@@ -77,3 +77,5 @@ dados <- dados %>%
                  resp1 = as.numeric(resp1),
                  resp2 = as.numeric(resp2)
                  )
+
+# lembrar de criar bidl e bidh
