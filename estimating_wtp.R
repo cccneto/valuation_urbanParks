@@ -78,4 +78,6 @@ dados <- dados %>%
                  resp2 = as.numeric(resp2)
                  )
 
-# lembrar de criar bidl e bidh
+# lembrar de criar bidl e bidh 
+# verificar range de valores no questionário
+# usar a funcao 
