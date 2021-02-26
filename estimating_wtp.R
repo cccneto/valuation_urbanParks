@@ -8,14 +8,14 @@ library(VIM)
 # carregando base
 baseunificada <- read.csv("https://github.com/cccneto/valuation_urbanParks/blob/master/dados.csv?raw=true", sep = ";")
 
+
 # ajustando codigo de variaveis 
 
 baseunificada %>% glimpse()
 
-baseunificada <- baseunificada %>% mutate(
-                  sexo = as.numeric(sexo),
-)
-
+baseunificada <- baseunificada %>% 
+  mutate(sexo = as.numeric(sexo),
+         bidl = l)
 
 # (H = 1, M = 0)
 baseunificada <- baseunificada %>% 
@@ -66,7 +66,7 @@ dados <- baseunificada %>%
           select(parque, idade, sexo, cidade, bairro, estadocivil, 
                  escolar, renda, qdepend, objetivo, freqvis,
                  tempoestad, tempoatfis, qualiar, infraestrutura, 
-                 lance1, lance2, resp1, resp2) %>%
+                 lance1, lance2, resp1, resp2, bidl, bidh) %>%
                 glimpse()
 
 dados <- dados %>% mutate(parque = as.factor(parque),
@@ -190,5 +190,25 @@ bootCI(sb1)
 
 ## AN INITIAL GENERAL DOUBLE BOUNDED MODEL
 
-db.full <- dbchoice(resp1 + resp2 ~ 1 + idade + sexo + estadocivil + qdepend + renda + infraestrutura | lance1 + lance2, dist = "logistic", 
-                    data = dados)
+db.full <- dbchoice(resp1 + resp2 ~ 1 + idade + sexo + estadocivil + qdepend + renda + infraestrutura | lance1 + lance2, na.action = na.omit, dist = "logistic", 
+                    data = base_df.full)
+
+base_df.full <- dados %>% select(resp1, resp2, idade, sexo, estadocivil, 
+                 qdepend, renda, infraestrutura, lance1, lance2, bidl, bidh)
+
+teste_df.full <- teste_df.full %>% 
+  mutate(nn = case_when(resp1 == '0' & resp2 == '0'  ~ 1, TRUE ~ 0)) %>% 
+  mutate(ny = case_when(resp1 == '0' & resp2 == '1'  ~ 1, TRUE ~ 0)) %>% 
+  mutate(yy = case_when(resp1 == '1' & resp2 == '1'  ~ 1, TRUE ~ 0)) %>% 
+  mutate(yn = case_when(resp1 == '1' & resp2 == '0'  ~ 1, TRUE ~ 0))
+
+teste_df.full <- dados %>% select(resp1, resp2, lance1, bidl, bidh)
+
+teste <- ct2df(teste_df.full, bid1 = "lance1", bid2h = "bidh", bid2l = "bidl",
+               yy = "yy", yn = "yn", ny = "ny", nn = "nn", y = "y", n = "n", type = "double")
+
+base_df.full %>% glimpse()
+
+dados %>% summary()
+
+dados %>% select(lance2) %>% filter(lance2 == 0)
