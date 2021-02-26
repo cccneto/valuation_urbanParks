@@ -6,9 +6,16 @@ library(dplyr)
 library(VIM)
 
 # carregando base
-baseunificada <- read_excel("C:/Users/User/Dropbox/PROJETO PARQUES URBANOS/BANCO DE DADOS/baseunificada.xlsx")
+baseunificada <- read.csv("https://github.com/cccneto/valuation_urbanParks/blob/master/dados.csv?raw=true", sep = ";")
 
 # ajustando codigo de variaveis 
+
+baseunificada %>% glimpse()
+
+baseunificada <- baseunificada %>% mutate(
+                  sexo = as.numeric(sexo),
+)
+
 
 # (H = 1, M = 0)
 baseunificada <- baseunificada %>% 
