@@ -6,37 +6,9 @@ library(dplyr)
 library(VIM)
 
 # carregando base
-baseunificada <- read.csv("https://github.com/cccneto/valuation_urbanParks/blob/master/dados.csv?raw=true", sep = ";")
-
+baseunificada <- read.csv("https://raw.githubusercontent.com/cccneto/valuation_urbanParks/master/dados.csv", sep = ";")
 
 # ajustando codigo de variaveis 
-
-baseunificada %>% glimpse()
-
-baseunificada <- baseunificada %>% 
-  mutate(sexo = as.numeric(sexo),
-         bidl = l)
-
-# (H = 1, M = 0)
-baseunificada <- baseunificada %>% 
-   mutate(sexo = case_when(sexo == '2' ~ 0, 
-                           sexo == '3' ~ 0,
-                           TRUE ~ sexo)) %>% 
-   glimpse()
-
-baseunificada <- baseunificada %>%
-  mutate(racacor = as.character(racacor)) %>% 
-  mutate(racacor = case_when(racacor == '1' ~ "branco",
-                          racacor == '2' ~ "preto", 
-                          racacor == '3' ~ "amarelo",
-                          racacor == '4' ~ "pardo",
-                          racacor == '5' ~ "indigena", TRUE ~ racacor
-                          )) %>%  glimpse()
-
-baseunificada <- baseunificada %>%
-              mutate(estadocivil = 
-              case_when(estadocivil == '2' ~ "1", TRUE ~ "0")) %>%
-              glimpse()  # casado = 2 --> 1
 
 baseunificada <- baseunificada %>%
   mutate(infraestrutura = 
@@ -46,26 +18,12 @@ baseunificada <- baseunificada %>%
                      TRUE ~ "1")) %>%
   glimpse()  # otimo/bom = 1
 
-baseunificada <- baseunificada %>%
-  mutate(qualiar = 
-           case_when(qualiar == '1' ~ "0",
-                     qualiar == '2' ~ "0",
-                     qualiar == '3' ~ "0",
-                     TRUE ~ "1")) %>%
-  glimpse()  # otimo/bom = 1
-
-# corrigindo nome de variavel
-baseunificada <- baseunificada %>% 
-              rename(cod_cidade = `cod cidade`,
-                     cod_parque = `cod parque`,
-                     cod_bairro = `cod bairro`)
-
 # selecionando variáveis de interesse
 dados <- baseunificada %>%  
-          filter(!is.na(baseunificada)) %>% # filtrando missing values
-          select(parque, idade, sexo, cidade, bairro, estadocivil, 
-                 escolar, renda, qdepend, objetivo, freqvis,
-                 tempoestad, tempoatfis, qualiar, infraestrutura, 
+         filter(!is.na(baseunificada)) %>% # filtrando missing values
+          select(parque, idade, sexo, cidade,  
+                 escolar, renda, qdepend, objetivo, 
+                 infraestrutura, sombra, temperatura, tamanho,
                  lance1, lance2, resp1, resp2, bidl, bidh) %>%
                 glimpse()
 
@@ -73,25 +31,24 @@ dados <- dados %>% mutate(parque = as.factor(parque),
                  idade = as.integer(idade),
                  sexo = as.factor(sexo),
                  cidade = as.factor(cidade),
-                 bairro = as.factor(bairro),
-                 estadocivil = as.numeric(estadocivil),
                  escolar = as.factor(escolar),
                  renda = as.integer(renda),
                  qdepend = as.integer(qdepend),
                  objetivo = as.factor(objetivo),
-                 freqvis = as.integer(freqvis),
-                 qualiar = as.numeric(qualiar),
                  infraestrutura = as.numeric(infraestrutura),
                  lance1 = as.integer(lance1),
                  lance2 = as.integer(lance2),
                  resp1 = as.numeric(resp1),
                  resp2 = as.numeric(resp2)
                  )
+# retirar os zeros do lance2
+dados <- dados %>% filter(!lance2 < 1)
+
 
 # conferindo missing values
 
 aggr_plot <- VIM::aggr(dados, col=c('navyblue','red'), 
-                  numbers=TRUE, sortVars=TRUE, labels=names(dados), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+                  numbers=TRUE, sortVars=TRUE, labels=names(dados), cex.axis=.7, gap=5, ylab=c("Histogram of missing data","Pattern"))
 
 
 
@@ -108,6 +65,8 @@ with(dados, barplot(round(tapply(resp1, lance1, mean), 2), las = 1,
                  main = "Implied demand 'curve'",
                  border = NA, font.main = 4))
 
+# A relatively complete model
+sb1 <- sbchoice(resp1 ~ 1 | lance1, dist = "logistic", data = dados)
 
 # plots the predicted support at each bid value
 plot(sb1, las = 1)    #  las control axis orientation
@@ -139,11 +98,9 @@ bootCI(sb1)   # The command to get the relevant 95% CI by bootstrap method
 # sexo e renda. Se acharmos que pode haver uma relação entre essas variáveis 
 # e a DDP de alguém, devemos incluir essas variáveis no modelo.
 
-sb.full_1 <- sbchoice(resp1 ~ 1 + idade + sexo + estadocivil + qdepend + renda + infraestrutura + qualiar + tempoestad | lance1, dist = "logistic", 
-                    data = dados)
 
 # melhor ajuste para sbdc
-sb.full <- sbchoice(resp1 ~ 1 + idade + sexo + estadocivil + qdepend + renda + infraestrutura | lance1, dist = "logistic", 
+sb.full <- sbchoice(resp1 ~ 1 + idade + sexo + qdepend + renda + infraestrutura | lance1, dist = "logistic", 
                       data = dados)
 
 # variaveis estatisticamente significativas: idade + sexo + estadocivil + qdepend + renda + infraestrutura
@@ -190,8 +147,18 @@ bootCI(sb1)
 
 ## AN INITIAL GENERAL DOUBLE BOUNDED MODEL
 
-db.full <- dbchoice(resp1 + resp2 ~ 1 + idade + sexo + estadocivil + qdepend + renda + infraestrutura | lance1 + lance2, na.action = na.omit, dist = "logistic", 
-                    data = base_df.full)
+db.full <- dbchoice(ans1 + ans2 ~ idade | bid1 + bid2, 
+                   data = dados)
+
+sum(is.infinite(dados$ans2))
+dados %>% select(bid2) %>% nrow()
+
+NP$ID <- seq(1:length(NP$age))
+
+dados$ID <- seq(1:length(dados$parque))
+basecompleta <- left_join(NP, dados, by = "ID")
+
+dados %>% select(bid1) %>%  filter(!bid1 ==1 & !bid1==0)
 
 base_df.full <- dados %>% select(resp1, resp2, idade, sexo, estadocivil, 
                  qdepend, renda, infraestrutura, lance1, lance2, bidl, bidh)
