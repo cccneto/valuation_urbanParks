@@ -6,59 +6,25 @@ library(dplyr)
 library(VIM)
 
 # carregando base
-baseunificada <- read.csv("https://raw.githubusercontent.com/cccneto/valuation_urbanParks/master/dados.csv", sep = ";")
-
-# ajustando codigo de variaveis 
-
-baseunificada <- baseunificada %>%
-  mutate(infraestrutura = 
-           case_when(infraestrutura == '1' ~ "0",
-                     infraestrutura == '2' ~ "0",
-                     infraestrutura == '3' ~ "0",
-                     TRUE ~ "1")) %>%
-  glimpse()  # otimo/bom = 1
-
-# selecionando variáveis de interesse
-dados <- baseunificada %>%  
-         filter(!is.na(baseunificada)) %>% # filtrando missing values
-          select(parque, idade, sexo, cidade,  
-                 escolar, renda, qdepend, objetivo, 
-                 infraestrutura, sombra, temperatura, tamanho,
-                 lance1, lance2, resp1, resp2, bidl, bidh) %>%
-                glimpse()
-
-dados <- dados %>% mutate(parque = as.factor(parque),
-                 idade = as.integer(idade),
-                 sexo = as.factor(sexo),
-                 cidade = as.factor(cidade),
-                 escolar = as.factor(escolar),
-                 renda = as.integer(renda),
-                 qdepend = as.integer(qdepend),
-                 objetivo = as.factor(objetivo),
-                 infraestrutura = as.numeric(infraestrutura),
-                 lance1 = as.integer(lance1),
-                 lance2 = as.integer(lance2),
-                 resp1 = as.numeric(resp1),
-                 resp2 = as.numeric(resp2)
-                 )
-# retirar os zeros do lance2
-dados <- dados %>% filter(!lance2 < 1)
-
+url <- "https://github.com/cccneto/valuation_urbanParks/blob/master/dados/base_caio.xlsx?raw=true"
+destfile <- "base_caio.xlsx"
+curl::curl_download(url, destfile)
+base_caio <- read_excel(destfile)
 
 # conferindo missing values
 
-aggr_plot <- VIM::aggr(dados, col=c('navyblue','red'), 
-                  numbers=TRUE, sortVars=TRUE, labels=names(dados), cex.axis=.7, gap=5, ylab=c("Histogram of missing data","Pattern"))
+aggr_plot <- VIM::aggr(base_caio, col=c('navyblue','red'), 
+                  numbers=TRUE, sortVars=TRUE, labels=names(base_caio), cex.axis=.7, gap=5, ylab=c("Histogram of missing data","Pattern"))
 
 
 
 # DATA VISUALIZATION 
-round(tapply(dados$resp1, dados$lance1, mean), 2)
+round(tapply(base_caio$resp1, base_caio$lance1, mean), 2)
 
-barplot(tapply(dados$resp1, dados$lance1, mean))
+barplot(tapply(base_caio$resp1, base_caio$lance1, mean))
 
 # More advanced barplot suitable for a research report
-with(dados, barplot(round(tapply(resp1, lance1, mean), 2), las = 1,
+with(base_caio, barplot(round(tapply(resp1, lance1, mean), 2), las = 1,
                  xlab = "Bid value categories in reais", 
                  ylab = "Proportion of selecting yes", 
                  yaxs = 'i', xaxs = 'i', 
@@ -66,15 +32,12 @@ with(dados, barplot(round(tapply(resp1, lance1, mean), 2), las = 1,
                  border = NA, font.main = 4))
 
 # A relatively complete model
-sb1 <- sbchoice(resp1 ~ 1 | lance1, dist = "logistic", data = dados)
+sb1 <- sbchoice(resp1 ~ 1 | lance1, dist = "logistic", data = base_caio)
 
 # plots the predicted support at each bid value
 plot(sb1, las = 1)    #  las control axis orientation
 abline(h = 0.5, lty = 2, col = "red") # adds a horizontal line to the plot 
 
-
-# A relatively complete model
-sb1 <- sbchoice(resp1 ~ 1 | lance1, dist = "logistic", data = dados)
 
 # get confidence intervals for the model sb1
 set.seed(123) # The start value can be anything
@@ -83,25 +46,9 @@ krCI(sb1)     # The command to get the relevant 95% CI by Krinsky Robb method
 set.seed(123) # As it is a new simulation we again set a start value 
 bootCI(sb1)   # The command to get the relevant 95% CI by bootstrap method
 
-# The confidence intervals around the median WTP estimate for the two methods are as follows:
-  
-# For the Krinsky Robb method the 95% CI is $39.90 to $52.61.
-# For the Bootstrap method the 95% CI is $ 39.84 to $51.75.
-
-# Portanto, embora tenhamos uma estimativa pontual de $ 45.01 como a DDP mediana, 
-# a partir da informação do IC de 95%, pode-se ver que existe uma incerteza 
-# considerável em torno dessa estimativa.
-
-# O uso de uma pergunta de acompanhamento nos permite reduzir substancialmente 
-# a incerteza da estimativa da DDP; mas antes de estimarmos o modelo DBDC, 
-# vamos primeiro incorporar as informações adicionais que temos sobre idade, 
-# sexo e renda. Se acharmos que pode haver uma relação entre essas variáveis 
-# e a DDP de alguém, devemos incluir essas variáveis no modelo.
-
-
 # melhor ajuste para sbdc
-sb.full <- sbchoice(resp1 ~ 1 + idade + sexo + qdepend + renda + infraestrutura | lance1, dist = "logistic", 
-                      data = dados)
+sb.full <- sbchoice(resp1 ~ 1 + idade + sexo + renda | lance1, dist = "logistic", 
+                      data = base_caio)
 
 # variaveis estatisticamente significativas: idade + sexo + estadocivil + qdepend + renda + infraestrutura
 # variaveis nao ES: qualiar + tempoestadia
@@ -115,18 +62,18 @@ coeftest(sb.full)
 plot(sb1, las = 1, xlab = "Valor do Lance em Reais", main = "Simple model", 
      cex.main = 0.8, font.main = 4)  # plots  predicted support at each price 
 abline(h = 0.5, lty = 2, col = "red")  # adds a horizontal line to the plot 
-segments(x0 = 45.01, y0 = -1, x1 = 45.01, y1 = 0.5, col = "red",lty = 2)
-points(45.01, 0.5, col = "red", pch = 16)
+segments(x0 = 22.69, y0 = -1, x1 = 22.69, y1 = 0.5, col = "red",lty = 2)
+points(22.69, 0.5, col = "red", pch = 16)
 text(5, 1, "Median WTP estimate = 45.01 reais", pos = 4, cex = 0.7)
 
 ## A detailed plot for the full model
 plot(sb.full, las = 1, xlab = "Valor do Lance em Reais", main = "Full model", 
      cex.main = 0.8, font.main = 4)  # plots  predicted support at each price 
 abline(h = 0.5, lty = 2, col = "green")  # adds a horizontal line  
-segments(x0 = 45.50, y0 = -1, x1 = 45.50, y1 = 0.5, col = "green", 
+segments(x0 = 22.79, y0 = -1, x1 = 22.79, y1 = 0.5, col = "green", 
          lty = 2)
-points(45.50, 0.5, col = "green", pch = 16)
-text(5, 1, "Median WTP estimate = 45.50 euro", pos = 4, cex = 0.7)
+points(22.79, 0.5, col = "green", pch = 16)
+text(5, 1, "Median WTP estimate = 22.79 euro", pos = 4, cex = 0.7)
 
 
 # get confidence intervals for the model sb.full
@@ -134,48 +81,8 @@ set.seed(123) # We still need a start value for the simulation
 bootCI(sb.full)
 bootCI(sb1)
 
-# Como temos um modelo mais completo, há menos incerteza sobre a estimativa 
-# da DDP. Portanto, embora as estimativas da DDP mediana sejam semelhantes 
-# para o modelo simples e o modelo completo, há um valor prático real em 
-# ter uma especificação do modelo completo: intervalos de confiança 
-# menores de 95% em torno da estimativa da DDP mediana. Note, entretanto, 
-# que o IC 95% ainda cobre uma faixa considerável: R$ 39.99 a R $ 51.94.
-# 
-# Uma das maneiras mais eficazes de reduzir o nível de incerteza sobre 
-# quanto as pessoas estão dispostas a pagar é fazer uma pergunta 
-# complementar (**follow-up question**). Agora consideramos este cenário.
+# AN INITIAL GENERAL DOUBLE BOUNDED MODEL
 
-## AN INITIAL GENERAL DOUBLE BOUNDED MODEL
+db.full <- dbchoice(resp1 + resp2 ~ idade | lance1 + lance2, 
+                   data = base_caio)
 
-db.full <- dbchoice(ans1 + ans2 ~ idade | bid1 + bid2, 
-                   data = dados)
-
-sum(is.infinite(dados$ans2))
-dados %>% select(bid2) %>% nrow()
-
-NP$ID <- seq(1:length(NP$age))
-
-dados$ID <- seq(1:length(dados$parque))
-basecompleta <- left_join(NP, dados, by = "ID")
-
-dados %>% select(bid1) %>%  filter(!bid1 ==1 & !bid1==0)
-
-base_df.full <- dados %>% select(resp1, resp2, idade, sexo, estadocivil, 
-                 qdepend, renda, infraestrutura, lance1, lance2, bidl, bidh)
-
-teste_df.full <- teste_df.full %>% 
-  mutate(nn = case_when(resp1 == '0' & resp2 == '0'  ~ 1, TRUE ~ 0)) %>% 
-  mutate(ny = case_when(resp1 == '0' & resp2 == '1'  ~ 1, TRUE ~ 0)) %>% 
-  mutate(yy = case_when(resp1 == '1' & resp2 == '1'  ~ 1, TRUE ~ 0)) %>% 
-  mutate(yn = case_when(resp1 == '1' & resp2 == '0'  ~ 1, TRUE ~ 0))
-
-teste_df.full <- dados %>% select(resp1, resp2, lance1, bidl, bidh)
-
-teste <- ct2df(teste_df.full, bid1 = "lance1", bid2h = "bidh", bid2l = "bidl",
-               yy = "yy", yn = "yn", ny = "ny", nn = "nn", y = "y", n = "n", type = "double")
-
-base_df.full %>% glimpse()
-
-dados %>% summary()
-
-dados %>% select(lance2) %>% filter(lance2 == 0)

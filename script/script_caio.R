@@ -5,7 +5,6 @@ library(VIM)
 library(GJRM)
 
 # carregando base
-library(readxl)
 url <- "https://github.com/cccneto/valuation_urbanParks/blob/master/dados/base_caio.xlsx?raw=true"
 destfile <- "base_caio.xlsx"
 curl::curl_download(url, destfile)
@@ -27,7 +26,9 @@ mr <- c("probit", "probit")
 # modelo
 bvp2 <- gjrm(f.list, data=base_caio, Model="B", margins= mr)
 summary(bvp2)
-
+AIC(bvp2)
+conv.check(bvp2)
+BIC(bvp2)
 # criando variaveis para calculo dap
 # equation 1
 coef_renda <- bvp2$coefficients["renda"]
