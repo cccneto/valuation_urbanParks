@@ -8,6 +8,8 @@ library(VIM)
 # carregando base
 baseunificada <- read.csv("https://raw.githubusercontent.com/cccneto/valuation_urbanParks/master/dados.csv", sep = ";")
 
+
+
 # ajustando codigo de variaveis 
 
 baseunificada <- baseunificada %>%
@@ -38,8 +40,8 @@ dados <- dados %>% mutate(parque = as.factor(parque),
                           infraestrutura = as.numeric(infraestrutura),
                           lance1 = as.integer(lance1),
                           lance2 = as.integer(lance2),
-                          resp1 = as.numeric(resp1),
-                          resp2 = as.numeric(resp2)
+                          resp1 = as.double(resp1),
+                          resp2 = as.double(resp2)
 )
 # retirar os zeros do lance2
 dados <- dados %>% filter(!lance2 < 1)
@@ -53,9 +55,9 @@ aggr_plot <- VIM::aggr(dados, col=c('navyblue','red'),
 
 
 # DATA VISUALIZATION 
-round(tapply(dados$resp1, dados$lance1, mean), 2)
+round(tapply(dados$resp2, dados$lance2, mean), 2)
 
-barplot(tapply(dados$resp1, dados$lance1, mean))
+barplot(tapply(dados$resp2, dados$lance2, mean))
 
 # More advanced barplot suitable for a research report
 with(dados, barplot(round(tapply(resp1, lance1, mean), 2), las = 1,
@@ -75,7 +77,7 @@ abline(h = 0.5, lty = 2, col = "red") # adds a horizontal line to the plot
 
 # A relatively complete model
 sb1 <- sbchoice(resp1 ~ 1 | lance1, dist = "logistic", data = dados)
-
+summary(sb1)
 # get confidence intervals for the model sb1
 set.seed(123) # The start value can be anything
 krCI(sb1)     # The command to get the relevant 95% CI by Krinsky Robb method
@@ -84,8 +86,9 @@ set.seed(123) # As it is a new simulation we again set a start value
 bootCI(sb1)   # The command to get the relevant 95% CI by bootstrap method
 
 # melhor ajuste para sbdc
-sb.full <- sbchoice(resp1 ~ 1 + idade + sexo + qdepend + renda + infraestrutura | lance1, dist = "logistic", 
+sb.full <- sbchoice(resp1 ~ 1 + idade | lance1, dist = "logistic", 
                     data = dados)
+
 
 # get confidence intervals for the model sb.full
 set.seed(123) # We still need a start value for the simulation  
@@ -94,18 +97,18 @@ bootCI(sb1)
 
 ## AN INITIAL GENERAL DOUBLE BOUNDED MODEL
 
-db.full <- dbchoice(ans1 + ans2 ~ idade | bid1 + bid2, 
-                    data = dados)
+db.full <- dbchoice(resp1 + resp2 ~ 1 | lance1 + lance2, dist = "logistic", log= TRUE, data = dados)
 
-sum(is.infinite(dados$ans2))
-dados %>% select(bid2) %>% nrow()
-
+#criando variavel para join "NP" e "dados"
 NP$ID <- seq(1:length(NP$age))
 
 dados$ID <- seq(1:length(dados$parque))
 basecompleta <- left_join(NP, dados, by = "ID")
 
-dados %>% select(bid1) %>%  filter(!bid1 ==1 & !bid1==0)
+
+
+
+# testando nova estrutura de dados
 
 base_df.full <- dados %>% select(resp1, resp2, idade, sexo, estadocivil, 
                                  qdepend, renda, infraestrutura, lance1, lance2, bidl, bidh)
