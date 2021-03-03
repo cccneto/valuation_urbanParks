@@ -9,7 +9,10 @@ library(GJRM)
 
 # carregando base
 library(readxl)
-base_caio <- read_excel("C:/Users/User/Downloads/base_caio.xlsx")
+url <- "https://github.com/cccneto/valuation_urbanParks/blob/master/dados/base_caio.xlsx?raw=true"
+destfile <- "base_caio.xlsx"
+curl::curl_download(url, destfile)
+base_caio <- read_excel(destfile)
 
 base_caio <- base_caio %>% 
   mutate(renda_med = mean(renda),
