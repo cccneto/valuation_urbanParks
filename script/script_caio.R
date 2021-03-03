@@ -1,10 +1,7 @@
 library(readxl)
-library(DCchoice)
-library(Ecdat)
 library(lmtest)
 library(dplyr)
 library(VIM)
-
 library(GJRM)
 
 # carregando base
