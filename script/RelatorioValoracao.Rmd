@@ -37,7 +37,7 @@ baseunificada <- read_excel(destfile)
 ```{r}
 baseunificada <- baseunificada %>% 
   select(parque, idade, sexo, cidade, escolar, renda, infraestrutura, sombra, temperatura, 
-         lance1,lance2, resp1, resp2, bidl, bidh)
+         lance1,lance2, resp1, resp2, bidl, bidh, lnRendat1, lnRendat2, lnRenda, t)
 ```
 
 
@@ -65,8 +65,9 @@ base <- baseunificada %>%
      sexo = case_when(sexo == 1 ~ "1", TRUE ~ "0")
     )
 
-base %>% filter(parque == "macaxeira") %>% select(temperatura) %>% unique()
+base %>% filter(parque == "macaxeira") %>% select(infraestrutura) %>% unique()
 class(baseunificada$infraestrutura)
+base %>% glimpse()
 ```
 
 ```{r}
@@ -78,117 +79,40 @@ base <- base %>%
     cidade = as.factor(cidade),
     escolar = as.integer(escolar),
     renda = as.integer(renda),
-    objetivo = as.factor(objetivo),
     infraestrutura = as.integer(infraestrutura),
     sombra = as.integer(sombra),
     temperatura = as.integer(temperatura),
     lance1 = as.integer(lance1),
     lance2 = as.integer(lance2),
-    resp1 = as.double(resp1),
-    resp2 = as.double(resp2)
+    resp1 = as.factor(resp1),
+    resp2 = as.factor(resp2)
   )
 
-baseunificada %>% filter(parque == "macaxeira") %>% select(temperatura) %>% unique()
+base %>% filter(parque == "macaxeira") %>% select(infraestrutura) %>% unique()
 
 
 ```
 
 
 ```{r}
-df <- base %>%  
-  select()
+base %>% filter(parque == "macaxeira") %>% select(temperatura) %>% unique()
+base %>% filter(parque == "macaxeira") %>% arrange(temperatura)
 ```
 
-```{r}
-df %>% filter(parque == "macaxeira") %>% select(temperatura) %>% unique()
-df %>% filter(parque == "macaxeira") %>% arrange(temperatura)
-```
-
-
-```{r}
-df2 <- df %>% filter(renda > 0) 
-df2 %>% filter(parque == "macaxeira") %>% select(temperatura) %>% unique()
-```
-
-
-
-# Ajustando classes das variaveis
-
-```{r}
-dados <- df %>%
-  mutate(
-    parque = as.factor(parque),
-    idade = as.integer(idade),
-    sexo = as.factor(sexo),
-    cidade = as.factor(cidade),
-    escolar = as.factor(escolar),
-    renda = as.integer(renda),
-    objetivo = as.factor(objetivo),
-    infraestrutura = as.factor(infraestrutura),
-    sombra = as.factor(sombra),
-    temperatura = as.factor(temperatura),
-    lance1 = as.integer(lance1),
-    lance2 = as.integer(lance2),
-    resp1 = as.double(resp1),
-    resp2 = as.double(resp2),
-    t1 = lance1*-1,
-    t2 = lance2*-1,
-    lnRendat1 = log((renda - t1)/renda),
-    lnRendat2 = log((renda - t2)/renda)
-  )
-
-# dados de temperatura estão faltantes para "Macaxeira"
-dados %>% filter(parque == "macaxeira") %>% select(temperatura) %>%  unique()
-
-dados %>% select(lnRendat1, lnRendat2) %>% filter(lnRendat1 == 'Inf', lnRendat2 == 'Inf')
-
-```
 
 # Conferindo missing values restantes
 ```{r}
-dados %>% summarise_all(~ sum(is.na(.)))
+base %>% summarise_all(~ sum(is.na(.)))
 ```
-
-
-# Selecionando variáveis de interesse
-
-```{r}
-
-dados1 <- dados %>%
-  filter(idade > 16)
-  # filter(renda > 0) %>% 
-  # filter(lance2 > 0) %>% 
-  # filter(lance1 > 0) 
-
-dados %>%  filter(parque == "macaxeira") %>% select(temperatura) %>% unique()
-
-dados1 %>% filter(parque == "macaxeira") %>% select(temperatura) %>% unique()
-
-```
-
-
-```{r}
-dados1 %>% summarise_all(~ sum(is.na(.)))
-```
-
-
-```{r}
-dados %>% filter(parque == "macaxeira") %>% count(temperatura) 
-```
-
-
-```{r}
-dados %>% filter(parque == "macaxeira") %>% count(temperatura)
-```
-
-
-
 
 
 # Testando correlação entre variáveis 
 
 ```{r}
-dados %>% select(resp1, resp2, lance1, lance2) %>% cor()  
+base %>% 
+  select(resp1, resp2, lance1, lance2) %>% 
+  mutate(resp1 = as.numeric(resp1), resp2 = as.numeric(resp2)) %>% 
+  cor()  
 # conclusao: dado que $\rho$ != 0, vamos utilizar pelo modelo bivariado
 
 ```
@@ -197,14 +121,14 @@ dados %>% select(resp1, resp2, lance1, lance2) %>% cor()
 # Salvando dados de cada parque.
 ```{r}
 
-dados_sitio_da_trindade <- dados %>% filter(parque == "sitio da trindade")
-dados_13demaio <- dados %>% filter(parque == "13demaio")
-dados_santosdumont <- dados %>% filter(parque == "santosdumont")
-dados_lindu <- dados %>% filter(parque == "lindu")
-dados_caiara <- dados %>% filter(parque == "caiara")
-dados_macaxeira <- dados %>% filter(parque == "macaxeira")
-dados_jaqueira <- dados %>% filter(parque == "jaqueira")
-dados_santana <- dados %>% filter(parque == "santana")
+dados_sitio_da_trindade <- base %>% filter(parque == "sitio da trindade")
+dados_13demaio <- base %>% filter(parque == "13demaio")
+dados_santosdumont <- base %>% filter(parque == "santosdumont")
+dados_lindu <- base %>% filter(parque == "lindu")
+dados_caiara <- base %>% filter(parque == "caiara")
+dados_macaxeira <- base %>% filter(parque == "macaxeira")
+dados_jaqueira <- base %>% filter(parque == "jaqueira")
+dados_santana <- base %>% filter(parque == "santana")
 
 ```
 
@@ -232,13 +156,13 @@ mr <- c("probit", "probit")
 # Regressão com dados de **todos os parques**  
 ```{r}
 # Modelo sem renda 
-bvp <- gjrm(f.list, data=dados, Model="B", margins= mr)
+bvp <- gjrm(f.list, data=base, Model="B", margins= mr)
 summary(bvp)
 ```
 
 ```{r}
 # Modelo com renda 
-bvp_ll <- gjrm(f.list1, data=dados, Model="B", margins= mr)
+bvp_ll <- gjrm(f.list1, data=base, Model="B", margins= mr)
 summary(bvp_ll)
 
 ```
@@ -251,10 +175,11 @@ db.trezedemaio <- gjrm(f.list, data=dados_13demaio, Model="B", margins= mr)
 db.santosdumont <- gjrm(f.list, data=dados_santosdumont, Model="B", margins= mr)
 db.lindu <- gjrm(f.list, data=dados_lindu, Model="B", margins= mr)
 db.caiara <- gjrm(f.list, data=dados_caiara, Model="B", margins= mr)
-#db.macaxeira <- gjrm(f.list, data=dados_macaxeira, Model="B", margins= mr)
-# db.jaqueira <- gjrm(f.list, data=dados_jaqueira, Model="B", margins= mr)
+db.macaxeira <- gjrm(f.list, data=dados_macaxeira, Model="B", margins= mr)
+db.jaqueira <- gjrm(f.list, data=dados_jaqueira, Model="B", margins= mr)
 db.santana <- gjrm(f.list, data=dados_santana, Model="B", margins= mr)
 
+summary(db.caiara)
 ```
 
 ```{r}
@@ -264,35 +189,23 @@ dados_santana %>% select(temperatura) %>% unique()
 
 # Regressão Parques - individualmente - Log linear na renda 
 ```{r}
-db.sitiotrindade <-gjrm(f.list1, data=dados_sitio_da_trindade, Model="B", margins= mr)
-db.trezedemaio <- gjrm(f.list1, data=dados_13demaio, Model="B", margins= mr)
-db.santosdumont <- gjrm(f.list1, data=dados_santosdumont, Model="B", margins= mr)
-db.lindu <- gjrm(f.list1, data=dados_lindu, Model="B", margins= mr)
-db.caiara <- gjrm(f.list1, data=dados_caiara, Model="B", margins= mr)
-db.macaxeira <- gjrm(f.list1, data=dados_macaxeira, Model="B", margins= mr)
-db.jaqueira <- gjrm(f.list1, data=dados_jaqueira, Model="B", margins= mr)
-db.santana <- gjrm(f.list1, data=dados_santana, Model="B", margins= mr)
+db.sitiotrindadeLL <-gjrm(f.list1, data=dados_sitio_da_trindade, Model="B", margins= mr)
+db.trezedemaioLL <- gjrm(f.list1, data=dados_13demaio, Model="B", margins= mr)
+db.santosdumontLL <- gjrm(f.list1, data=dados_santosdumont, Model="B", margins= mr)
+db.linduLL <- gjrm(f.list1, data=dados_lindu, Model="B", margins= mr)
+# db.caiaraLL <- gjrm(f.list1, data=dados_caiara, Model="B", margins= mr) # fitted probabilities numerically 0 or 1 ocurred
+db.macaxeiraLL <- gjrm(f.list1, data=dados_macaxeira, Model="B", margins= mr)
+db.jaqueiraLL <- gjrm(f.list1, data=dados_jaqueira, Model="B", margins= mr)
+db.santanaLL <- gjrm(f.list1, data=dados_santana, Model="B", margins= mr)
 
 ```
 
+## Os dados do parque caiara estão causando problemas na analise.
 
-
-
-
+A mensagem de erro aponta que **"fitted probabilities numerically 0 or 1 ocurred"**
 ```{r}
+dados_caiara %>% select(resp2) %>% arrange()
 
-```
-
-
-```{r}
-
-```
-
-```{r}
-
-```
-
-```{r}
 
 ```
 
