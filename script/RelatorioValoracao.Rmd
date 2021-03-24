@@ -75,7 +75,7 @@ base <- base %>%
   mutate(
     parque = as.factor(parque),
     idade = as.integer(idade),
-    sexo = as.factor(sexo),
+    sexo = as.integer(sexo),
     cidade = as.factor(cidade),
     escolar = as.integer(escolar),
     renda = as.integer(renda),
@@ -132,8 +132,9 @@ dados_santana <- base %>% filter(parque == "santana")
 
 ```
 
+# DADOS DE TODOS OS PARQUES
 
-# Configurando listas de variaveis - modelo sem renda
+## Configurando listas de variaveis - modelo sem renda
 ```{r}
 treat.eq <- resp1 ~ lance1 + idade + sexo + escolar + temperatura + infraestrutura
 out.eq <- resp2 ~ lance2 + idade + sexo + escolar + temperatura + infraestrutura
@@ -142,9 +143,64 @@ mr <- c("probit", "probit")
 
 ```
 
-# Configurando listas de variaveis - modelo com lnRendat
+## Modelo Linear
+```{r}
+bvp <- gjrm(f.list, data=base, Model="B", margins= mr)
+summary(bvp)
+```
+
+```{r}
+# valores médios
+lance1_med <- mean(base$lance1)
+renda_med <- mean(base$renda)
+idade_med <- mean(base$idade)
+sexo_med <- mean(base$sexo)
+escolar_med <- mean(base$escolar)
+temp_med <- mean(base$temperatura)
+infra_med <- mean(base$infraestrutura)
+```
+
+
+```{r}
+## coeficientes eq 1
+cf_intercept <- bvp$coefficients[1]
+cf_lance1 <- bvp$coefficients[2]
+cf_idade <- bvp$coefficients[3]
+cf_sexo <- bvp$coefficients[4]
+cf_escolar <- bvp$coefficients[5]
+cf_temp <- bvp$coefficients[6]
+cf_infra <- bvp$coefficients[7]
+```
+
+```{r}
+# coeficientes eq 2
+cf_intercept2 <- bvp$coefficients[8]
+cf_lance2 <- bvp$coefficients[9]
+cf_idade2 <- bvp$coefficients[10]
+cf_sexo2 <- bvp$coefficients[11]
+cf_escolar2 <- bvp$coefficients[12]
+cf_temp2 <- bvp$coefficients[13]
+cf_infra2 <- bvp$coefficients[14]
+```
+
+
+## Cálculo da dap
+
+### Dap equação 1
 ```{r}
 
+dap_eq1_L <- -(cf_intercept + cf_idade*idade_med + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)/cf_lance1 # R$ 44,53
+```
+
+### Dap equação 2
+```{r}
+dap_eq2_L <- -(cf_intercept + cf_idade2*idade_med + cf_sexo2*sexo_med +     cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_lance2 # R$ 48,16 
+
+```
+
+# Configurando listas de variaveis - modelo com lnRendat
+
+```{r}
 treat.eq1 <- resp1 ~ lance1 + idade + sexo + escolar + lnRendat1 + temperatura + infraestrutura
 out.eq1 <- resp2 ~ lance2 + idade + sexo + escolar + lnRendat2 + temperatura + infraestrutura
 f.list1 <- list(treat.eq1, out.eq1)
@@ -152,23 +208,57 @@ mr <- c("probit", "probit")
 
 ```
 
-
-# Regressão com dados de **todos os parques**  
 ```{r}
-# Modelo sem renda 
-bvp <- gjrm(f.list, data=base, Model="B", margins= mr)
-summary(bvp)
-```
-
-```{r}
-# Modelo com renda 
 bvp_ll <- gjrm(f.list1, data=base, Model="B", margins= mr)
 summary(bvp_ll)
 
 ```
 
+# DAP's para modelo Log linear na Renda
 
-# Regressão Parques - individualmente - linear na renda 
+## coeficientes
+```{r}
+# Equação 1
+cf_intercept <- bvp_ll$coefficients[1]
+cf_lance1 <- bvp_ll$coefficients[2]
+cf_idade <- bvp_ll$coefficients[3]
+cf_sexo <- bvp_ll$coefficients[4]
+cf_escolar <- bvp_ll$coefficients[5]
+cf_lnRendat1 <- bvp_ll$coefficients[6]
+cf_temp <- bvp_ll$coefficients[7]
+cf_infra <- bvp_ll$coefficients[8]
+
+```
+
+## coeficientes 
+```{r}
+# equation 2
+cf_intercept2 <- bvp_ll$coefficients[9]
+cf_lance2 <- bvp_ll$coefficients[10]
+cf_idade2 <- bvp_ll$coefficients[11]
+cf_sexo2 <- bvp_ll$coefficients[12]
+cf_escolar2 <- bvp_ll$coefficients[13]
+cf_lnRendat2 <- bvp_ll$coefficients[14]
+cf_temp2 <- bvp_ll$coefficients[15]
+cf_infra2 <- bvp_ll$coefficients[16]
+```
+
+### Dap equação 1
+```{r}
+dap_eq1_ll <- renda_med - renda_med*(exp(-cf_intercept + cf_idade*idade_med + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)/cf_lnRendat1)
+```
+
+### Dap equação 2
+```{r}
+dap_eq2_ll <- renda_med - renda_med*(exp(-cf_intercept2 + cf_idade2*idade_med + cf_sexo2*sexo_med + cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_lnRendat2)
+	
+```
+
+
+
+# Análise individual dos parques 
+
+## Regressão Parques - individualmente - linear na renda 
 ```{r}
 db.sitiotrindade <-gjrm(f.list, data=dados_sitio_da_trindade, Model="B", margins= mr)
 db.trezedemaio <- gjrm(f.list, data=dados_13demaio, Model="B", margins= mr)
@@ -178,16 +268,9 @@ db.caiara <- gjrm(f.list, data=dados_caiara, Model="B", margins= mr)
 db.macaxeira <- gjrm(f.list, data=dados_macaxeira, Model="B", margins= mr)
 db.jaqueira <- gjrm(f.list, data=dados_jaqueira, Model="B", margins= mr)
 db.santana <- gjrm(f.list, data=dados_santana, Model="B", margins= mr)
-
-summary(db.caiara)
 ```
 
-```{r}
-dados_santana %>% select(temperatura) %>% unique()
-```
-
-
-# Regressão Parques - individualmente - Log linear na renda 
+## Regressão Parques - individualmente - Log linear na renda 
 ```{r}
 db.sitiotrindadeLL <-gjrm(f.list1, data=dados_sitio_da_trindade, Model="B", margins= mr)
 db.trezedemaioLL <- gjrm(f.list1, data=dados_13demaio, Model="B", margins= mr)
@@ -205,7 +288,4 @@ db.santanaLL <- gjrm(f.list1, data=dados_santana, Model="B", margins= mr)
 A mensagem de erro aponta que **"fitted probabilities numerically 0 or 1 ocurred"**
 ```{r}
 dados_caiara %>% select(resp2) %>% arrange()
-
-
 ```
-
