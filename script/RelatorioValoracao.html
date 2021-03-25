@@ -166,7 +166,7 @@ pre code {
 
 <h1 class="title toc-ignore">Análise dos Parques Urbanos</h1>
 <h4 class="author">Claudiano Neto</h4>
-<h4 class="date">23 março, 2021</h4>
+<h4 class="date">25 março, 2021</h4>
 
 </div>
 
@@ -183,10 +183,10 @@ curl::curl_download(url, destfile)
 baseunificada &lt;- read_excel(destfile)</code></pre>
 <pre class="r"><code>baseunificada &lt;- baseunificada %&gt;% 
   select(parque, idade, sexo, cidade, escolar, renda, infraestrutura, sombra, temperatura, 
-         lance1,lance2, resp1, resp2, bidl, bidh, lnRendat1, lnRendat2, lnRenda, t)</code></pre>
+         lance1,lance2, resp1, resp2, bidl, bidh, lnRendat1, lnRendat2, lnRenda)</code></pre>
 <pre class="r"><code>baseunificada %&gt;% glimpse()</code></pre>
-<pre><code>## Rows: 1,111
-## Columns: 19
+<pre><code>## Rows: 1,144
+## Columns: 18
 ## $ parque         &lt;chr&gt; &quot;sitio da trindade&quot;, &quot;sitio da trindade&quot;, &quot;sitio da tri~
 ## $ idade          &lt;dbl&gt; 50, 35, 50, 67, 41, 31, 47, 30, 62, 41, 39, 80, 68, 66,~
 ## $ sexo           &lt;dbl&gt; 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 2, 2, 2~
@@ -202,10 +202,9 @@ baseunificada &lt;- read_excel(destfile)</code></pre>
 ## $ resp2          &lt;dbl&gt; 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0~
 ## $ bidl           &lt;dbl&gt; 5.567764, 2.000000, 3.000000, 6.708204, 1.414214, 5.385~
 ## $ bidh           &lt;dbl&gt; 48.00000, 66.00000, 21.00000, 70.00000, 14.00000, 48.00~
-## $ lnRendat1      &lt;dbl&gt; -0.0005001250, -0.0002353218, -0.0005626583, -0.0030045~
-## $ lnRendat2      &lt;dbl&gt; -0.0007744934, -0.0038899088, -0.0013133621, -0.0046775~
-## $ lnRenda        &lt;dbl&gt; 4.792392, 4.230449, 4.204120, 4.176091, 4.176091, 4.176~
-## $ t              &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~</code></pre>
+## $ lnRendat1      &lt;dbl&gt; 0.0004998750, 0.0002352664, 0.0005623419, 0.0029955090,~
+## $ lnRendat2      &lt;dbl&gt; 0.0007738940, 0.0038748361, 0.0013116394, 0.0046558115,~
+## $ lnRenda        &lt;dbl&gt; 4.792392, 4.230449, 4.204120, 4.176091, 4.176091, 4.176~</code></pre>
 <pre class="r"><code>baseunificada &lt;- baseunificada %&gt;% mutate(infraestrutura = as.double(infraestrutura),
                          sombra = as.double(sombra),
                          temperatura = as.double(temperatura))</code></pre>
@@ -216,7 +215,7 @@ baseunificada &lt;- read_excel(destfile)</code></pre>
   mutate(
     parque = as.factor(parque),
     idade = as.integer(idade),
-    sexo = as.factor(sexo),
+    sexo = as.integer(sexo),
     cidade = as.factor(cidade),
     escolar = as.integer(escolar),
     renda = as.integer(renda),
@@ -227,47 +226,40 @@ baseunificada &lt;- read_excel(destfile)</code></pre>
     lance2 = as.integer(lance2),
     resp1 = as.factor(resp1),
     resp2 = as.factor(resp2)
-  )
-
-base %&gt;% filter(parque == &quot;macaxeira&quot;) %&gt;% select(infraestrutura) %&gt;% unique()</code></pre>
-<pre><code>## # A tibble: 2 x 1
-##   infraestrutura
-##            &lt;int&gt;
-## 1              0
-## 2              1</code></pre>
+  )</code></pre>
 <pre class="r"><code>base %&gt;% filter(parque == &quot;macaxeira&quot;) %&gt;% select(temperatura) %&gt;% unique()</code></pre>
 <pre><code>## # A tibble: 1 x 1
 ##   temperatura
 ##         &lt;int&gt;
 ## 1           0</code></pre>
 <pre class="r"><code>base %&gt;% filter(parque == &quot;macaxeira&quot;) %&gt;% arrange(temperatura)</code></pre>
-<pre><code>## # A tibble: 111 x 19
-##    parque   idade sexo  cidade   escolar renda infraestrutura sombra temperatura
-##    &lt;fct&gt;    &lt;int&gt; &lt;fct&gt; &lt;fct&gt;      &lt;int&gt; &lt;int&gt;          &lt;int&gt;  &lt;int&gt;       &lt;int&gt;
-##  1 macaxei~    45 1     recife         0  1500              0      0           0
-##  2 macaxei~    40 0     recife         0   988              1      1           0
-##  3 macaxei~    39 0     camarag~       0   988              1      1           0
-##  4 macaxei~    26 1     recife         0  3000              1      0           0
-##  5 macaxei~    24 1     recife         0  1500              0      1           0
-##  6 macaxei~    25 0     recife         0  2000              1      1           0
-##  7 macaxei~    33 1     recife         0  2000              1      1           0
-##  8 macaxei~    41 0     recife         0  1500              1      0           0
-##  9 macaxei~    22 1     paulista       0  1700              1      1           0
-## 10 macaxei~    24 1     recife         0  1600              1      1           0
-## # ... with 101 more rows, and 10 more variables: lance1 &lt;int&gt;, lance2 &lt;int&gt;,
+<pre><code>## # A tibble: 111 x 18
+##    parque   idade  sexo cidade   escolar renda infraestrutura sombra temperatura
+##    &lt;fct&gt;    &lt;int&gt; &lt;int&gt; &lt;fct&gt;      &lt;int&gt; &lt;int&gt;          &lt;int&gt;  &lt;int&gt;       &lt;int&gt;
+##  1 macaxei~    45     1 recife         0  1500              0      0           0
+##  2 macaxei~    40     0 recife         0   988              1      1           0
+##  3 macaxei~    39     0 camarag~       0   988              1      1           0
+##  4 macaxei~    26     1 recife         0  3000              1      0           0
+##  5 macaxei~    24     1 recife         0  1500              0      1           0
+##  6 macaxei~    25     0 recife         0  2000              1      1           0
+##  7 macaxei~    33     1 recife         0  2000              1      1           0
+##  8 macaxei~    41     0 recife         0  1500              1      0           0
+##  9 macaxei~    22     1 paulista       0  1700              1      1           0
+## 10 macaxei~    24     1 recife         0  1600              1      1           0
+## # ... with 101 more rows, and 9 more variables: lance1 &lt;int&gt;, lance2 &lt;int&gt;,
 ## #   resp1 &lt;fct&gt;, resp2 &lt;fct&gt;, bidl &lt;dbl&gt;, bidh &lt;dbl&gt;, lnRendat1 &lt;dbl&gt;,
-## #   lnRendat2 &lt;dbl&gt;, lnRenda &lt;dbl&gt;, t &lt;dbl&gt;</code></pre>
+## #   lnRendat2 &lt;dbl&gt;, lnRenda &lt;dbl&gt;</code></pre>
 </div>
 <div id="conferindo-missing-values-restantes" class="section level1">
 <h1>Conferindo missing values restantes</h1>
 <pre class="r"><code>base %&gt;% summarise_all(~ sum(is.na(.)))</code></pre>
-<pre><code>## # A tibble: 1 x 19
+<pre><code>## # A tibble: 1 x 18
 ##   parque idade  sexo cidade escolar renda infraestrutura sombra temperatura
 ##    &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt; &lt;int&gt;          &lt;int&gt;  &lt;int&gt;       &lt;int&gt;
-## 1      0     0     0      0       0     0              0      0           0
-## # ... with 10 more variables: lance1 &lt;int&gt;, lance2 &lt;int&gt;, resp1 &lt;int&gt;,
+## 1     33     0     0     33       0     0              0      0           0
+## # ... with 9 more variables: lance1 &lt;int&gt;, lance2 &lt;int&gt;, resp1 &lt;int&gt;,
 ## #   resp2 &lt;int&gt;, bidl &lt;int&gt;, bidh &lt;int&gt;, lnRendat1 &lt;int&gt;, lnRendat2 &lt;int&gt;,
-## #   lnRenda &lt;int&gt;, t &lt;int&gt;</code></pre>
+## #   lnRenda &lt;int&gt;</code></pre>
 </div>
 <div id="testando-correlação-entre-variáveis" class="section level1">
 <h1>Testando correlação entre variáveis</h1>
@@ -276,10 +268,10 @@ base %&gt;% filter(parque == &quot;macaxeira&quot;) %&gt;% select(infraestrutura
   mutate(resp1 = as.numeric(resp1), resp2 = as.numeric(resp2)) %&gt;% 
   cor()  </code></pre>
 <pre><code>##             resp1       resp2      lance1     lance2
-## resp1   1.0000000  0.40996009 -0.25476119 0.49812187
-## resp2   0.4099601  1.00000000 -0.05905675 0.09222811
-## lance1 -0.2547612 -0.05905675  1.00000000 0.36077985
-## lance2  0.4981219  0.09222811  0.36077985 1.00000000</code></pre>
+## resp1   1.0000000  0.40810964 -0.24179444 0.49440771
+## resp2   0.4081096  1.00000000 -0.05357547 0.09522973
+## lance1 -0.2417944 -0.05357547  1.00000000 0.37342816
+## lance2  0.4944077  0.09522973  0.37342816 1.00000000</code></pre>
 <pre class="r"><code># conclusao: dado que $\rho$ != 0, vamos utilizar pelo modelo bivariado</code></pre>
 </div>
 <div id="salvando-dados-de-cada-parque." class="section level1">
@@ -293,24 +285,18 @@ dados_macaxeira &lt;- base %&gt;% filter(parque == &quot;macaxeira&quot;)
 dados_jaqueira &lt;- base %&gt;% filter(parque == &quot;jaqueira&quot;)
 dados_santana &lt;- base %&gt;% filter(parque == &quot;santana&quot;)</code></pre>
 </div>
-<div id="configurando-listas-de-variaveis---modelo-sem-renda" class="section level1">
-<h1>Configurando listas de variaveis - modelo sem renda</h1>
+<div id="dados-de-todos-os-parques" class="section level1">
+<h1>DADOS DE TODOS OS PARQUES</h1>
+<div id="configurando-listas-de-variaveis---modelo-sem-renda" class="section level2">
+<h2>Configurando listas de variaveis - modelo sem renda</h2>
 <pre class="r"><code>treat.eq &lt;- resp1 ~ lance1 + idade + sexo + escolar + temperatura + infraestrutura
 out.eq &lt;- resp2 ~ lance2 + idade + sexo + escolar + temperatura + infraestrutura
 f.list &lt;- list(treat.eq, out.eq)
 mr &lt;- c(&quot;probit&quot;, &quot;probit&quot;)</code></pre>
 </div>
-<div id="configurando-listas-de-variaveis---modelo-com-lnrendat" class="section level1">
-<h1>Configurando listas de variaveis - modelo com lnRendat</h1>
-<pre class="r"><code>treat.eq1 &lt;- resp1 ~ lance1 + idade + sexo + escolar + lnRendat1 + temperatura + infraestrutura
-out.eq1 &lt;- resp2 ~ lance2 + idade + sexo + escolar + lnRendat2 + temperatura + infraestrutura
-f.list1 &lt;- list(treat.eq1, out.eq1)
-mr &lt;- c(&quot;probit&quot;, &quot;probit&quot;)</code></pre>
-</div>
-<div id="regressão-com-dados-de-todos-os-parques" class="section level1">
-<h1>Regressão com dados de <strong>todos os parques</strong></h1>
-<pre class="r"><code># Modelo sem renda 
-bvp &lt;- gjrm(f.list, data=base, Model=&quot;B&quot;, margins= mr)
+<div id="modelo-linear" class="section level2">
+<h2>Modelo Linear</h2>
+<pre class="r"><code>bvp &lt;- gjrm(f.list, data=base, Model=&quot;B&quot;, margins= mr)
 summary(bvp)</code></pre>
 <pre><code>## 
 ## COPULA:   Gaussian
@@ -323,13 +309,13 @@ summary(bvp)</code></pre>
 ## 
 ## Parametric coefficients:
 ##                 Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)     0.657915   0.147372   4.464 8.03e-06 ***
-## lance1         -0.021214   0.002016 -10.523  &lt; 2e-16 ***
-## idade          -0.005876   0.002674  -2.197 0.027988 *  
-## sexo1           0.072638   0.078913   0.920 0.357326    
-## escolar         0.179675   0.092336   1.946 0.051669 .  
-## temperatura     0.297289   0.088587   3.356 0.000791 ***
-## infraestrutura  0.494378   0.082387   6.001 1.96e-09 ***
+## (Intercept)     0.635419   0.144080   4.410 1.03e-05 ***
+## lance1         -0.020311   0.002000 -10.154  &lt; 2e-16 ***
+## idade          -0.006643   0.002616  -2.540  0.01109 *  
+## sexo            0.073047   0.077620   0.941  0.34666    
+## escolar         0.216602   0.091525   2.367  0.01795 *  
+## temperatura     0.270258   0.086305   3.131  0.00174 ** 
+## infraestrutura  0.503613   0.080887   6.226 4.78e-10 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
@@ -340,21 +326,71 @@ summary(bvp)</code></pre>
 ## 
 ## Parametric coefficients:
 ##                 Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)     0.592923   0.144231   4.111 3.94e-05 ***
-## lance2         -0.016455   0.002010  -8.187 2.68e-16 ***
-## idade          -0.011202   0.002579  -4.344 1.40e-05 ***
-## sexo1           0.172271   0.074987   2.297   0.0216 *  
-## escolar        -0.083828   0.087448  -0.959   0.3378    
-## temperatura    -0.009167   0.085156  -0.108   0.9143    
-## infraestrutura  0.638580   0.078101   8.176 2.93e-16 ***
+## (Intercept)     0.528728   0.141845   3.728 0.000193 ***
+## lance2         -0.015654   0.001999  -7.832 4.79e-15 ***
+## idade          -0.010806   0.002530  -4.272 1.94e-05 ***
+## sexo            0.172253   0.074038   2.327 0.019989 *  
+## escolar        -0.067069   0.086997  -0.771 0.440745    
+## temperatura    -0.025151   0.083284  -0.302 0.762659    
+## infraestrutura  0.651171   0.077040   8.452  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## 
-## n = 1111  theta = 0.805(0.731,0.856)  tau = 0.595(0.522,0.654)
+## n = 1144  theta = 0.787(0.718,0.841)  tau = 0.577(0.509,0.636)
 ## total edf = 15</code></pre>
-<pre class="r"><code># Modelo com renda 
-bvp_ll &lt;- gjrm(f.list1, data=base, Model=&quot;B&quot;, margins= mr)
+<pre class="r"><code># valores médios
+lance1_med &lt;- mean(base$lance1)
+renda_med &lt;- mean(base$renda)
+idade_med &lt;- mean(base$idade)
+sexo_med &lt;- mean(base$sexo)
+escolar_med &lt;- mean(base$escolar)
+temp_med &lt;- mean(base$temperatura)
+infra_med &lt;- mean(base$infraestrutura)</code></pre>
+<pre class="r"><code>## coeficientes eq 1
+cf_intercept &lt;- bvp$coefficients[1]
+cf_lance1 &lt;- bvp$coefficients[2]
+cf_idade &lt;- bvp$coefficients[3]
+cf_sexo &lt;- bvp$coefficients[4]
+cf_escolar &lt;- bvp$coefficients[5]
+cf_temp &lt;- bvp$coefficients[6]
+cf_infra &lt;- bvp$coefficients[7]</code></pre>
+<pre class="r"><code># coeficientes eq 2
+cf_intercept2 &lt;- bvp$coefficients[8]
+cf_lance2 &lt;- bvp$coefficients[9]
+cf_idade2 &lt;- bvp$coefficients[10]
+cf_sexo2 &lt;- bvp$coefficients[11]
+cf_escolar2 &lt;- bvp$coefficients[12]
+cf_temp2 &lt;- bvp$coefficients[13]
+cf_infra2 &lt;- bvp$coefficients[14]</code></pre>
+</div>
+<div id="calculando-a-dap" class="section level2">
+<h2>CALCULANDO A DAP</h2>
+<div id="dap-equação-1" class="section level3">
+<h3>Dap equação 1</h3>
+<pre class="r"><code>dap_eq1_L &lt;- -(cf_intercept + cf_idade*idade_med + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)/cf_lance1 # R$ 44,53
+
+print(dap_eq1_L)</code></pre>
+<pre><code>## (Intercept) 
+##    40.47244</code></pre>
+</div>
+<div id="dap-equação-2" class="section level3">
+<h3>Dap equação 2</h3>
+<pre class="r"><code>dap_eq2_L &lt;- -(cf_intercept + cf_idade2*idade_med + cf_sexo2*sexo_med +     cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_lance2 # R$ 48,16 
+
+print(dap_eq2_L)</code></pre>
+<pre><code>## (Intercept) 
+##    39.50105</code></pre>
+</div>
+</div>
+</div>
+<div id="configurando-listas-de-variáveis---modelo-com-lnrendat" class="section level1">
+<h1>Configurando listas de variáveis - modelo com lnRendat</h1>
+<pre class="r"><code>treat.eq1 &lt;- resp1 ~ lance1 + idade + sexo + escolar + lnRendat1 + temperatura + infraestrutura
+out.eq1 &lt;- resp2 ~ lance2 + idade + sexo + escolar + lnRendat2 + temperatura + infraestrutura
+f.list1 &lt;- list(treat.eq1, out.eq1)
+mr &lt;- c(&quot;probit&quot;, &quot;probit&quot;)</code></pre>
+<pre class="r"><code>bvp_ll &lt;- gjrm(f.list1, data=base, Model=&quot;B&quot;, margins= mr)
 summary(bvp_ll)</code></pre>
 <pre><code>## 
 ## COPULA:   Gaussian
@@ -368,14 +404,14 @@ summary(bvp_ll)</code></pre>
 ## 
 ## Parametric coefficients:
 ##                 Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)     0.679130   0.149671   4.537 5.69e-06 ***
-## lance1         -0.020656   0.002135  -9.677  &lt; 2e-16 ***
-## idade          -0.006122   0.002700  -2.267 0.023363 *  
-## sexo1           0.061983   0.079628   0.778 0.436329    
-## escolar         0.165661   0.093475   1.772 0.076351 .  
-## lnRendat1       0.587182   0.699840   0.839 0.401456    
-## temperatura     0.299143   0.088726   3.372 0.000747 ***
-## infraestrutura  0.490722   0.082740   5.931 3.01e-09 ***
+## (Intercept)     0.675737   0.147267   4.589 4.46e-06 ***
+## lance1         -0.019314   0.002178  -8.867  &lt; 2e-16 ***
+## idade          -0.007140   0.002647  -2.698  0.00698 ** 
+## sexo            0.058096   0.078527   0.740  0.45941    
+## escolar         0.193019   0.093143   2.072  0.03824 *  
+## lnRendat1      -1.291056   1.018472  -1.268  0.20493    
+## temperatura     0.273360   0.086415   3.163  0.00156 ** 
+## infraestrutura  0.494839   0.081293   6.087 1.15e-09 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
@@ -387,23 +423,68 @@ summary(bvp_ll)</code></pre>
 ## 
 ## Parametric coefficients:
 ##                 Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)     0.611859   0.145733   4.198 2.69e-05 ***
-## lance2         -0.015752   0.002094  -7.524 5.31e-14 ***
-## idade          -0.011409   0.002594  -4.398 1.09e-05 ***
-## sexo1           0.162913   0.075341   2.162   0.0306 *  
-## escolar        -0.101182   0.088633  -1.142   0.2536    
-## lnRendat2       0.725186   0.639061   1.135   0.2565    
-## temperatura    -0.012414   0.085246  -0.146   0.8842    
-## infraestrutura  0.635705   0.078305   8.118 4.73e-16 ***
+## (Intercept)     0.566787   0.144260   3.929 8.53e-05 ***
+## lance2         -0.014507   0.002124  -6.831 8.42e-12 ***
+## idade          -0.011264   0.002549  -4.418 9.95e-06 ***
+## sexo            0.159251   0.074561   2.136   0.0327 *  
+## escolar        -0.094779   0.088798  -1.067   0.2858    
+## lnRendat2      -1.480258   0.947099  -1.563   0.1181    
+## temperatura    -0.027559   0.083360  -0.331   0.7409    
+## infraestrutura  0.642923   0.077280   8.319  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## 
-## n = 1110  theta = 0.803(0.72,0.871)  tau = 0.594(0.512,0.672)
+## n = 1144  theta = 0.786(0.701,0.837)  tau = 0.575(0.494,0.631)
 ## total edf = 17</code></pre>
 </div>
-<div id="regressão-parques---individualmente---linear-na-renda" class="section level1">
-<h1>Regressão Parques - individualmente - linear na renda</h1>
+<div id="daps-modelo-log-linear-na-renda" class="section level1">
+<h1>DAP’s MODELO LOG LINEAR NA RENDA</h1>
+<div id="coeficientes" class="section level2">
+<h2>coeficientes</h2>
+<pre class="r"><code># Equação 1
+cf_intercept &lt;- bvp_ll$coefficients[1]
+cf_lance1 &lt;- bvp_ll$coefficients[2]
+cf_idade &lt;- bvp_ll$coefficients[3]
+cf_sexo &lt;- bvp_ll$coefficients[4]
+cf_escolar &lt;- bvp_ll$coefficients[5]
+cf_lnRendat1 &lt;- bvp_ll$coefficients[6]
+cf_temp &lt;- bvp_ll$coefficients[7]
+cf_infra &lt;- bvp_ll$coefficients[8]</code></pre>
+</div>
+<div id="coeficientes-1" class="section level2">
+<h2>coeficientes</h2>
+<pre class="r"><code># equation 2
+cf_intercept2 &lt;- bvp_ll$coefficients[9]
+cf_lance2 &lt;- bvp_ll$coefficients[10]
+cf_idade2 &lt;- bvp_ll$coefficients[11]
+cf_sexo2 &lt;- bvp_ll$coefficients[12]
+cf_escolar2 &lt;- bvp_ll$coefficients[13]
+cf_lnRendat2 &lt;- bvp_ll$coefficients[14]
+cf_temp2 &lt;- bvp_ll$coefficients[15]
+cf_infra2 &lt;- bvp_ll$coefficients[16]</code></pre>
+<div id="dap-equação-1-1" class="section level3">
+<h3>Dap equação 1</h3>
+<pre class="r"><code>dap_eq1_ll &lt;- renda_med - renda_med*(exp(-cf_intercept + cf_idade*idade_med + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)/cf_lnRendat1)
+
+print(dap_eq1_ll)</code></pre>
+<pre><code>## (Intercept) 
+##    4503.637</code></pre>
+</div>
+<div id="dap-equação-2-1" class="section level3">
+<h3>Dap equação 2</h3>
+<pre class="r"><code>dap_eq2_ll &lt;- renda_med - renda_med*(exp(-cf_intercept2 + cf_idade2*idade_med + cf_sexo2*sexo_med + cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_lnRendat2)
+
+print(dap_eq2_ll)</code></pre>
+<pre><code>## (Intercept) 
+##    4211.916</code></pre>
+</div>
+</div>
+</div>
+<div id="análise-individual-dos-parques" class="section level1">
+<h1>Análise individual dos parques</h1>
+<div id="regressão-parques---individualmente---linear-na-renda" class="section level2">
+<h2>Regressão Parques - individualmente - linear na renda</h2>
 <pre class="r"><code>db.sitiotrindade &lt;-gjrm(f.list, data=dados_sitio_da_trindade, Model=&quot;B&quot;, margins= mr)
 db.trezedemaio &lt;- gjrm(f.list, data=dados_13demaio, Model=&quot;B&quot;, margins= mr)
 db.santosdumont &lt;- gjrm(f.list, data=dados_santosdumont, Model=&quot;B&quot;, margins= mr)
@@ -411,58 +492,10 @@ db.lindu &lt;- gjrm(f.list, data=dados_lindu, Model=&quot;B&quot;, margins= mr)
 db.caiara &lt;- gjrm(f.list, data=dados_caiara, Model=&quot;B&quot;, margins= mr)
 db.macaxeira &lt;- gjrm(f.list, data=dados_macaxeira, Model=&quot;B&quot;, margins= mr)
 db.jaqueira &lt;- gjrm(f.list, data=dados_jaqueira, Model=&quot;B&quot;, margins= mr)
-db.santana &lt;- gjrm(f.list, data=dados_santana, Model=&quot;B&quot;, margins= mr)
-
-summary(db.caiara)</code></pre>
-<pre><code>## 
-## COPULA:   Gaussian
-## MARGIN 1: Bernoulli
-## MARGIN 2: Bernoulli
-## 
-## EQUATION 1
-## Link function for mu.1: probit 
-## Formula: resp1 ~ lance1 + idade + sexo + escolar + temperatura + infraestrutura
-## 
-## Parametric coefficients:
-##                Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)     0.05623    0.67665   0.083   0.9338    
-## lance1         -0.08932    0.02158  -4.140 3.47e-05 ***
-## idade           0.01717    0.02696   0.637   0.5242    
-## sexo1           0.69541    0.47402   1.467   0.1424    
-## escolar        -0.83682    0.60811  -1.376   0.1688    
-## temperatura     0.35718    0.47564   0.751   0.4527    
-## infraestrutura  1.21412    0.50806   2.390   0.0169 *  
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## 
-## EQUATION 2
-## Link function for mu.2: probit 
-## Formula: resp2 ~ lance2 + idade + sexo + escolar + temperatura + infraestrutura
-## 
-## Parametric coefficients:
-##                Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)     0.84672    0.60763   1.393    0.163    
-## lance2         -0.05310    0.01173  -4.526 6.01e-06 ***
-## idade          -0.02166    0.01809  -1.198    0.231    
-## sexo1           0.49011    0.39425   1.243    0.214    
-## escolar         0.61861    0.44074   1.404    0.160    
-## temperatura     0.51139    0.40133   1.274    0.203    
-## infraestrutura  0.28265    0.38830   0.728    0.467    
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## 
-## n = 51  theta = 1(-1,1)  tau = 1(-1,1)
-## total edf = 15</code></pre>
-<pre class="r"><code>dados_santana %&gt;% select(temperatura) %&gt;% unique()</code></pre>
-<pre><code>## # A tibble: 1 x 1
-##   temperatura
-##         &lt;int&gt;
-## 1           0</code></pre>
+db.santana &lt;- gjrm(f.list, data=dados_santana, Model=&quot;B&quot;, margins= mr)</code></pre>
 </div>
-<div id="regressão-parques---individualmente---log-linear-na-renda" class="section level1">
-<h1>Regressão Parques - individualmente - Log linear na renda</h1>
+<div id="regressão-parques---individualmente---log-linear-na-renda" class="section level2">
+<h2>Regressão Parques - individualmente - Log linear na renda</h2>
 <pre class="r"><code>db.sitiotrindadeLL &lt;-gjrm(f.list1, data=dados_sitio_da_trindade, Model=&quot;B&quot;, margins= mr)
 db.trezedemaioLL &lt;- gjrm(f.list1, data=dados_13demaio, Model=&quot;B&quot;, margins= mr)
 db.santosdumontLL &lt;- gjrm(f.list1, data=dados_santosdumont, Model=&quot;B&quot;, margins= mr)
@@ -471,6 +504,7 @@ db.linduLL &lt;- gjrm(f.list1, data=dados_lindu, Model=&quot;B&quot;, margins= m
 db.macaxeiraLL &lt;- gjrm(f.list1, data=dados_macaxeira, Model=&quot;B&quot;, margins= mr)
 db.jaqueiraLL &lt;- gjrm(f.list1, data=dados_jaqueira, Model=&quot;B&quot;, margins= mr)
 db.santanaLL &lt;- gjrm(f.list1, data=dados_santana, Model=&quot;B&quot;, margins= mr)</code></pre>
+</div>
 <div id="os-dados-do-parque-caiara-estão-causando-problemas-na-analise." class="section level2">
 <h2>Os dados do parque caiara estão causando problemas na analise.</h2>
 <p>A mensagem de erro aponta que <strong>“fitted probabilities numerically 0 or 1 ocurred”</strong></p>

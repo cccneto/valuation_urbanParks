@@ -37,7 +37,7 @@ baseunificada <- read_excel(destfile)
 ```{r}
 baseunificada <- baseunificada %>% 
   select(parque, idade, sexo, cidade, escolar, renda, infraestrutura, sombra, temperatura, 
-         lance1,lance2, resp1, resp2, bidl, bidh, lnRendat1, lnRendat2, lnRenda, t)
+         lance1,lance2, resp1, resp2, bidl, bidh, lnRendat1, lnRendat2, lnRenda)
 ```
 
 
@@ -87,8 +87,6 @@ base <- base %>%
     resp1 = as.factor(resp1),
     resp2 = as.factor(resp2)
   )
-
-base %>% filter(parque == "macaxeira") %>% select(infraestrutura) %>% unique()
 
 
 ```
@@ -184,21 +182,24 @@ cf_infra2 <- bvp$coefficients[14]
 ```
 
 
-## Cálculo da dap
+## CALCULANDO A DAP 
 
 ### Dap equação 1
 ```{r}
 
 dap_eq1_L <- -(cf_intercept + cf_idade*idade_med + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)/cf_lance1 # R$ 44,53
+
+print(dap_eq1_L)
 ```
 
 ### Dap equação 2
 ```{r}
-dap_eq2_L <- -(cf_intercept + cf_idade2*idade_med + cf_sexo2*sexo_med +     cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_lance2 # R$ 48,16 
+dap_eq2_L <- -(cf_intercept + cf_idade2*idade_med + cf_sexo2*sexo_med + cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_lance2 # R$ 48,16 
 
+print(dap_eq2_L)
 ```
 
-# Configurando listas de variaveis - modelo com lnRendat
+# Configurando listas de variáveis - modelo com lnRendat
 
 ```{r}
 treat.eq1 <- resp1 ~ lance1 + idade + sexo + escolar + lnRendat1 + temperatura + infraestrutura
@@ -214,7 +215,7 @@ summary(bvp_ll)
 
 ```
 
-# DAP's para modelo Log linear na Renda
+# DAP's MODELO LOG LINEAR NA RENDA
 
 ## coeficientes
 ```{r}
@@ -227,6 +228,7 @@ cf_escolar <- bvp_ll$coefficients[5]
 cf_lnRendat1 <- bvp_ll$coefficients[6]
 cf_temp <- bvp_ll$coefficients[7]
 cf_infra <- bvp_ll$coefficients[8]
+ct_t1 <- bvp_ll$coefficients[2]
 
 ```
 
@@ -241,17 +243,22 @@ cf_escolar2 <- bvp_ll$coefficients[13]
 cf_lnRendat2 <- bvp_ll$coefficients[14]
 cf_temp2 <- bvp_ll$coefficients[15]
 cf_infra2 <- bvp_ll$coefficients[16]
+ct_t1 <- bvp_ll$coefficients[10]
+
 ```
 
 ### Dap equação 1
 ```{r}
-dap_eq1_ll <- renda_med - renda_med*(exp(-cf_intercept + cf_idade*idade_med + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)/cf_lnRendat1)
+dap_eq1_ll <- renda_med - (renda_med*(exp(-((cf_intercept + cf_idade*(idade_med) + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)))/cf_t1))
+
+print(dap_eq1_ll)
 ```
 
 ### Dap equação 2
 ```{r}
-dap_eq2_ll <- renda_med - renda_med*(exp(-cf_intercept2 + cf_idade2*idade_med + cf_sexo2*sexo_med + cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_lnRendat2)
-	
+dap_eq2_ll <- renda_med - (renda_med*(exp(-cf_intercept2 + cf_idade2*idade_med + cf_sexo2*sexo_med + cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_t2))
+
+print(dap_eq2_ll)
 ```
 
 
