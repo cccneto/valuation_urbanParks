@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## R Markdown
 
-```{r include=FALSE, warning=FALSE}
+```{r warning=FALSE, include=FALSE}
 library(readxl)
 library(DCchoice)
 library(Ecdat)
@@ -25,7 +25,7 @@ library(tidyr)
 
 # Carregando base de dados
 
-```{r warning=FALSE, message=FALSE}
+```{r message=FALSE, warning=FALSE}
 url <-
   "https://github.com/cccneto/valuation_urbanParks/blob/master/dados/baseunificada.xlsx?raw=true"
 destfile <- "base_unificada.xlsx"
@@ -40,10 +40,6 @@ baseunificada <- baseunificada %>%
          lance1,lance2, resp1, resp2, bidl, bidh, lnRendat1, lnRendat2, lnRenda)
 ```
 
-
-```{r}
-baseunificada %>% glimpse()
-```
 
 ```{r}
 baseunificada <- baseunificada %>% mutate(infraestrutura = as.double(infraestrutura),
@@ -65,9 +61,6 @@ base <- baseunificada %>%
      sexo = case_when(sexo == 1 ~ "1", TRUE ~ "0")
     )
 
-base %>% filter(parque == "macaxeira") %>% select(infraestrutura) %>% unique()
-class(baseunificada$infraestrutura)
-base %>% glimpse()
 ```
 
 ```{r}
@@ -89,12 +82,6 @@ base <- base %>%
   )
 
 
-```
-
-
-```{r}
-base %>% filter(parque == "macaxeira") %>% select(temperatura) %>% unique()
-base %>% filter(parque == "macaxeira") %>% arrange(temperatura)
 ```
 
 
@@ -130,9 +117,9 @@ dados_santana <- base %>% filter(parque == "santana")
 
 ```
 
-# DADOS DE TODOS OS PARQUES
+# ANALISE CONJUNTA DE TODOS OS PARQUES
 
-## Configurando listas de variaveis - modelo sem renda
+## Configurando listas de variaveis - **modelo sem renda**
 ```{r}
 treat.eq <- resp1 ~ lance1 + idade + sexo + escolar + temperatura + infraestrutura
 out.eq <- resp2 ~ lance2 + idade + sexo + escolar + temperatura + infraestrutura
@@ -147,8 +134,9 @@ bvp <- gjrm(f.list, data=base, Model="B", margins= mr)
 summary(bvp)
 ```
 
-```{r}
-# valores médios
+
+```{r include=FALSE}
+# atribuindo valores médios
 lance1_med <- mean(base$lance1)
 renda_med <- mean(base$renda)
 idade_med <- mean(base$idade)
@@ -156,10 +144,11 @@ sexo_med <- mean(base$sexo)
 escolar_med <- mean(base$escolar)
 temp_med <- mean(base$temperatura)
 infra_med <- mean(base$infraestrutura)
+lance2_med <- mean(base$lance2)
 ```
 
 
-```{r}
+```{r include=FALSE}
 ## coeficientes eq 1
 cf_intercept <- bvp$coefficients[1]
 cf_lance1 <- bvp$coefficients[2]
@@ -170,7 +159,7 @@ cf_temp <- bvp$coefficients[6]
 cf_infra <- bvp$coefficients[7]
 ```
 
-```{r}
+```{r include=FALSE}
 # coeficientes eq 2
 cf_intercept2 <- bvp$coefficients[8]
 cf_lance2 <- bvp$coefficients[9]
@@ -187,79 +176,17 @@ cf_infra2 <- bvp$coefficients[14]
 ### Dap equação 1
 ```{r}
 
-dap_eq1_L <- -(cf_intercept + cf_idade*idade_med + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)/cf_lance1 # R$ 44,53
-
-print(dap_eq1_L)
+dap_eq1 <- -(cf_intercept + cf_idade*idade_med + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)/cf_lance1 # R$ 40,47
 ```
+
+A dap da equação 1 foi de R$ `r round(dap_eq1, digits = 2)`
 
 ### Dap equação 2
 ```{r}
-dap_eq2_L <- -(cf_intercept + cf_idade2*idade_med + cf_sexo2*sexo_med + cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_lance2 # R$ 48,16 
-
-print(dap_eq2_L)
+dap_eq2 <- -(cf_intercept + cf_idade2*idade_med + cf_sexo2*sexo_med + cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_lance2 # R$ 39,50 
 ```
 
-# Configurando listas de variáveis - modelo com lnRendat
-
-```{r}
-treat.eq1 <- resp1 ~ lance1 + idade + sexo + escolar + lnRendat1 + temperatura + infraestrutura
-out.eq1 <- resp2 ~ lance2 + idade + sexo + escolar + lnRendat2 + temperatura + infraestrutura
-f.list1 <- list(treat.eq1, out.eq1)
-mr <- c("probit", "probit")
-
-```
-
-```{r}
-bvp_ll <- gjrm(f.list1, data=base, Model="B", margins= mr)
-summary(bvp_ll)
-
-```
-
-# DAP's MODELO LOG LINEAR NA RENDA
-
-## coeficientes
-```{r}
-# Equação 1
-cf_intercept <- bvp_ll$coefficients[1]
-cf_lance1 <- bvp_ll$coefficients[2]
-cf_idade <- bvp_ll$coefficients[3]
-cf_sexo <- bvp_ll$coefficients[4]
-cf_escolar <- bvp_ll$coefficients[5]
-cf_lnRendat1 <- bvp_ll$coefficients[6]
-cf_temp <- bvp_ll$coefficients[7]
-cf_infra <- bvp_ll$coefficients[8]
-ct_t1 <- bvp_ll$coefficients[2]
-
-```
-
-## coeficientes 
-```{r}
-# equation 2
-cf_intercept2 <- bvp_ll$coefficients[9]
-cf_lance2 <- bvp_ll$coefficients[10]
-cf_idade2 <- bvp_ll$coefficients[11]
-cf_sexo2 <- bvp_ll$coefficients[12]
-cf_escolar2 <- bvp_ll$coefficients[13]
-cf_lnRendat2 <- bvp_ll$coefficients[14]
-cf_temp2 <- bvp_ll$coefficients[15]
-cf_infra2 <- bvp_ll$coefficients[16]
-ct_t1 <- bvp_ll$coefficients[10]
-
-```
-
-### Dap equação 1
-```{r}
-dap_eq1_ll <- renda_med - (renda_med*(exp(-((cf_intercept + cf_idade*(idade_med) + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)))/cf_t1))
-
-print(dap_eq1_ll)
-```
-
-### Dap equação 2
-```{r}
-dap_eq2_ll <- renda_med - (renda_med*(exp(-cf_intercept2 + cf_idade2*idade_med + cf_sexo2*sexo_med + cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_t2))
-
-print(dap_eq2_ll)
-```
+A dap da equação 2 foi de R$ `r round(dap_eq2, digits = 2)`
 
 
 
@@ -267,32 +194,21 @@ print(dap_eq2_ll)
 
 ## Regressão Parques - individualmente - linear na renda 
 ```{r}
-db.sitiotrindade <-gjrm(f.list, data=dados_sitio_da_trindade, Model="B", margins= mr)
-db.trezedemaio <- gjrm(f.list, data=dados_13demaio, Model="B", margins= mr)
-db.santosdumont <- gjrm(f.list, data=dados_santosdumont, Model="B", margins= mr)
-db.lindu <- gjrm(f.list, data=dados_lindu, Model="B", margins= mr)
-db.caiara <- gjrm(f.list, data=dados_caiara, Model="B", margins= mr)
-db.macaxeira <- gjrm(f.list, data=dados_macaxeira, Model="B", margins= mr)
-db.jaqueira <- gjrm(f.list, data=dados_jaqueira, Model="B", margins= mr)
-db.santana <- gjrm(f.list, data=dados_santana, Model="B", margins= mr)
+
+bvp.sitiotrindade <- gjrm(f.list, data=dados_sitio_da_trindade, Model="B", margins= mr)
+bvp.trezedemaio <- gjrm(f.list, data=dados_13demaio, Model="B", margins= mr)
+bvp.santosdumont <- gjrm(f.list, data=dados_santosdumont, Model="B", margins= mr)
+bvp.lindu <- gjrm(f.list, data=dados_lindu, Model="B", margins= mr)
+bvp.caiara <- gjrm(f.list, data=dados_caiara, Model="B", margins= mr)
+bvp.macaxeira <- gjrm(f.list, data=dados_macaxeira, Model="B", margins= mr)
+bvp.jaqueira <- gjrm(f.list, data=dados_jaqueira, Model="B", margins= mr)
+bvp.santana <- gjrm(f.list, data=dados_santana, Model="B", margins= mr)
 ```
 
-## Regressão Parques - individualmente - Log linear na renda 
+
+## Os 
+
 ```{r}
-db.sitiotrindadeLL <-gjrm(f.list1, data=dados_sitio_da_trindade, Model="B", margins= mr)
-db.trezedemaioLL <- gjrm(f.list1, data=dados_13demaio, Model="B", margins= mr)
-db.santosdumontLL <- gjrm(f.list1, data=dados_santosdumont, Model="B", margins= mr)
-db.linduLL <- gjrm(f.list1, data=dados_lindu, Model="B", margins= mr)
-# db.caiaraLL <- gjrm(f.list1, data=dados_caiara, Model="B", margins= mr) # fitted probabilities numerically 0 or 1 ocurred
-db.macaxeiraLL <- gjrm(f.list1, data=dados_macaxeira, Model="B", margins= mr)
-db.jaqueiraLL <- gjrm(f.list1, data=dados_jaqueira, Model="B", margins= mr)
-db.santanaLL <- gjrm(f.list1, data=dados_santana, Model="B", margins= mr)
-
+broom::tidy(bvp.sitiotrindade)
 ```
 
-## Os dados do parque caiara estão causando problemas na analise.
-
-A mensagem de erro aponta que **"fitted probabilities numerically 0 or 1 ocurred"**
-```{r}
-dados_caiara %>% select(resp2) %>% arrange()
-```
