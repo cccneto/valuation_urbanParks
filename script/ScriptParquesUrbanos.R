@@ -1,3 +1,4 @@
+
 library(readxl)
 library(DCchoice)
 library(Ecdat)
@@ -5,185 +6,165 @@ library(lmtest)
 library(dplyr)
 library(VIM)
 library(GJRM)
+library(tidyr)
 
-# carregando base
-url <-
-  "https://github.com/cccneto/valuation_urbanParks/blob/master/dados/baseunificada.xlsx?raw=true"
+# Carregando base de dados
+
+url <- "https://github.com/cccneto/valuation_urbanParks/blob/master/dados/baseunificada.xlsx?raw=true"
 destfile <- "base_unificada.xlsx"
 curl::curl_download(url, destfile)
 baseunificada <- read_excel(destfile)
-View(baseunificada)
 
-
-# ajustando codigo de variaveis
-
-baseunificada <- baseunificada %>%
+baseunificada <- baseunificada %>% 
+  select(parque, idade, sexo, cidade, escolar, renda, infraestrutura, sombra, temperatura, 
+         lance1,lance2, resp1, resp2, bidl, bidh, lnRendat1, lnRendat2, lnRenda) %>% 
   mutate(
-    infraestrutura = case_when( # dummie para bom/otimo = 1
-      infraestrutura == '1' ~ "0",
-      infraestrutura == '2' ~ "0",
-      infraestrutura == '3' ~ "0",
-      TRUE ~ "1"), 
-    temperatura = case_when(  # dummie para bom/otimo = 1
-      temperatura == '1' ~ "0",
-      temperatura == '2' ~ "0",
-      temperatura == '3' ~ "0",
-      TRUE ~ "1"),
-    sombra = case_when( # dummie para bom/otimo = 1
-      sombra == '1' ~ "0",
-      sombra == '2' ~ "0",
-      sombra == '3' ~ "0",
-      TRUE ~ "1"), 
-    escolar = case_when(escolar > '15' ~ "1",
-                        TRUE ~ "0"), # 1=superior completo, 0= otherwise
-    sexo = case_when(sexo == '2' ~ "0",
-                     sexo == '3' ~ "0",
-                     TRUE ~ "1")) 
+    infraestrutura = as.double(infraestrutura),
+    sombra = as.double(sombra),
+    temperatura = as.double(temperatura))
 
-# selecionando variáveis de interesse
-dados <- baseunificada %>%
-  filter(!is.na(baseunificada), !is.na(renda)) %>% # filtrando missing values
-  filter(!renda < 1) %>% 
-  filter(!lance2 < 1) %>% # retirar os zeros do lance2
-  select( parque, idade, sexo, cidade, escolar,renda, qdepend, 
-          objetivo, infraestrutura, sombra, temperatura, tamanho,
-          lance1,lance2, depend, resp1, resp2, bidl, bidh)
+# Ajustando codigo de variaveis
 
+base <- baseunificada %>%
+  mutate(
+    infraestrutura = case_when(infraestrutura >= 4 ~ "1", TRUE ~ "0"), 
+    temperatura = case_when(temperatura >= 4 ~ "1", TRUE ~ "0"),
+    sombra = case_when(sombra >= 4 ~ "1", TRUE ~ "0"),
+    escolar = case_when(escolar > 19 ~ "1", TRUE ~ "0"), # 1=superior completo, 0= otherwise
+    sexo = case_when(sexo == 1 ~ "1", TRUE ~ "0")
+  )
 
-dados <- dados %>%
+base <- base %>%
   mutate(
     parque = as.factor(parque),
     idade = as.integer(idade),
-    sexo = as.factor(sexo),
+    sexo = as.integer(sexo),
     cidade = as.factor(cidade),
-    escolar = as.factor(escolar),
+    escolar = as.integer(escolar),
     renda = as.integer(renda),
-    qdepend = as.integer(qdepend),
-    depend = as.factor(depend),
-    objetivo = as.factor(objetivo),
-    infraestrutura = as.factor(infraestrutura),
-    sombra = as.factor(sombra),
-    temperatura = as.factor(temperatura),
+    infraestrutura = as.integer(infraestrutura),
+    sombra = as.integer(sombra),
+    temperatura = as.integer(temperatura),
     lance1 = as.integer(lance1),
     lance2 = as.integer(lance2),
-    resp1 = as.double(resp1),
-    resp2 = as.double(resp2),
-    t1 = lance1*-1,
-    t2 = lance2*-1,
-    lnRendat1 = log((renda - t1)/renda),
-    lnRendat2 = log((renda - t2)/renda)
+    resp1 = as.factor(resp1),
+    resp2 = as.factor(resp2)
   )
 
-# dados de temperatura estão faltantes para "Macaxeira"
-dados %>% filter(parque == "macaxeira") %>% relocate(temperatura) %>% select(temperatura) %>% count(temperatura)
 
+# Conferindo missing values restantes
+base %>% summarise_all(~ sum(is.na(.)))
 
+# Testando correlação entre variáveis 
 
-# conferindo missing values
-
-aggr_plot <- VIM::aggr( dados, col = c('navyblue', 'red'), numbers = TRUE,
-  sortVars = TRUE, labels = names(dados), cex.axis = .8, gap = 3, ylab = c("Histogram of missing data", "Pattern")
-)
-
-# DATA VISUALIZATION
-
-# More advanced barplot suitable for a research report
-with( dados, 
-      barplot( round(tapply(resp1, lance1, mean), 2), las = 1,
-    xlab = "Bid value categories in reais", ylab = "Proportion of selecting yes",
-    yaxs = 'i', xaxs = 'i', main = "Implied demand 'curve'", border = NA, font.main = 4)
-)
-
-# testing correlation between variables
-dados %>% select(resp1, resp2, lance1, lance2) %>% cor()  
+base %>% 
+  select(resp1, resp2, lance1, lance2) %>% 
+  mutate(resp1 = as.numeric(resp1), resp2 = as.numeric(resp2)) %>% 
+  cor()  
 # conclusao: dado que $\rho$ != 0, vamos utilizar pelo modelo bivariado
 
+# Salvando dados de cada parque.
 
-# testing variables to all parks
-sb1 <-  sbchoice(resp1 ~ idade | lance1, dist = "logistic", data = dados) # NSS
-sb2 <-  sbchoice(resp1 ~ sexo | lance1, dist = "logistic", data = dados) # NSS
-sb3 <-  sbchoice(resp1 ~ renda | lance1, dist = "logistic", data = dados)
-sb4 <-  sbchoice(resp1 ~ escolar | lance1, dist = "logistic", data = dados) # NSS
-sb5 <-  sbchoice(resp1 ~ infraestrutura | lance1, dist = "logistic", data = dados)
-sb6 <-  sbchoice(resp1 ~ qdepend | lance1, dist = "logistic", data = dados)
-sb7 <-  sbchoice(resp1 ~ depend | lance1, dist = "logistic", data = dados)  # NSS
+dados_sitio_da_trindade <- base %>% filter(parque == "sitio da trindade")
+dados_13demaio <- base %>% filter(parque == "13demaio")
+dados_santosdumont <- base %>% filter(parque == "santosdumont")
+dados_lindu <- base %>% filter(parque == "lindu")
+dados_caiara <- base %>% filter(parque == "caiara")
+dados_macaxeira <- base %>% filter(parque == "macaxeira")
+dados_jaqueira <- base %>% filter(parque == "jaqueira")
+dados_santana <- base %>% filter(parque == "santana")
 
-# saving data from each Park - the full file that contains all data is 'dados'.
-dados_sitio_da_trindade <- dados %>% filter(parque == "sitio da trindade")
-dados_13demaio <- dados %>% filter(parque == "13demaio")
-dados_santosdumont <- dados %>% filter(parque == "santosdumont")
-dados_lindu <- dados %>% filter(parque == "lindu")
-dados_caiara <- dados %>% filter(parque == "caiara")
-dados_macaxeira <- dados %>% filter(parque == "macaxeira")
-dados_jaqueira <- dados %>% filter(parque == "jaqueira")
-dados_santana <- dados %>% filter(parque == "santana")
+# ANALISE CONJUNTA DE TODOS OS PARQUES
 
-
-# # plots the predicted support at each bid value
-# plot(sb1, las = 1)    #  las control axis orientation
-# abline(h = 0.5, lty = 2, col = "red") # adds a horizontal line to the plot
-# 
-
-DCchoice::sbchoice()
-
-# # A relatively complete model
-sb1 <- sbchoice(resp1 ~ 1 + idade + sexo + escolar + temperatura + infraestrutura | lance1, dist = "logistic", data = dados)
-summary(sb1)
-
-set.seed(123) # As it is a new simulation we again set a start value
-bootCI(sb1)   # The command to get the relevant 95% CI by bootstrap method
-
-sb2 <- sbchoice(resp2 ~ 1 + idade + sexo + escolar + temperatura + infraestrutura | lance2, dist = "logistic", data = dados)
-summary(sb2)
-set.seed(123) # As it is a new simulation we again set a start value
-bootCI(sb2)
-
-
-## CLASSIC BIVARIATE PROBIT
-
-# pela AIC curve 'out1' tem melhor ajuste
-
+## Configurando listas de variaveis - **modelo sem renda**
 treat.eq <- resp1 ~ lance1 + idade + sexo + escolar + temperatura + infraestrutura
 out.eq <- resp2 ~ lance2 + idade + sexo + escolar + temperatura + infraestrutura
 f.list <- list(treat.eq, out.eq)
 mr <- c("probit", "probit")
 
-
-treat.eq1 <- resp1 ~ lance1 + idade + sexo + escolar + lnRendat1 + temperatura + infraestrutura
-out.eq1 <- resp2 ~ lance2 + idade + sexo + escolar + lnRendat2 + temperatura + infraestrutura
-f.list1 <- list(treat.eq1, out.eq1)
-mr <- c("probit", "probit")
-
-
-
-# regression log linear income from all parks 
-bvp <- gjrm(f.list, data=dados, Model="B", margins= mr)
+## Modelo Linear
+bvp <- gjrm(f.list, data=base, Model="B", margins= mr)
 summary(bvp)
 
-bvp_ll <- gjrm(f.list1, data=dados, Model="B", margins= mr)
-summary(bvp_ll)
+# atribuindo valores médios
+lance1_med <- mean(base$lance1)
+renda_med <- mean(base$renda)
+idade_med <- mean(base$idade)
+sexo_med <- mean(base$sexo)
+escolar_med <- mean(base$escolar)
+temp_med <- mean(base$temperatura)
+infra_med <- mean(base$infraestrutura)
+lance2_med <- mean(base$lance2)
 
+## coeficientes eq 1
+cf_intercept <- bvp$coefficients[1]
+cf_lance1 <- bvp$coefficients[2]
+cf_idade <- bvp$coefficients[3]
+cf_sexo <- bvp$coefficients[4]
+cf_escolar <- bvp$coefficients[5]
+cf_temp <- bvp$coefficients[6]
+cf_infra <- bvp$coefficients[7]
 
-# each park - linear na renda 
+# coeficientes eq 2
+cf_intercept2 <- bvp$coefficients[8]
+cf_lance2 <- bvp$coefficients[9]
+cf_idade2 <- bvp$coefficients[10]
+cf_sexo2 <- bvp$coefficients[11]
+cf_escolar2 <- bvp$coefficients[12]
+cf_temp2 <- bvp$coefficients[13]
+cf_infra2 <- bvp$coefficients[14]
 
-db.sitiotrindade <-gjrm(f.list, data=dados_sitio_da_trindade, Model="B", margins= mr)
-db.trezedemaio <- gjrm(f.list, data=dados_13demaio, Model="B", margins= mr)
-db.santosdumont <- gjrm(f.list, data=dados_santosdumont, Model="B", margins= mr)
-db.lindu <- gjrm(f.list, data=dados_lindu, Model="B", margins= mr)
-db.caiara <- gjrm(f.list, data=dados_caiara, Model="B", margins= mr)
-db.macaxeira <- gjrm(f.list, data=dados_macaxeira, Model="B", margins= mr)
-db.jaqueira <- gjrm(f.list, data=dados_jaqueira, Model="B", margins= mr)
-db.santana <- gjrm(f.list, data=dados_santana, Model="B", margins= mr)
+## CALCULANDO A DAP 
 
-# each park - log linear
+### Dap equação 1
+dap_eq1 <- -(cf_intercept + cf_idade*idade_med + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)/cf_lance1 # R$ 40,47
 
-db.sitiotrindade <-gjrm(f.list1, data=dados_sitio_da_trindade, Model="B", margins= mr)
-db.trezedemaio <- gjrm(f.list1, data=dados_13demaio, Model="B", margins= mr)
-db.santosdumont <- gjrm(f.list1, data=dados_santosdumont, Model="B", margins= mr)
-db.lindu <- gjrm(f.list1, data=dados_lindu, Model="B", margins= mr)
-db.caiara <- gjrm(f.list1, data=dados_caiara, Model="B", margins= mr)
-db.macaxeira <- gjrm(f.list1, data=dados_macaxeira, Model="B", margins= mr)
-db.jaqueira <- gjrm(f.list1, data=dados_jaqueira, Model="B", margins= mr)
-db.santana <- gjrm(f.list1, data=dados_santana, Model="B", margins= mr)
+# A dap da equação 1 foi de R$ 
+round(dap_eq1, digits = 2)
+
+### Dap equação 2
+dap_eq2 <- -(cf_intercept + cf_idade2*idade_med + cf_sexo2*sexo_med + cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_lance2 # R$ 39,50 
+
+# A dap da equação 2 foi de R$ 
+round(dap_eq2, digits = 2)
+
+# Análise individual dos parques 
+
+## Regressão Parques - individualmente - linear na renda 
+
+bvp.sitiotrindade <- gjrm(f.list, data=dados_sitio_da_trindade, Model="B", margins= mr)
+bvp.trezedemaio <- gjrm(f.list, data=dados_13demaio, Model="B", margins= mr)
+bvp.santosdumont <- gjrm(f.list, data=dados_santosdumont, Model="B", margins= mr)
+bvp.lindu <- gjrm(f.list, data=dados_lindu, Model="B", margins= mr)
+bvp.caiara <- gjrm(f.list, data=dados_caiara, Model="B", margins= mr)
+bvp.macaxeira <- gjrm(f.list, data=dados_macaxeira, Model="B", margins= mr)
+bvp.jaqueira <- gjrm(f.list, data=dados_jaqueira, Model="B", margins= mr)
+bvp.santana <- gjrm(f.list, data=dados_santana, Model="B", margins= mr)
+
+install.packages("gtsummary")
+library(survival)
+library(gtsummary)
+
+require(GJRM)
+set.seed(123)
+x1 <- sample(1:100, size = 20)
+bid1 <- sample(c(5, 10, 20, 30), size = 20, replace = T)
+bid2 <- sample(c(5, 10, 20, 30), size = 20, replace = T)
+ans1 <- sample(c(1,0), size = 20, replace = T)
+ans2 <- sample(c(1,0), size = 20, replace = T)
+df <- cbind(x1, bid1, bid2, ans1, ans2)
+df <- as.data.frame(df)
+
+treat.eq <- ans1 ~ bid1 + x1
+out.eq <- ans2 ~ bid2 + x1
+f.list <- list(treat.eq, out.eq)
+mr <- c("probit", "probit")
+
+## Model
+bvp <- gjrm(f.list, data=df, Model="B", margins= mr)
+
+# Como eu posso extrair os valores de ('Estimate', 'std. Error', 'Pr(>|z|)') dos resultados do output e coloca-los em um formato de tabela? 
+
+# 'Estimate', 'std. Error', 'Pr(>|z|)'
 
 
