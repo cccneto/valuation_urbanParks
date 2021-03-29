@@ -145,7 +145,7 @@ bvp.santana <- gjrm(f.list, data=dados_santana, Model="B", margins= mr)
 # 'Estimate', 'std. Error', 'Pr(>|z|)'
 
 l.bvp.sitiotrindade <- summary(bvp.sitiotrindade)
-l.bvp.trezademaio <- summary(bvp.trezedemaio)
+l.bvp.trezedemaio <- summary(bvp.trezedemaio)
 l.bvp.santosdumont <- summary(bvp.santosdumont)
 l.bvp.lindu <- summary(bvp.lindu)
 l.bvp.caiara <- summary(bvp.caiara)
@@ -155,19 +155,42 @@ l.bvp.santana <- summary(bvp.santana)
 
 library(dplyr)
 
+# extraindo os resultados dos modelos individuais
+resultado_sitiotrindade <-
+  rbind(l.bvp.sitiotrindade$tableP1, l.bvp.sitiotrindade$tableP2) %>%
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")
 
-eq1_bvp.sitiotrindade <- l.bvp.sitiotrindade$tableP1
-eq2_bvp.sitiotrindade <- l.bvp.sitiotrindade$tableP2
-resultado_sitiotrindade <- rbind(eq1_bvp.sitiotrindade, eq2_bvp.sitiotrindade)
+resultado_trezedemaio <-
+  rbind(l.bvp.trezedemaio$tableP1, l.bvp.trezedemaio$tableP2) %>%
+  as.data.frame()  %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")
 
-eq1_bvp.trezademaio <- l.bvp.trezademaio$tableP1
-eq2_bvp.trezademaio <- l.bvp.trezademaio$tableP2
-resultado_trezedemaio <- rbind(eq1_bvp.trezademaio, eq1_bvp.trezademaio)
+resultado_santosdumont <-
+  rbind(l.bvp.santosdumont$tableP1, l.bvp.santosdumont$tableP2) %>%
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")
 
-eq1_bvp.santosdumont <- l.bvp.santosdumont$tableP1
-eq2_bvp.santosdumont <- l.bvp.santosdumont$tableP2
-resultado_santosdumont <- rbind(eq1_bvp.santosdumont, eq1_bvp.santosdumont)
 
-eq1_bvp.lindu <- l.bvp.santosdumont$tableP1
-eq2_bvp.lindusantosdumont <- l.bvp.santosdumont$tableP2
-resultado_santosdumont <- rbind(eq1_bvp.santosdumont, eq1_bvp.santosdumont)
+resultado_lindu <-
+  rbind(l.bvp.lindu$tableP1, l.bvp.lindu$tableP2) %>%
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")
+
+resultado_caiara <- 
+  rbind(l.bvp.caiara$tableP1, l.bvp.caiara$tableP2) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column("Variavel") %>% 
+  select(!"z value")
+ 
+resultado_macaxeira <- 
+  rbind(l.bvp.macaxeira$tableP1, l.bvp.macaxeira$tableP2) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column("Variavel") %>% 
+  select(!"z value")
+
+resultado_jaqueira <-
+  rbind(l.bvp.jaqueira$tableP1, l.bvp.jaqueira$tableP2) %>%
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")
+
+resultado_santana <-
+  rbind(l.bvp.santana$tableP1, l.bvp.santana$tableP2) %>%
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")
+
+
