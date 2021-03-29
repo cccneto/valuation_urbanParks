@@ -141,30 +141,33 @@ bvp.macaxeira <- gjrm(f.list, data=dados_macaxeira, Model="B", margins= mr)
 bvp.jaqueira <- gjrm(f.list, data=dados_jaqueira, Model="B", margins= mr)
 bvp.santana <- gjrm(f.list, data=dados_santana, Model="B", margins= mr)
 
-install.packages("gtsummary")
-library(survival)
-library(gtsummary)
-
-require(GJRM)
-set.seed(123)
-x1 <- sample(1:100, size = 20)
-bid1 <- sample(c(5, 10, 20, 30), size = 20, replace = T)
-bid2 <- sample(c(5, 10, 20, 30), size = 20, replace = T)
-ans1 <- sample(c(1,0), size = 20, replace = T)
-ans2 <- sample(c(1,0), size = 20, replace = T)
-df <- cbind(x1, bid1, bid2, ans1, ans2)
-df <- as.data.frame(df)
-
-treat.eq <- ans1 ~ bid1 + x1
-out.eq <- ans2 ~ bid2 + x1
-f.list <- list(treat.eq, out.eq)
-mr <- c("probit", "probit")
-
-## Model
-bvp <- gjrm(f.list, data=df, Model="B", margins= mr)
-
 # Como eu posso extrair os valores de ('Estimate', 'std. Error', 'Pr(>|z|)') dos resultados do output e coloca-los em um formato de tabela? 
-
 # 'Estimate', 'std. Error', 'Pr(>|z|)'
 
+l.bvp.sitiotrindade <- summary(bvp.sitiotrindade)
+l.bvp.trezademaio <- summary(bvp.trezedemaio)
+l.bvp.santosdumont <- summary(bvp.santosdumont)
+l.bvp.lindu <- summary(bvp.lindu)
+l.bvp.caiara <- summary(bvp.caiara)
+l.bvp.macaxeira <- summary(bvp.macaxeira)
+l.bvp.jaqueira <- summary(bvp.jaqueira)
+l.bvp.santana <- summary(bvp.santana)
 
+library(dplyr)
+
+
+eq1_bvp.sitiotrindade <- l.bvp.sitiotrindade$tableP1
+eq2_bvp.sitiotrindade <- l.bvp.sitiotrindade$tableP2
+resultado_sitiotrindade <- rbind(eq1_bvp.sitiotrindade, eq2_bvp.sitiotrindade)
+
+eq1_bvp.trezademaio <- l.bvp.trezademaio$tableP1
+eq2_bvp.trezademaio <- l.bvp.trezademaio$tableP2
+resultado_trezedemaio <- rbind(eq1_bvp.trezademaio, eq1_bvp.trezademaio)
+
+eq1_bvp.santosdumont <- l.bvp.santosdumont$tableP1
+eq2_bvp.santosdumont <- l.bvp.santosdumont$tableP2
+resultado_santosdumont <- rbind(eq1_bvp.santosdumont, eq1_bvp.santosdumont)
+
+eq1_bvp.lindu <- l.bvp.santosdumont$tableP1
+eq2_bvp.lindusantosdumont <- l.bvp.santosdumont$tableP2
+resultado_santosdumont <- rbind(eq1_bvp.santosdumont, eq1_bvp.santosdumont)
