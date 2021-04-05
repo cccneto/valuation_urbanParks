@@ -86,6 +86,23 @@ mr <- c("probit", "probit")
 bvp <- gjrm(f.list, data=base, Model="B", margins= mr)
 summary(bvp)
 
+coefs <- summary(bvp)
+coefs$tableP1
+coefs <- summary(bvp$coefficients)
+
+# montando tabela de coeficientes
+full_coefs <- 
+    rbind(
+      coefs$tableP1[ ,c("Estimate", "Std. Error", "Pr(>|z|)")],
+      coefs$tableP2[ ,c("Estimate", "Std. Error", "Pr(>|z|)")])
+                    
+ 
+full_coefs  
+ 
+stargazer::stargazer(full_coefs, type = "text")
+
+
+
 # atribuindo valores médios
 lance1_med <- mean(base$lance1)
 renda_med <- mean(base$renda)
@@ -158,39 +175,65 @@ library(dplyr)
 # extraindo os resultados dos modelos individuais
 resultado_sitiotrindade <-
   rbind(l.bvp.sitiotrindade$tableP1, l.bvp.sitiotrindade$tableP2) %>%
-  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value") %>% 
+  mutate(Parque = "Sitio Trindade")
 
 resultado_trezedemaio <-
   rbind(l.bvp.trezedemaio$tableP1, l.bvp.trezedemaio$tableP2) %>%
-  as.data.frame()  %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")
+  as.data.frame()  %>% tibble::rownames_to_column("Variavel") %>% select(!"z value") %>% 
+  mutate(Parque = "Treze de Maio")
 
 resultado_santosdumont <-
   rbind(l.bvp.santosdumont$tableP1, l.bvp.santosdumont$tableP2) %>%
-  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")  %>% 
+  mutate(Parque = "Santos Dumont")
 
 
 resultado_lindu <-
   rbind(l.bvp.lindu$tableP1, l.bvp.lindu$tableP2) %>%
-  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")  %>% 
+  mutate(Parque = "Lindu")
 
 resultado_caiara <- 
   rbind(l.bvp.caiara$tableP1, l.bvp.caiara$tableP2) %>% 
   as.data.frame() %>% 
   tibble::rownames_to_column("Variavel") %>% 
-  select(!"z value")
+  select(!"z value")  %>% 
+  mutate(Parque = "Caiara")
  
 resultado_macaxeira <- 
   rbind(l.bvp.macaxeira$tableP1, l.bvp.macaxeira$tableP2) %>% 
   as.data.frame() %>% 
   tibble::rownames_to_column("Variavel") %>% 
-  select(!"z value")
+  select(!"z value") %>% 
+  mutate(Parque = "Macaxeira")
 
 resultado_jaqueira <-
   rbind(l.bvp.jaqueira$tableP1, l.bvp.jaqueira$tableP2) %>%
-  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value") %>% 
+  mutate(Parque = "Jaqueira")
 
 resultado_santana <-
   rbind(l.bvp.santana$tableP1, l.bvp.santana$tableP2) %>%
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value") %>% 
+  mutate(Parque = "Santana")
+
+# extraindo valores regressao todos parques juntos
+
+l.bvp.allparques <- summary(bvp)
+rbind(l.bvp.allparques$tableP1, l.bvp.allparques$tableP2) %>%
   as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")
 
+df_parques <- rbind(resultado_santana, resultado_caiara, resultado_macaxeira, 
+      resultado_lindu, resultado_santosdumont, resultado_trezedemaio, resultado_sitiotrindade)
 
+df_parques %>% 
+  group_by(Equação = df_parques$Parque, `Estimate` = Estimate, `Std. Erro` = `Std. Error`, `p-valor` = `Pr(>|z|)`)
+
+
+lmtest::waldtest.default(bvp,bvp.caiara, test = c("Chisq", "F"))
+lmtest::waldtest(bvp)
+mdscore::wald.test(bvp)
+
+library(EdSurvey)
+waldTest(model = bvp, coefficients = 2:5)

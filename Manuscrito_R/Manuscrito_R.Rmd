@@ -1,0 +1,152 @@
+---
+title: VALUATION OF CULTURAL ECOSYSTEM SERVICES IN URBAN PARKS
+subtitle: teremos um subtitulo?
+titlerunning: Short form of title (if too long for head)
+authorrunning: Short form of author list if too long for running head
+thanks: | 
+    Grants or other notes about the article that should go on the front 
+    page should be placed here. General acknowledgments should be placed at the
+    end of the article.
+
+authors: 
+- name: Carlos Eduardo de Menezes Silva
+  address: Department of YYY, Federal Institute of Pernambuco
+  email: carlosmenezes@recife.ifpe.edu.br 
+  
+- name: Claudiano Carneiro da Cruz Neto
+  address: Center for Agricultural, Environmental and Biological Sciences, Federal University of Reconcavo of Bahia
+  email: cneto@ufrb.edu.br
+
+keywords:
+- key
+- dictionary
+- word
+
+#PACS: 
+#- PAC1
+#- superPAC
+    
+MSC:
+- MSC code 1
+- MSC code 2
+
+abstract: |
+  The text of your abstract.  150 -- 250 words.
+
+bibliography: bibliography.bib
+biblio-style: spphys
+# bibstyle options spbasic(default), spphys, spmpsci
+output: rticles::springer_article
+---
+
+# Introduction {#intro}
+
+The world population may grow 26% by the year 2050, from the current 7.7 billion to 9.7 billion (UN, 2019). This will lead to an even greater increase in the population in urban areas, especially in regions such as Latin America that already have around 81% of their population living in these areas (UN, 2018). This scenario increases the concern with maintaining and / or improving the well-being conditions for this population. And in this regard, it is considered that the well-being of the inhabitants of urban areas depends on an adequate supply of ecosystem services (Keeler et al., 2019).
+
+Understood as nature's contributions to people, ecosystem services are vital for human existence and good quality of life. However, they are generally distributed unevenly in space, time and between different segments of society (IPBES, 2019). Of particular interest to the well-being of urban populations, cultural ecosystem services are public goods, produced by ecosystems that affect people's physical and mental states. Cultural services are characterized mainly as environments, places or environmental situations that give rise to changes in people's physical or mental states (Haines-Young & Potschin, 2018). And therefore, in a context of greater urbanization, special attention should be paid to urban green spaces as a guarantee of offering this type of ecosystem service, and ensuring the integration of these spaces in city planning (Liu, Remme, Hamel, Nong, & Ren, 2020).
+
+These benefits provided by urban green areas are still important when cities seek to offer a variety of services that contribute to increasing the quality of life of their inhabitants. Initiative that already found support in the agenda of the Sustainable Development Goals - SDGs, gains even more momentum with the greater importance given to these spaces after the long period of confinement caused by the Pandemic of COVID-19.
+
+However, unlike developed countries, in Brazil and Latin America, the literature on this issue is still scarce. There are few studies that explore the association between green areas and well-being in urban areas in Brazil (AMATO-LOURENÇO, MOREIRA, ARANTES, FILHO, & MAUAD, 2016; Camargo et al., 2018; Londe & Mendes, 2014; Silveira & Junger, 2018). There are also few studies on the economic valuation of these areas. These productions are concentrated in the southern region of the country and focused on individual parks. And in general, cultural ecosystem services are less evaluated or evaluated inappropriately (Ridding et al., 2017) and for this reason they are seldom present in studies in this area (Boerema, Rebelo, Bodi, Esler, & Meire, 2017). This scarcity makes it difficult to understand the potential benefit that urban green spaces can bring to the Brazilian population (Arana & Xavier, 2017). And the importance of investments by the government in these areas.
+
+In this article, we seek to contribute to fill this information gap and demonstrate the importance of urban parks as sources of provision of cultural ecosystem services in the city of Recife. As a differential, we do not study only one park, but all urban parks recognized by the city and which had specific equipment for physical activities. We used questionnaires applied to users of all parks to characterize them and we used the contingent valuation method to estimate the monetary value. Among other contributions, the results demonstrate that the parks in Recife have a greater coverage than usual and that users with lower income groups value these areas more than users with lower income.
+
+
+Separate text sections with \cite{Mislevy06Cog}.
+
+# Methodology {#sec:1}
+
+## Study Area  {#sec:2}
+
+The place of study was the Municipality of Recife, capital of the state of Pernambuco, in the Northeast region of Brazil. The municipality has 10 public parks and countless squares spread over the 94 neighborhoods that compose it. The area covered by the squares parks is equivalent to 8.2% of the municipal territory. These 10 areas have structures known as city gyms, spaces with equipment and classes of different modalities, in addition to other leisure equipment (Figure 1).
+
+**inserir figura do mapa**
+
+## Survey methods and questionnaire design
+
+We conducted the survey between December 2018 and March 2019 among the local residents of the city of Recife that uses at least one of the 9 parks of the city. The survey method was face-to-face personal interviews by means of a structured questionnaire and was applied to 1281 questionnaires. All procedures were according to the rules of resolution 510/1617 (BRASIL, 2016), the opinion survey format was prepared and did not request any identification. 
+
+We gathered data among the Recife users population’s universe, configuring a non-probabilistic sample with a convenience bias. We recognize the sampling scheme has not achieved a representative sample of the city’s households. All the analyses and estimates were performed with the R Studio 4.0 software. The dataset is available in csv format at a Github repository [https://github.com/cccneto/valuation_urbanParks].
+
+The current survey was tested through a pilot study/previous survey in one of the city parks (CITAR ARTIGO DO ARACA). We have constructed the bid vector for the dichotomous choice questions based on the analysis of the WTP responses in the previous survey. The questionnaire’s structure was based on the NOAA panel recommendations for CVM studies (Arrow et al., 1993). The questionnaire consisted of a set of 17 questions. 
+
+In the first part, we surveyed respondents’ socio-economic and household characteristics from age at least 18 years. In the second part we asked about: a) the visit purpose to the park, b) the frequency visits to the park, c) the main criteria determining the decision to visit a park,  d) their perceptions about the park characteristics (e.g. infrastructure, maintenance, size, security), finally, e) their perception about the presence of ecosystem services in the park.
+
+The final part we described the hypothetical scenario and the valuation questions. In this scenario, we presented a change in the park's vegetal cover to the respondents, focusing on the transformation of the environmental quality of the area. It is important to say the interviewer did a relevant visual presentation of the changes in the scenario presented (i.e. images before and after the park development).
+
+In the approach to respondents on the park, we asked residents if they wanted to participate in this research (i.e., if they agree to respond to the survey questions). After the two initial parts of the questionnaire, we asked how much they would be willing to pay for the changes presented to them. The interviewer explained their answers would be useful to the decision-making and planning process. About the WTP question, we adopted a close-ended format to better approximate real market transactions (i.e., take-it or leave-it decisions).  We have have adopted the a double-bounded (DB) dichotomous choice format following the recommendations of the NOAA panel (Arrow et al., 1993) and Hanemann (1984). The procedures presents to respondents an initial bid value, randomly selected from a set of 70 bid levels - R\$ 1 to R\$ 70. If the response was “yes” a follow-up question with a higher bid was asked, while a “no” response led to a lower bid level. The value amount would be annually collected by the municipal authority and would be exclusively devoted to cover the development costs of the park. 
+
+## Theoretical Model 
+
+According to Groothuis and Whitehead (2002), econometric models of dichotomous choice have been an instrument widely used to address issues related to contingent valuation. O Modelo de utilidade randômica fornece as bases teóricas para a análise de Métodos de Valoração Contingente.In this model an individual could choose to pay a donation fee for the conservation of the services provided by the studied area if the following conditions are met (Hanemann, 1984):
+
+\begin{align}
+u(y, X) = u(y-t, q, X)
+\end{align}
+
+\begin{align}
+u(y, X) = u(y_{j}X_{j}) + \epsilon_{0j})
+\end{align}
+
+\begin{align}
+v(1, y-t; X) + \epsilon_{1} \ge v(0, y, X)
+\end{align}
+
+Where $u$ is the respondent's utility function, $v$ is the indirect utility function, $1$ represents the donation payment and $0$ represents the non-payment, $y$ is the respondent's individual income, the amount of the bid made to the respondent, $X$ represents other socioeconomic characteristics that affect the respondent's preferences. The difference between the utilities $\Delta v$ determines the payment or not of the donation:
+
+\begin{align}
+\Delta v= (1, y-t;X) -v(0, y, X) + \epsilon_{1} + \epsilon_{0} 	
+\end{align}
+
+The MVC dichotomous choice format requires a qualitative choice model. The use of a linear distribution of the WTP and a Bivariate Probit Model (BPM), was developed based on the model by Cameron & Quiggin (1994). It is assumed that the error of the second dichotomous question is correlated with the error of the first question. For this reason, we follow Alberini's (1995) recommendation for the choice of bivariate dichotomous models, because if the coefficient correlation, $\rho \ne 1$, it is clear that, in general, the second WTP does not perfectly match the first and can be interpreted as a revised version of the amount of the first WTP. If WTP values are independently determined, then $\rho = 0$. For all other values of the correlation coefficient, the interval $0 < \rho < 1$ is valid, which implies that the correlation between the two WTP values is less than perfect.
+
+Considering these aspects, the modeling of the data generated by the questions in the double limit dichotomous choice format was achieved by the following formulation:
+
+#### Linear Model 
+
+\begin{align}
+\Delta Y_{i}(yes|no)= \alpha_{0} + \alpha_{1}Age + \alpha_{2}D_{1i} + \alpha_{3}D_{2i} +  \alpha_{4}D_{3i} + \alpha_{5}D_{4i} + \alpha_{6}Tempo_{i} + \beta_{1}Bid_{12i} + \epsilon_{i} 	
+\end{align}
+
+
+$Y_i$ is the dependent variable and reports the respondent's answer ($yes = 1$ or $no = 0$) to the $Bid$, $Age_i$ is the age of the respondent, $D_{1i}$ is the dummie variable for the $Sex$ of the respondent (man = $1$, woman = $0$), $D_{2i}$ is a dummie for the respondent's education (complete higher education = $1$), $D_{3i}$ is a dummie for respondent assessing regarding the temperature in the park (good / excellent = $1$), $D_{4i}$ is a dummie for assessing the respondent regarding of the park's infrastructure (good / great = $1$), $Bid_i$ are the variables for the values drawn as bids to respondents.
+
+The $WTP_{ij}$ component represents the respondent's $j-th$ willingness to pay and $i = 1$, 2 denotes the first and second questions, respectively.
+
+\begin{align}
+WTP_{ij} = X'_{ij}\beta_{i} + \epsilon_{ij}
+\end{align}
+
+The $WTP$ depends on a systematic component given by the observed characteristics of the interviewee $(X'_{ij}\beta_{i})$, as well as a random random component $(ij \sim N(0, \sigma^2))$.     
+
+\begin{align}
+Pr(yes, no) = Pr(WTP_{1j} \ge t^1, WTP_{2j} < t^2)
+\end{align}
+
+\begin{align}
+Pr(yes, no) = Pr(X'_{1}\beta_{1} + \epsilon_{1j} \ge t^1, X'_{2}\beta_{2} + \epsilon_{2j} < t^2)
+\end{align}
+
+Since the other sequence of possible responses can be constructed in an analogous way, which allows building the likelihood function:
+
+\begin{align}
+L_{j} (\mu | t) = Pr(X'_{1}\beta_{1} + \epsilon_{1j} \ge t^1, X'_{2}\beta_{2} + \epsilon_{2j} < t^2)^{yn} x Pr(X'_{1}\beta_{1} + \epsilon_{1j} < t^2 , X'_{2}\beta_{2} + \epsilon_{2j} \ge t^2)^{ny} x Pr(X'_{1}\beta_{1} + \epsilon_{1j} > t^1, X'_{2}\beta_{2} + \epsilon_{2j} \ge t^2)^{yy} x Pr(X'_{1}\beta_{1} + \epsilon_{1j} < t^1, X'_{2}\beta_{2} + \epsilon_{2j} < t^2)^{nn}
+\end{align}
+
+Given a sample of n respondents, we have that the function of logarithmic probability of the responses to the first and second moves of the dichotomous choice with double limit is:
+
+
+\begin{align}
+\ln(L_{j} (\mu | t)) = yn \ln((X'_{1}\beta_{1} + \epsilon_{1j} \ge t^1, X'_{2}\beta_{2} + \epsilon_{2j} < t^2) * ny Pr(X'_{1}\beta_{1} + \epsilon_{1j} < t^2 , X'_{2}\beta_{2} + \epsilon_{2j} \ge t^2) * yy Pr(X'_{1}\beta_{1} + \epsilon_{1j} > t^1, X'_{2}\beta_{2} + \epsilon_{2j} \ge t^2) * nn Pr(X'_{1}\beta_{1} + \epsilon_{1j} < t^1, X'_{2}\beta_{2} + \epsilon_{2j} < t^2))
+\end{align}
+
+Once the regression is estimated, the estimated WTP is calculated as:
+
+\begin{align}
+\widehat{WTP} = \frac{\hat{\alpha}\overline{X_{i}})}{\hat{\beta}} 
+\end{align}
+
+
+# Results {#sec:3}
+
+After processing the data, 1144 questionnaires were used. Considering the estimated population of 1,653,461 inhabitants of the city, and the distribution between age groups, income, sex and place of residence, the data are representative for the city. Among the interviewees, 51.68% were female; 48.32 male. The vast majority of respondents 92.82% were young adults (<65 years), living in 94 neighborhoods in the city (Table 1).
