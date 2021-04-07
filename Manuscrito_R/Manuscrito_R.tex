@@ -285,9 +285,12 @@ the following formulation:
 \hypertarget{linear-model}{%
 \paragraph{Linear Model}\label{linear-model}}
 
-\begin{align}
-\Delta Y_{i}(yes|no)= \alpha_{0} + \alpha_{1}Age + \alpha_{2}D_{1i} + \alpha_{3}D_{2i} +  \alpha_{4}D_{3i} + \alpha_{5}D_{4i} + \alpha_{6}Tempo_{i} + \beta_{1}Bid_{12i} + \epsilon_{i}     
-\end{align}
+\[
+\begin{aligned}
+\Delta Y_{i}(yes|no)= \alpha_{0} + \alpha_{1}Age + \alpha_{2}D_{1i} + \alpha_{3}D_{2i} \\ 
++ \alpha_{4}D_{3i} + \alpha_{5}D_{4i} + \alpha_{6}Tempo_{i} + \beta_{1}Bid_{12i} + \epsilon_{i}     
+\end{aligned}
+\]
 
 \(Y_i\) is the dependent variable and reports the respondent's answer
 (\(yes = 1\) or \(no = 0\)) to the \(Bid\), \(Age_i\) is the age of the
@@ -323,17 +326,27 @@ Pr(yes, no) = Pr(X'_{1}\beta_{1} + \epsilon_{1j} \ge t^1, X'_{2}\beta_{2} + \eps
 Since the other sequence of possible responses can be constructed in an
 analogous way, which allows building the likelihood function:
 
-\begin{align}
-L_{j} (\mu | t) = Pr(X'_{1}\beta_{1} + \epsilon_{1j} \ge t^1, X'_{2}\beta_{2} + \epsilon_{2j} < t^2)^{yn} x Pr(X'_{1}\beta_{1} + \epsilon_{1j} < t^2 , X'_{2}\beta_{2} + \epsilon_{2j} \ge t^2)^{ny} x Pr(X'_{1}\beta_{1} + \epsilon_{1j} > t^1, X'_{2}\beta_{2} + \epsilon_{2j} \ge t^2)^{yy} x Pr(X'_{1}\beta_{1} + \epsilon_{1j} < t^1, X'_{2}\beta_{2} + \epsilon_{2j} < t^2)^{nn}
-\end{align}
+\[
+\begin{aligned}
+L_{j} (\mu | t) = Pr(X'_{1}\beta_{1} + \epsilon_{1j} \ge t^1, X'_{2}\beta_{2} + \epsilon_{2j} < t^2)^{yn} * \\
+Pr(X'_{1}\beta_{1} + \epsilon_{1j} < t^2 , X'_{2}\beta_{2} + \epsilon_{2j} \ge t^2)^{ny} * \\
+Pr(X'_{1}\beta_{1} + \epsilon_{1j} > t^1, X'_{2}\beta_{2} + \epsilon_{2j} \ge t^2)^{yy} * \\ 
+Pr(X'_{1}\beta_{1} + \epsilon_{1j} < t^1, X'_{2}\beta_{2} + \epsilon_{2j} < t^2)^{nn} 
+\end{aligned}
+\]
 
 Given a sample of n respondents, we have that the function of
 logarithmic probability of the responses to the first and second moves
 of the dichotomous choice with double limit is:
 
-\begin{align}
-\ln(L_{j} (\mu | t)) = yn \ln((X'_{1}\beta_{1} + \epsilon_{1j} \ge t^1, X'_{2}\beta_{2} + \epsilon_{2j} < t^2) * ny Pr(X'_{1}\beta_{1} + \epsilon_{1j} < t^2 , X'_{2}\beta_{2} + \epsilon_{2j} \ge t^2) * yy Pr(X'_{1}\beta_{1} + \epsilon_{1j} > t^1, X'_{2}\beta_{2} + \epsilon_{2j} \ge t^2) * nn Pr(X'_{1}\beta_{1} + \epsilon_{1j} < t^1, X'_{2}\beta_{2} + \epsilon_{2j} < t^2))
-\end{align}
+\[
+\begin{aligned}
+Ln(L_{j} (\mu | t)) = yn \ln((X'_{1}\beta_{1} + \epsilon_{1j} \ge t^1, X'_{2}\beta_{2} + \epsilon_{2j} < t^2) * \\
+ny Pr(X'_{1}\beta_{1} + \epsilon_{1j} < t^2 , X'_{2}\beta_{2} + \epsilon_{2j} \ge t^2) * \\
+yy Pr(X'_{1}\beta_{1} + \epsilon_{1j} > t^1, X'_{2}\beta_{2} + \epsilon_{2j} \ge t^2) * \\
+nn Pr(X'_{1}\beta_{1} + \epsilon_{1j} < t^1, X'_{2}\beta_{2} + \epsilon_{2j} < t^2)) 
+\end{aligned}
+\]
 
 Once the regression is estimated, the estimated WTP is calculated as:
 
@@ -351,6 +364,108 @@ data are representative for the city. Among the interviewees, 51.68\%
 were female; 48.32 male. The vast majority of respondents 92.82\% were
 young adults (\textless65 years), living in 94 neighborhoods in the city
 (Table 1).
+
+Regarding the profile of respondents, \(45.9%
+\) of the respondents are female, the average age is about 41.3 years
+(sd = 14.8). The average monthly income is \(R\$ 1.800\), and the median
+income was estimated to be between \(R\$ 41\) and \(R\$ 61.200\). Only
+\(25.9%
+\) hold a degree from a university or from a technological educational
+institute.About the use of dummy variables, we focused on respondents
+assessing their self-perception on the temperature in the park, and
+regarding the park's infrastructure. About \(31.8%
+\) beliefs that the park has a nice temperature because of the natural
+cover to the park. And \(55.4%
+\) evaluated the "infrastructure as good/great. These variables were
+included in the analysis because it was expected to affect positively
+the probability to participate in the project, as well the respondent's
+WTP.(ver tabela x)
+
+The results from the BP regression for the general sample are shown in
+Table x. The estimations for Eq. (1) are shown in the upper part of the
+Table, while the estimation for Eq. (2) in the lower part. The
+probability that WTP be equal or higher to the two bids amount is
+influenced by the respondent's own characteristics and by a series of
+independent variables that reflect her/his preferences for the ES being
+valued. The coefficient on the bid was negative and significant in both
+equations, which indicates as the price increased the probability of a
+positive answer to the WTP question decreased.
+
+The results for the general sample indicate that WTP from the first
+equation (Eq 1) was influenced positively by the level of education, and
+by the respondent's perceptions about infrastructure and temperature of
+the park, while was negatively affected by the respondent's age. The
+variable gender wasn't statistically significant.
+
+in the second equation, the results for the general sample indicate that
+WTP wasn't influenced positively by the age of respondents, but does by
+respondent's perceptions about infrastructure. Opposite to the first
+equation, the level of education and the respondent's perceptions about
+the temperature of the park weren't statistically significant.
+
+\begin{verbatim}
+## Data Frame Summary  
+## base  
+## Dimensions: 1144 x 10  
+## Duplicates: 25  
+## 
+## ---------------------------------------------------------------------------
+## No   Variable          Stats / Values                 Freqs (% of Valid)   
+## ---- ----------------- ------------------------------ ---------------------
+## 1    resp1             1. 0                           481 (42.0%)          
+##      [factor]          2. 1                           663 (58.0%)          
+## 
+## 2    resp2             1. 0                           587 (51.3%)          
+##      [factor]          2. 1                           557 (48.7%)          
+## 
+## 3    lance1            Mean (sd) : 29.9 (17.7)        70 distinct values   
+##      [integer]         min < med < max:                                    
+##                        1 < 28 < 70                                         
+##                        IQR (CV) : 29.2 (0.6)                               
+## 
+## 4    lance2            Mean (sd) : 33.7 (19.5)        71 distinct values   
+##      [integer]         min < med < max:                                    
+##                        1 < 32 < 75                                         
+##                        IQR (CV) : 34 (0.6)                                 
+## 
+## 5    idade             Mean (sd) : 41.3 (14.8)        68 distinct values   
+##      [integer]         min < med < max:                                    
+##                        17 < 39 < 96                                        
+##                        IQR (CV) : 21 (0.4)                                 
+## 
+## 6    sexo              Min  : 0                       0 : 525 (45.9%)      
+##      [integer]         Mean : 0.5                     1 : 619 (54.1%)      
+##                        Max  : 1                                            
+## 
+## 7    escolar           Min  : 0                       0 : 848 (74.1%)      
+##      [integer]         Mean : 0.3                     1 : 296 (25.9%)      
+##                        Max  : 1                                            
+## 
+## 8    infraestrutura    Min  : 0                       0 : 510 (44.6%)      
+##      [integer]         Mean : 0.6                     1 : 634 (55.4%)      
+##                        Max  : 1                                            
+## 
+## 9    temperatura       Min  : 0                       0 : 780 (68.2%)      
+##      [integer]         Mean : 0.3                     1 : 364 (31.8%)      
+##                        Max  : 1                                            
+## 
+## 10   renda             Mean (sd) : 3091.1 (3798.1)    131 distinct values  
+##      [integer]         min < med < max:                                    
+##                        41 < 1800 < 62000                                   
+##                        IQR (CV) : 3002 (1.2)                               
+## ---------------------------------------------------------------------------
+\end{verbatim}
+
+\textbf{inserir tabela com proporcao das respostas y e n's}
+
+\hypertarget{sec:4}{%
+\section{Discussion}\label{sec:4}}
+
+\hypertarget{sec:5}{%
+\section{Conclusions}\label{sec:5}}
+
+\hypertarget{sec:6}{%
+\section{Policy implications}\label{sec:6}}
 
 
 \bibliographystyle{spphys}

@@ -9,11 +9,11 @@ library(GJRM)
 library(tidyr)
 
 # Carregando base de dados
-
 url <- "https://github.com/cccneto/valuation_urbanParks/blob/master/dados/baseunificada.xlsx?raw=true"
-destfile <- "base_unificada.xlsx"
+destfile <- tempfile()
 curl::curl_download(url, destfile)
 baseunificada <- read_excel(destfile)
+
 
 baseunificada <- baseunificada %>% 
   select(parque, idade, sexo, cidade, escolar, renda, infraestrutura, sombra, temperatura, 
@@ -92,7 +92,7 @@ coefs <- summary(bvp$coefficients)
 
 # montando tabela de coeficientes
 full_coefs <- 
-    rbind(
+    cbind(
       coefs$tableP1[ ,c("Estimate", "Std. Error", "Pr(>|z|)")],
       coefs$tableP2[ ,c("Estimate", "Std. Error", "Pr(>|z|)")])
                     
