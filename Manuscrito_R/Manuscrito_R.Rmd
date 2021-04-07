@@ -411,7 +411,7 @@ The results for the general sample indicate that WTP from the first equation (Eq
 
 in the second equation,  the results for the general sample indicate that WTP wasn't influenced positively by the age of respondents, but does by respondent's perceptions about infrastructure. Opposite to the first equation, the level of education and the respondent's perceptions about the temperature of the park weren't statistically significant.
 
-      
+## WTP results
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
