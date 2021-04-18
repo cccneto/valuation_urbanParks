@@ -76,15 +76,15 @@ dados_santana <- base %>% filter(parque == "santana")
 
 # ANALISE CONJUNTA DE TODOS OS PARQUES
 
-## Configurando listas de variaveis - **modelo sem renda**
-treat.eq <- resp1 ~ lance1 + idade + sexo + escolar + temperatura + infraestrutura
-out.eq <- resp2 ~ lance2 + idade + sexo + escolar + temperatura + infraestrutura
-f.list <- list(treat.eq, out.eq)
-mr <- c("probit", "probit")
-
-## Modelo Linear
-bvp <- gjrm(f.list, data=base, Model="B", margins= mr)
-summary(bvp)
+  ## Configurando listas de variaveis - **modelo sem renda**
+  treat.eq <- resp1 ~ lance1 + idade + sexo + escolar + temperatura + infraestrutura
+  out.eq <- resp2 ~ lance2 + idade + sexo + escolar + temperatura + infraestrutura
+  f.list <- list(treat.eq, out.eq)
+  mr <- c("probit", "probit")
+  
+  ## Modelo Linear
+  bvp <- gjrm(f.list, data=base, Model="B", margins= mr)
+  summary(bvp)
 
 coefs <- summary(bvp)
 coefs$tableP1

@@ -14,6 +14,12 @@ curl::curl_download(url, destfile)
 baseunificada <- read_excel(destfile)
 
 
+
+
+destfile <- tempfile()
+curl::curl_download(url, destfile)
+baseunificada <- read_excel(destfile)
+
 baseunificada <- baseunificada %>% 
   select(parque, idade, sexo, cidade, escolar, renda, infraestrutura, sombra, temperatura, 
          lance1,lance2, resp1, resp2, bidl, bidh, lnRendat1, lnRendat2, lnRenda) %>% 
@@ -53,6 +59,8 @@ base <- base %>%
 
 # Conferindo missing values restantes
 base %>% summarise_all(~ sum(is.na(.)))
+
+write.csv2(base, file = "base_cleaned.csv")
 
 # Testando correlação entre variáveis 
 
