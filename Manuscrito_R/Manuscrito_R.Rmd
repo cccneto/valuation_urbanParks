@@ -3,9 +3,11 @@ title: "VALUATION OF CULTURAL ECOSYSTEM SERVICES IN URBAN PARKS"
 subtitle: teremos um subtitulo?
 titlerunning: Short form of title (if too long for head)
 output:
+  html_document:
+    df_print: paged
+  word_document: default
   pdf_document:
     latex_engine: xelatex
-  word_document: default
 thanks: "Grants or other notes about the article that should go on the front \npage
   should be placed here. General acknowledgments should be placed at the\nend of the
   article.\n"
@@ -17,8 +19,7 @@ authors:
   address: Center for Agricultural, Environmental and Biological Sciences, Federal
     University of Reconcavo of Bahia
   email: cneto@ufrb.edu.br
-header-includes:
-   - \usepackage{bbm}  
+header-includes: \usepackage{bbm}
 keywords:
 - key
 - dictionary
@@ -170,9 +171,59 @@ library(GJRM)
 library(tidyr)
 library(utils)
 
-base <- utils::read.table("https://raw.githubusercontent.com/cccneto/valuation_urbanParks/master/dados/base_cleaned.csv",
-                  header = T,
-                  sep = ",")
+# base <- utils::read.table("https://raw.githubusercontent.com/cccneto/valuation_urbanParks/master/dados/base_cleaned.csv",
+#                   header = T,
+#                   sep = ",")
+# 
+# base <- read.csv("https://raw.githubusercontent.com/cccneto/valuation_urbanParks/master/dados/base_cleaned.csv", 
+#                  header = T)
+
+
+# Carregando base de dados
+url <- "https://github.com/cccneto/valuation_urbanParks/blob/master/dados/baseunificada.xlsx?raw=true"
+destfile <- tempfile()
+curl::curl_download(url, destfile)
+baseunificada <- read_excel(destfile)
+
+
+baseunificada <- baseunificada %>% 
+  select(parque, idade, sexo, cidade, escolar, renda, infraestrutura, sombra, temperatura, objetivo, 
+         lance1,lance2, resp1, resp2, bidl, bidh, lnRendat1, lnRendat2, lnRenda) %>% 
+  mutate(
+    infraestrutura = as.double(infraestrutura),
+    sombra = as.double(sombra),
+    temperatura = as.double(temperatura))
+
+# Ajustando codigo de variaveis
+
+base <- baseunificada %>%
+  mutate(
+    infraestrutura = case_when(infraestrutura >= 4 ~ "1", TRUE ~ "0"), 
+    temperatura = case_when(temperatura >= 4 ~ "1", TRUE ~ "0"),
+    sombra = case_when(sombra >= 4 ~ "1", TRUE ~ "0"),
+    escolar = case_when(escolar > 19 ~ "1", TRUE ~ "0"), # 1=superior completo, 0= otherwise
+    sexo = case_when(sexo == 1 ~ "1", TRUE ~ "0")
+  )
+
+base <- base %>%
+  mutate(
+    parque = as.factor(parque),
+    idade = as.integer(idade),
+    sexo = as.integer(sexo),
+    cidade = as.factor(cidade),
+    escolar = as.integer(escolar),
+    renda = as.integer(renda),
+    infraestrutura = as.integer(infraestrutura),
+    sombra = as.integer(sombra),
+    temperatura = as.integer(temperatura),
+    lance1 = as.integer(lance1),
+    lance2 = as.integer(lance2),
+    resp1 = as.factor(resp1),
+    resp2 = as.factor(resp2)
+  )
+
+
+
 
 base %>%
   select(
@@ -211,10 +262,7 @@ mr <- c("probit", "probit")
 ## Modelo Linear
 bvp <- gjrm(f.list, data=base, Model="B", margins= mr)
 summary(bvp)
-```
 
-
-```{r include=FALSE}
 coefs <- summary(bvp)
 coefs$tableP1
 coefs <- summary(bvp$coefficients)
@@ -417,6 +465,43 @@ freq_total
 
 The results from the BP regression for the general sample are shown in Table x. The estimations for Eq. (1) are shown in the upper part of the Table, while the estimation for Eq. (2)  in the lower part. The probability that WTP be equal or higher to the two bids amount is influenced by the respondent’s own characteristics and by a series of independent variables that reflect their preferences for the ES being valued. The coefficient on the bid was negative and statistically significant in both equations, which indicates as the price increased the probability of a positive answer to the WTP question decreased.  
 
+  \begin{table}[!tbp]
+    \begin{center}
+    \begin{tabular}{lrrrr}
+    \hline\hline
+    \multicolumn{1}{l}{}&\multicolumn{1}{r}{Estimate}&\multicolumn{1}{r}{Std. Error}&\multicolumn{1}{r}{z-value}&\multicolumn{1}{r}{p-value}\tabularnewline
+    \hline
+       \vspace{5mm}
+   \textbf{Equation 1} \\
+    \textit{Intercept} &$ 0.635419$&$0.1440$&$  4.410$&$0.00001$\textsobscript{***}\tabularnewline
+    Bid1&$-0.020311$&$0.0020$&$-10.154$&$0.00000$\textsobscript{***}\tabularnewline
+    Age&$ -0.006643$&$0.0026$&$  -2.540$&$0.01109$\textsobscript{**}\tabularnewline
+    Gender&$0.073047$&$0.0776$&$0.941$&$0.34666$\tabularnewline
+    School&$0.216602$&$0.0915$&$  2.367$&$0.01795$\textsobscript{***}\tabularnewline
+    Temperature &$0.270258$&$0.0863$&$3.131$&$0.00174$\textsobscript{***}\tabularnewline
+    Infrastructure &$ 0.503613$&$0.0808$&$  6.226$&$0.00000$\textsobscript{***}\tabularnewline
+    \hline
+\vspace{5mm}
+   \textbf{Equation 2} \\
+     \textit{Intercept} &$ 0.528728$&$0.1418$&$  3.728$&$0.00019$\textsobscript{***}\tabularnewline
+    Bid2&$-0.015654$&$0.0019$&$-7.832$&$0.00000$\textsobscript{***}\tabularnewline
+    Age&$ -0.010806$&$0.0.0025$&$  -4.272$&$0.00001$\textsobscript{***}\tabularnewline
+    Gender&$0.172253$&$0.0740$&$2.37$&$0.019989$\textsobscript{**}\tabularnewline
+    School&$ -0.067069$&$0.0869$&$ -0.771$&$0.44074$\tabularnewline
+    Temperature &$-0.025151$&$0.0832$&$-0.302$&$0.76265\tabularnewline
+    Infrastructure &$ 0.651171$&$0.0770$&$  8.452$&$0.00000$\textsobscript{***}\tabularnewline
+   \hline
+   Nº Observations &&&$1144$\tabularnewline
+   Log Likelihood &&&$-1342.32$\tabularnewline
+   \hline
+   \end{tabular}\end{center}
+   \begin{tablenotes}
+   \begin{center}
+          \\Note: ***, ** and * for 1\%, 5\% and 10\%, respectively} 
+   \end{center}
+\end{tablenotes}
+    \end{table}
+
 
 ```{r include=FALSE}
 # ANALISE CONJUNTA DE TODOS OS PARQUES
@@ -428,42 +513,11 @@ f.list <- list(treat.eq, out.eq)
 mr <- c("probit", "probit")
 ```
 
-```{r echo=FALSE}
+```{r include=FALSE}
 ## Modelo Linear
 bvp <- gjrm(f.list, data=base, Model="B", margins= mr)
 summary(bvp)
 
-```
-
-```{r}
-# Custom extractor functions
-library(modelsummary)
-library(broom)
-library(dplyr)
-library(GJRM)
-
-tidy.SemiParBIV <- function(x, conf.level = 0.95, ...) {
-    s <- summary(x, prob.lev = 1 - conf.level, ...)
-    s <- s[grepl("tableP", names(s))]
-    s <- s[sapply(s, is.null) == FALSE]
-    for (i in seq_along(s)) {
-        colnames(s[[i]]) <- c("estimate", "std.error", "statistic", "p.value")
-        s[[i]] <- data.frame(s[[i]])
-        s[[i]]$equation <- paste("Equation", i)
-        s[[i]]$term <- row.names(s[[i]])
-    }
-    out <- bind_rows(s)
-    out
-}
-
-glance.SemiParBIV <- function(x, ...) {
-  out <- data.frame(
-    nobs = x$n,
-    robust = x$robust)
-  out
-}
-
-modelsummary(bvp.santana, output = "markdown", group = equation + term ~ model)
 ```
 
 The results for the general sample indicate that WTP from the first equation (Eq 1) was influenced positively by the level of education (0.042, p-value < 0,01), and by the respondent's perceptions about infrastructure (0.187, p-value < 0,01) and temperature of the park (0.105, p-value < 0,01), while the respondent's age and gender weren't statistically significant.
@@ -486,8 +540,3 @@ This study introduces a new approach to calibrate WTP estimates using perceived 
  
 Verificar texto do D. Latinopoulos et al. 2016
 
-
-bvp.sitiotrindade, bvp.trezedemaio, 
-bvp.santosdumont
-bvp.lindu, bvp.caiara, bvp.macaxeira 
-bvp.jaqueira, bvp.santana 
