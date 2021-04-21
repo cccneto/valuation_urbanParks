@@ -301,66 +301,51 @@ nn Pr(X&#39;_{1}\beta_{1} + \epsilon_{1j} &lt; t^1, X&#39;_{2}\beta_{2} + \epsil
 <p>After processing the data, 1144 questionnaires were used. Considering the estimated population of 1,653,461 inhabitants of the city, and the distribution between age groups, income, sex and place of residence, the data are representative for the city. Among the interviewees, 51.68% were female; 48.32 male. The vast majority of respondents 92.82% were young adults (&lt;65 years), living in 94 neighborhoods in the city (Table 1).</p>
 <p>Inserir tabela considerando a informação <strong>Objetivo de visita</strong></p>
 <p>Regarding the profile of respondents, <span class="math inline">\(45.9%\)</span> of the respondents are female, the average age is about 41.3 years (sd = 14.8). The average monthly income is <span class="math inline">\(R\$ 1.800\)</span>, and the median income was estimated to be between <span class="math inline">\(R\$ 41\)</span> and <span class="math inline">\(R\$ 61.200\)</span>. Only <span class="math inline">\(25.9%\)</span> hold a degree from a university or from a technological educational institute.About the use of dummy variables, we focused on respondents assessing their self-perception on the temperature in the park, and regarding the park’s infrastructure. About <span class="math inline">\(31.8%\)</span> beliefs that the park has a nice temperature because of the natural cover to the park. And <span class="math inline">\(55.4%\)</span> evaluated the &quot;infrastructure as good/great. These variables were included in the analysis because it was expected to affect positively the probability to participate in the project, as well the respondent’s WTP.(ver tabela x)</p>
-<pre class="r"><code># Proporção de respostas por parque
-resp_parq &lt;- base %&gt;% 
-  group_by(parque) %&gt;% 
-  na.omit() %&gt;% 
-      mutate(resp1 = as.numeric(resp1),
-             resp2 = as.numeric(resp2)) %&gt;% 
-      summarise(yy = sum(resp1==1 &amp; resp2==1),
-                yn = sum(resp1==1 &amp; resp2==0),
-                ny = sum(resp1==0 &amp; resp2==1),
-                nn = sum(resp1==0 &amp; resp2==0)) %&gt;% 
-    group_by(parque) %&gt;%
-    summarise(freq_yy = yy / sum(yy, yn, nn, ny)*100,
-            freq_yn = yn / sum(yy, yn, nn, ny)*100,
-            freq_ny = ny / sum(yy, yn, nn, ny)*100,
-            freq_nn = nn / sum(yy, yn, nn, ny)*100,
-            total_quest = sum(yy, yn, nn, ny))  %&gt;% 
-    arrange(desc(freq_yy, freq_yn)) 
-
-resp_parq</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["parque"],"name":[1],"type":["fct"],"align":["left"]},{"label":["freq_yy"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["freq_yn"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["freq_ny"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["freq_nn"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["total_quest"],"name":[6],"type":["int"],"align":["right"]}],"data":[{"1":"13demaio","2":"100","3":"0","4":"0","5":"0","6":"48"},{"1":"caiara","2":"100","3":"0","4":"0","5":"0","6":"35"},{"1":"jaqueira","2":"100","3":"0","4":"0","5":"0","6":"32"},{"1":"lagoaaraca","2":"100","3":"0","4":"0","5":"0","6":"107"},{"1":"lindu","2":"100","3":"0","4":"0","5":"0","6":"32"},{"1":"macaxeira","2":"100","3":"0","4":"0","5":"0","6":"40"},{"1":"santana","2":"100","3":"0","4":"0","5":"0","6":"44"},{"1":"santosdumont","2":"100","3":"0","4":"0","5":"0","6":"11"},{"1":"sitio da trindade","2":"100","3":"0","4":"0","5":"0","6":"10"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
 <p><strong>Inserir detalhamento das respostas por parque e geral</strong></p>
-<pre class="r"><code># respostas por parque
-num_total &lt;- base %&gt;% 
-  na.omit() %&gt;% 
-  mutate(resp1 = as.numeric(resp1),
-         resp2 = as.numeric(resp2)) %&gt;% 
-  summarise(yy = sum(resp1==1 &amp; resp2==1),
-            yn = sum(resp1==1 &amp; resp2==0),
-            ny = sum(resp1==0 &amp; resp2==1),
-            nn = sum(resp1==0 &amp; resp2==0)) 
-
-num_total</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["yy"],"name":[1],"type":["int"],"align":["right"]},{"label":["yn"],"name":[2],"type":["int"],"align":["right"]},{"label":["ny"],"name":[3],"type":["int"],"align":["right"]},{"label":["nn"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"359","2":"0","3":"0","4":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-<pre class="r"><code># frequencia das respostas - todos parques
-freq_total&lt;- num_total %&gt;%  
-  summarise(freq_yy = yy / sum(yy, yn, nn, ny)*100,
-            freq_yn = yn / sum(yy, yn, nn, ny)*100,
-            freq_ny = ny / sum(yy, yn, nn, ny)*100,
-            freq_nn = nn / sum(yy, yn, nn, ny)*100) %&gt;% 
-  arrange(desc(freq_yy, freq_yn)) %&gt;% 
-  round(digits = 2)
-
-freq_total</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["freq_yy"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["freq_yn"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["freq_ny"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["freq_nn"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"100","2":"0","3":"0","4":"0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
 </div>
 <div id="bivariate-probit-model-estimation-results" class="section level2">
 <h2>Bivariate Probit Model estimation results</h2>
 <p>The results from the BP regression for the general sample are shown in Table x. The estimations for Eq. (1) are shown in the upper part of the Table, while the estimation for Eq. (2) in the lower part. The probability that WTP be equal or higher to the two bids amount is influenced by the respondent’s own characteristics and by a series of independent variables that reflect their preferences for the ES being valued. The coefficient on the bid was negative and statistically significant in both equations, which indicates as the price increased the probability of a positive answer to the WTP question decreased.</p>
+<p><span class="math display">\[
+  \begin{table}[!tbp]
+    \begin{center}
+    \begin{tabular}{lrrrr}
+    \hline\hline
+    \multicolumn{1}{l}{}&amp;\multicolumn{1}{r}{Estimate}&amp;\multicolumn{1}{r}{Std. Error}&amp;\multicolumn{1}{r}{z-value}&amp;\multicolumn{1}{r}{p-value}\tabularnewline
+    \hline
+       \vspace{5mm}
+   \textbf{Equation 1} \\
+    \textit{Intercept} &amp;$ 0.635419$&amp;$0.1440$&amp;$  4.410$&amp;$0.00001$\textsobscript{***}\tabularnewline
+    Bid1&amp;$-0.020311$&amp;$0.0020$&amp;$-10.154$&amp;$0.00000$\textsobscript{***}\tabularnewline
+    Age&amp;$ -0.006643$&amp;$0.0026$&amp;$  -2.540$&amp;$0.01109$\textsobscript{**}\tabularnewline
+    Gender&amp;$0.073047$&amp;$0.0776$&amp;$0.941$&amp;$0.34666$\tabularnewline
+    School&amp;$0.216602$&amp;$0.0915$&amp;$  2.367$&amp;$0.01795$\textsobscript{***}\tabularnewline
+    Temperature &amp;$0.270258$&amp;$0.0863$&amp;$3.131$&amp;$0.00174$\textsobscript{***}\tabularnewline
+    Infrastructure &amp;$ 0.503613$&amp;$0.0808$&amp;$  6.226$&amp;$0.00000$\textsobscript{***}\tabularnewline
+    \hline
+\vspace{5mm}
+   \textbf{Equation 2} \\
+     \textit{Intercept} &amp;$ 0.528728$&amp;$0.1418$&amp;$  3.728$&amp;$0.00019$\textsobscript{***}\tabularnewline
+    Bid2&amp;$-0.015654$&amp;$0.0019$&amp;$-7.832$&amp;$0.00000$\textsobscript{***}\tabularnewline
+    Age&amp;$ -0.010806$&amp;$0.0.0025$&amp;$  -4.272$&amp;$0.00001$\textsobscript{***}\tabularnewline
+    Gender&amp;$0.172253$&amp;$0.0740$&amp;$2.37$&amp;$0.019989$\textsobscript{**}\tabularnewline
+    School&amp;$ -0.067069$&amp;$0.0869$&amp;$ -0.771$&amp;$0.44074$\tabularnewline
+    Temperature &amp;$-0.025151$&amp;$0.0832$&amp;$-0.302$&amp;$0.76265\tabularnewline
+    Infrastructure &amp;$ 0.651171$&amp;$0.0770$&amp;$  8.452$&amp;$0.00000$\textsobscript{***}\tabularnewline
+   \hline
+   Nº Observations &amp;&amp;&amp;$1144$\tabularnewline
+   Log Likelihood &amp;&amp;&amp;$-1342.32$\tabularnewline
+   AIC &amp;&amp;&amp;$ 2714.6$\tabularnewline
+   BIC &amp;&amp;&amp;$ 2790.3$\tabularnewline
+   \hline
+   \end{tabular}\end{center}
+   \begin{tablenotes}
+   \begin{center}
+          \\Note: *** p&lt;0.01, ** p&lt;0.05, and * p&lt;0.1} 
+   \end{center}
+\end{tablenotes}
+    \end{table}
+\]</span></p>
 <p>The results for the general sample indicate that WTP from the first equation (Eq 1) was influenced positively by the level of education (0.042, p-value &lt; 0,01), and by the respondent’s perceptions about infrastructure (0.187, p-value &lt; 0,01) and temperature of the park (0.105, p-value &lt; 0,01), while the respondent’s age and gender weren’t statistically significant.</p>
 <p>In the second equation, the results for the general sample indicate that WTP is negatively influenced by the age of respondents (0.010, p-value &lt; 0,01), by the park’s temperature (0.090, p-value &lt; 0,01), and the respondent’s gender (0.042, p-value &lt; 0,186). However, it is positively affected by respondent’s perceptions about the park’s infrastructure (0.176, p-value &lt; 0,01). Opposite to the first equation, the level of education wasn’t statistically significant.</p>
 <p>Examining the results, we could interpret some of the signs of the estimated coefficients as expected and consistent with the economic theory. For example, the likelihood of voting “yes” to the proposed program in the second equation is higher for younger and better-educated respondents, as well as for female respondents. On the other hand, we find that likelihood of voting “yes” to the proposed program is lower when we consider park respondent’s temperature perceptions. Furthermore, the regression model indicates statistically significant and theoretically justify relationships between the WTP responses and several explanatory variables.</p>
@@ -374,9 +359,10 @@ freq_total</code></pre>
 </div>
 <div id="policy-implications" class="section level1">
 <h1>Policy implications</h1>
-<p>This study introduces a new approach to calibrate WTP estimates using perceived policy consequentiality that enables detailed analyses of the factors behind preference misrepresentations (Liu et al., 2020)</p>
+<p>This study introduces a new approach to calibrate WTP estimates using perceived policy consequentiality that enables detailed analyses of the factors behind preference misrepresentations (Liu et al., 2020). The perceived consequentiality reduces the probability of nontruthful choices and potentially leads to a more accurate willingness to pay (WTP) estimation</p>
+<p>Policy consequentiality refers to the belief of respondents that their survey responses will affect the outcome of whether a proposed policy or project is implemented. Payment consequentiality refers to the belief that payment will be imposed when the project gets implemented. Truthful preference revelation is unlikely when survey respondents do not believe that the survey is consequential (Carson and Groves, 2007), which may bias estimation on WTP.</p>
+<p>** acrescentar comentario nas discussoes a respeito de preferirmos imposto ou cobrança direto na conta ao inves de doação&quot; -&gt; </p>
 <p>Verificar texto do D. Latinopoulos et al. 2016</p>
-<p>bvp.sitiotrindade, bvp.trezedemaio, bvp.santosdumont bvp.lindu, bvp.caiara, bvp.macaxeira bvp.jaqueira, bvp.santana</p>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-amato2016metropoles" class="csl-entry">
 Amato-Lourenço, Luı́s Fernando, Tiana Carla Lopes Moreira, Bruna Lara de Arantes, Demóstenes Ferreira da Silva Filho, and Thais Mauad. 2016. <span>“Metr<span>ó</span>poles, Cobertura Vegetal, <span class="nocase">á</span>reas Verdes e Sa<span>ú</span>de.”</span> <em>Estudos Avan<span>ç</span>ados</em> 30 (86): 113–30.

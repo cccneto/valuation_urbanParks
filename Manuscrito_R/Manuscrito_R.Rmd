@@ -3,11 +3,11 @@ title: "VALUATION OF CULTURAL ECOSYSTEM SERVICES IN URBAN PARKS"
 subtitle: teremos um subtitulo?
 titlerunning: Short form of title (if too long for head)
 output:
-  html_document:
-    df_print: paged
-  word_document: default
   pdf_document:
     latex_engine: xelatex
+  word_document: default
+  html_document:
+    df_print: paged
 thanks: "Grants or other notes about the article that should go on the front \npage
   should be placed here. General acknowledgments should be placed at the\nend of the
   article.\n"
@@ -28,7 +28,7 @@ MSC:
 - MSC code 1
 - MSC code 2
 abstract: |
-  The text of your abstract.  150 -- 250 words.
+  Escrever abstract aqui, total de 150 -- 250 palavras.
 bibliography: bibliography.bib
 biblio-style: spphys
 authorrunning: Short form of author list if too long for running head
@@ -57,21 +57,21 @@ The place of study was the Municipality of Recife, capital of the state of Perna
 
 ## Survey methods and questionnaire design
 
-We conducted the survey between December 2018 and March 2019 among the local residents of the city of Recife that uses at least one of the 9 parks of the city. The survey method was face-to-face personal interviews by means of a structured questionnaire and was applied to 1281 questionnaires. All procedures were according to the rules of resolution 510/1617 (BRASIL, 2016), the opinion survey format was prepared and did not request any identification. 
+We conducted the survey between December 2018 and March 2019 among the local residents of the city of Recife that uses at least one of the 9 parks of the city. The survey method was face-to-face personal interviews by means of a structured questionnaire and was applied to 1281 questionnaires. All procedures were according to the rules of resolution 510/1617 of National Health Council (CNS), the opinion survey format was prepared and did not request any identification. 
 
 We gathered data among the Recife users population’s universe, configuring a non-probabilistic sample with a convenience bias. We recognize the sampling scheme has not achieved a representative sample of the city’s households. All the analyses and estimates were performed with the R Studio 4.0 software. The dataset is available in csv format at a Github repository [https://github.com/cccneto/valuation_urbanParks].
 
-The current survey was tested through a pilot study/previous survey in one of the city parks (CITAR ARTIGO DO ARACA). We have constructed the bid vector for the dichotomous choice questions based on the analysis of the WTP responses in the previous survey. The questionnaire’s structure was based on the NOAA panel recommendations for CVM studies (Arrow et al., 1993). The questionnaire consisted of a set of 17 questions. 
+The current survey was tested through a pilot study/previous survey in one of the city parks (CITAR ARTIGO DO ARACA). We have constructed the bid vector for the dichotomous choice questions based on the analysis of the WTP responses in the previous survey. The questionnaire’s structure was based on the NOAA panel recommendations for CVM studies [@arrow1993report]. The questionnaire consisted of a set of 17 questions. 
 
-In the first part, we surveyed respondents’ socio-economic and household characteristics from age at least 18 years. In the second part we asked about: a) the visit purpose to the park, b) the frequency visits to the park, c) the main criteria determining the decision to visit a park,  d) their perceptions about the park characteristics (e.g. infrastructure, maintenance, size, security), finally, e) their perception about the presence of ecosystem services in the park.
+In the first part, we surveyed respondents’ socio-economic and household characteristics from age at least 18 years. In the second part we asked about: a) the visit purpose to the park, b) the frequency visits to the park, c) the main criteria determining the decision to visit a park,  d) their perceptions about the park characteristics (e.g. Facilities, maintenance, size, security), finally, e) their perception about the presence of ecosystem services in the park.
 
 The final part we described the hypothetical scenario and the valuation questions. In this scenario, we presented a change in the park's vegetal cover to the respondents, focusing on the transformation of the environmental quality of the area. It is important to say the interviewer did a relevant visual presentation of the changes in the scenario presented (i.e. images before and after the park development).
 
-In the approach to respondents on the park, we asked residents if they wanted to participate in this research (i.e., if they agree to respond to the survey questions). After the two initial parts of the questionnaire, we asked how much they would be willing to pay for the changes presented to them. The interviewer explained their answers would be useful to the decision-making and planning process. About the WTP question, we adopted a close-ended format to better approximate real market transactions (i.e., take-it or leave-it decisions).  We have have adopted the a double-bounded (DB) dichotomous choice format following the recommendations of the NOAA panel (Arrow et al., 1993) and Hanemann (1984). The procedures presents to respondents an initial bid value, randomly selected from a set of 70 bid levels - R\$ 1 to R\$ 70. If the response was “yes” a follow-up question with a higher bid was asked, while a “no” response led to a lower bid level. The value amount would be annually collected by the municipal authority and would be exclusively devoted to cover the development costs of the park. 
+In the approach to respondents on the park, we asked residents if they wanted to participate in this research (i.e., if they agree to respond to the survey questions). After the two initial parts of the questionnaire, we asked how much they would be willing to pay for the changes presented to them. The interviewer explained their answers would be useful to the decision-making and planning process. About the WTP question, we adopted a close-ended format to better approximate real market transactions (i.e., take-it or leave-it decisions).  We have have adopted the a double-bounded (DB) dichotomous choice format following the recommendations of the NOAA panel [@arrow1993report] and [@hanemann1991statistical]. The procedures presents to respondents an initial bid value, randomly selected from a set of 70 bid levels - R\$ 1 to R\$ 70. If the response was “yes” a follow-up question with a higher bid was asked, while a “no” response led to a lower bid level. The value amount would be annually collected by the municipal authority and would be exclusively devoted to cover the development costs of the park. 
 
 ## Theoretical Model 
 
-According to Groothuis and Whitehead (2002), econometric models of dichotomous choice have been an instrument widely used to address issues related to contingent valuation. O Modelo de utilidade randômica fornece as bases teóricas para a análise de Métodos de Valoração Contingente.In this model an individual could choose to pay a donation fee for the conservation of the services provided by the studied area if the following conditions are met (Hanemann, 1984):
+According to [@groothuis2002does], econometric models of dichotomous choice have been an instrument widely used to address issues related to contingent valuation. O Modelo de utilidade randômica fornece as bases teóricas para a análise de Métodos de Valoração Contingente.In this model an individual could choose to pay a donation fee for the conservation of the services provided by the studied area if the following conditions are met (Hanemann, 1984):
 
 \begin{align}
 u(y, X) = u(y-t, q, X)
@@ -91,7 +91,7 @@ Where $u$ is the respondent's utility function, $v$ is the indirect utility func
 \Delta v= (1, y-t;X) -v(0, y, X) + \epsilon_{1} + \epsilon_{0} 	
 \end{align}
 
-The MVC dichotomous choice format requires a qualitative choice model. The use of a linear distribution of the WTP and a Bivariate Probit Model (BPM), was developed based on the model by Cameron & Quiggin (1994). It is assumed that the error of the second dichotomous question is correlated with the error of the first question. For this reason, we follow Alberini's (1995) recommendation for the choice of bivariate dichotomous models, because if the coefficient correlation, $\rho \ne 1$, it is clear that, in general, the second WTP does not perfectly match the first and can be interpreted as a revised version of the amount of the first WTP. If WTP values are independently determined, then $\rho = 0$. For all other values of the correlation coefficient, the interval $0 < \rho < 1$ is valid, which implies that the correlation between the two WTP values is less than perfect.
+The MVC dichotomous choice format requires a qualitative choice model. The use of a linear distribution of the WTP and a Bivariate Probit Model (BPM), was developed based on the model by [@cameron1994estimation]. It is assumed that the error of the second dichotomous question is correlated with the error of the first question. For this reason, we follow Alberini's (1995) recommendation for the choice of bivariate dichotomous models, because if the coefficient correlation, $\rho \ne 1$, it is clear that, in general, the second WTP does not perfectly match the first and can be interpreted as a revised version of the amount of the first WTP. If WTP values are independently determined, then $\rho = 0$. For all other values of the correlation coefficient, the interval $0 < \rho < 1$ is valid, which implies that the correlation between the two WTP values is less than perfect.
 
 Considering these aspects, the modeling of the data generated by the questions in the double limit dichotomous choice format was achieved by the following formulation:
 
@@ -104,7 +104,7 @@ $$
 \end{aligned}
 $$
 
-$Y_i$ is the dependent variable and reports the respondent's answer ($yes = 1$ or $no = 0$) to the $Bid$, $Age_i$ is the age of the respondent, $D_{1i}$ is the dummie variable for the $Sex$ of the respondent (man = $1$, woman = $0$), $D_{2i}$ is a dummie for the respondent's education (complete higher education = $1$), $D_{3i}$ is a dummie for respondent assessing regarding the temperature in the park (good / excellent = $1$), $D_{4i}$ is a dummie for assessing the respondent regarding of the park's infrastructure (good / great = $1$), $Bid_i$ are the variables for the values drawn as bids to respondents.
+$Y_i$ is the dependent variable and reports the respondent's answer ($yes = 1$ or $no = 0$) to the $Bid$, $Age_i$ is the age of the respondent, $D_{1i}$ is the dummie variable for the $Sex$ of the respondent (man = $1$, woman = $0$), $D_{2i}$ is a dummie for the respondent's education (complete higher education = $1$), $D_{3i}$ is a dummie for respondent assessing regarding the temperature in the park (good / excellent = $1$), $D_{4i}$ is a dummie for assessing the respondent regarding of the park's Facilities (good / great = $1$), $Bid_i$ are the variables for the values drawn as bids to respondents.
 
 The $WTP_{ij}$ component represents the respondent's $j-th$ willingness to pay and $i = 1$, 2 denotes the first and second questions, respectively.
 
@@ -155,9 +155,7 @@ Once the regression is estimated, the estimated WTP is calculated as:
 
 ## Respondent's profile
 
-After processing the data, 1144 questionnaires were used. Considering the estimated population of 1,653,461 inhabitants of the city, and the distribution between age groups, income, sex and place of residence, the data are representative for the city. Among the interviewees, 51.68% were female; 48.32 male. The vast majority of respondents 92.82% were young adults (<65 years), living in 94 neighborhoods in the city (Table 1).
-
-
+After processing the data, 1144 questionnaires were used. Considering the estimated population of 1,653,461 inhabitants of the city, and the distribution between age groups, income, sex and place of residence, the data are representative for the city. Among the interviewees, $51.68\%$ were female; $48.32\%$ male. The vast majority of respondents $92.82\%$ were young adults (<65 years), living in 94 neighborhoods in the city (Table 1).
 
 ```{r include=FALSE}
 library(tidyverse)
@@ -262,6 +260,11 @@ mr <- c("probit", "probit")
 ## Modelo Linear
 bvp <- gjrm(f.list, data=base, Model="B", margins= mr)
 summary(bvp)
+
+library(modelsummary)
+modelsummary(bvp, group = component + term ~ model)
+
+summary(teste)
 
 coefs <- summary(bvp)
 coefs$tableP1
@@ -406,10 +409,10 @@ base %>%
    
 ```
 
-Regarding the profile of respondents, $45.9%$ of the respondents are female, the average age is about 41.3 years (sd = 14.8). The average monthly income is $R\$ 1.800$, and the median income was estimated to be between $R\$ 41$ and $R\$ 61.200$. Only $25.9%$ hold a degree from a university or from a technological educational institute.About the use of dummy variables, we focused on respondents assessing their self-perception on the temperature in the park, and regarding the park's infrastructure. About $31.8%$ beliefs that the park has a nice temperature because of the natural cover to the park. And $55.4%$ evaluated the "infrastructure as good/great. These variables  were included in the analysis because it was expected to affect positively the probability to participate in the project, as well the respondent's WTP.(ver tabela x)
+Regarding the profile of respondents, $45.9\%$ of the respondents are female, the average age is about 41.3 years (sd = 14.8). The average monthly income is $R\$ 1.800$, and the median income was estimated to be between $R\$ 41$ and $R\$ 61.200$. Only $25.9\%$ hold a degree from a university or from a technological educational institute.About the use of dummy variables, we focused on respondents assessing their self-perception on the temperature in the park, and regarding the park's Facilities. About $31.8\%$ beliefs that the park has a nice temperature because of the natural cover to the park. And $55.4\%$ evaluated the "Facilities as good/great. These variables  were included in the analysis because it was expected to affect positively the probability to participate in the project, as well the respondent's WTP.(ver tabela x)
 
 
-```{r}
+```{r include=FALSE}
 # Proporção de respostas por parque
 resp_parq <- base %>% 
   group_by(parque) %>% 
@@ -433,7 +436,7 @@ resp_parq
 
 **Inserir detalhamento das respostas por parque e geral**
 
-```{r}
+```{r include=FALSE}
 # respostas por parque
 num_total <- base %>% 
   na.omit() %>% 
@@ -447,7 +450,7 @@ num_total <- base %>%
 num_total
 ```
 
-```{r}
+```{r include=FALSE}
 # frequencia das respostas - todos parques
 freq_total<- num_total %>%  
   summarise(freq_yy = yy / sum(yy, yn, nn, ny)*100,
@@ -465,42 +468,44 @@ freq_total
 
 The results from the BP regression for the general sample are shown in Table x. The estimations for Eq. (1) are shown in the upper part of the Table, while the estimation for Eq. (2)  in the lower part. The probability that WTP be equal or higher to the two bids amount is influenced by the respondent’s own characteristics and by a series of independent variables that reflect their preferences for the ES being valued. The coefficient on the bid was negative and statistically significant in both equations, which indicates as the price increased the probability of a positive answer to the WTP question decreased.  
 
-  \begin{table}[!tbp]
-    \begin{center}
-    \begin{tabular}{lrrrr}
-    \hline\hline
-    \multicolumn{1}{l}{}&\multicolumn{1}{r}{Estimate}&\multicolumn{1}{r}{Std. Error}&\multicolumn{1}{r}{z-value}&\multicolumn{1}{r}{p-value}\tabularnewline
-    \hline
-       \vspace{5mm}
-   \textbf{Equation 1} \\
-    \textit{Intercept} &$ 0.635419$&$0.1440$&$  4.410$&$0.00001$\textsobscript{***}\tabularnewline
-    Bid1&$-0.020311$&$0.0020$&$-10.154$&$0.00000$\textsobscript{***}\tabularnewline
-    Age&$ -0.006643$&$0.0026$&$  -2.540$&$0.01109$\textsobscript{**}\tabularnewline
-    Gender&$0.073047$&$0.0776$&$0.941$&$0.34666$\tabularnewline
-    School&$0.216602$&$0.0915$&$  2.367$&$0.01795$\textsobscript{***}\tabularnewline
-    Temperature &$0.270258$&$0.0863$&$3.131$&$0.00174$\textsobscript{***}\tabularnewline
-    Infrastructure &$ 0.503613$&$0.0808$&$  6.226$&$0.00000$\textsobscript{***}\tabularnewline
-    \hline
-\vspace{5mm}
-   \textbf{Equation 2} \\
-     \textit{Intercept} &$ 0.528728$&$0.1418$&$  3.728$&$0.00019$\textsobscript{***}\tabularnewline
-    Bid2&$-0.015654$&$0.0019$&$-7.832$&$0.00000$\textsobscript{***}\tabularnewline
-    Age&$ -0.010806$&$0.0.0025$&$  -4.272$&$0.00001$\textsobscript{***}\tabularnewline
-    Gender&$0.172253$&$0.0740$&$2.37$&$0.019989$\textsobscript{**}\tabularnewline
-    School&$ -0.067069$&$0.0869$&$ -0.771$&$0.44074$\tabularnewline
-    Temperature &$-0.025151$&$0.0832$&$-0.302$&$0.76265\tabularnewline
-    Infrastructure &$ 0.651171$&$0.0770$&$  8.452$&$0.00000$\textsobscript{***}\tabularnewline
-   \hline
-   Nº Observations &&&$1144$\tabularnewline
-   Log Likelihood &&&$-1342.32$\tabularnewline
-   \hline
-   \end{tabular}\end{center}
-   \begin{tablenotes}
-   \begin{center}
-          \\Note: ***, ** and * for 1\%, 5\% and 10\%, respectively} 
-   \end{center}
-\end{tablenotes}
-    \end{table}
+<!--   \begin{table}[!tbp] -->
+<!--     \begin{center} -->
+<!--     \begin{tabular}{lrrrr} -->
+<!--     \hline\hline -->
+<!--     \multicolumn{1}{l}{}&\multicolumn{1}{r}{Estimate}&\multicolumn{1}{r}{Std. Error}&\multicolumn{1}{r}{z-value}&\multicolumn{1}{r}{p-value}\tabularnewline -->
+<!--     \hline -->
+<!--        \vspace{5mm} -->
+<!--    \textbf{Equation 1} \\ -->
+<!--     \textit{Intercept} &$ 0.635419$&$0.1440$&$  4.410$&$0.00001$\textsobscript{***}\tabularnewline -->
+<!--     Bid1&$-0.020311$&$0.0020$&$-10.154$&$0.00000$\textsobscript{***}\tabularnewline -->
+<!--     Age&$ -0.006643$&$0.0026$&$  -2.540$&$0.01109$\textsobscript{**}\tabularnewline -->
+<!--     Gender&$0.073047$&$0.0776$&$0.941$&$0.34666$\tabularnewline -->
+<!--     School&$0.216602$&$0.0915$&$  2.367$&$0.01795$\textsobscript{***}\tabularnewline -->
+<!--     Temperature &$0.270258$&$0.0863$&$3.131$&$0.00174$\textsobscript{***}\tabularnewline -->
+<!--     Facilities &$ 0.503613$&$0.0808$&$  6.226$&$0.00000$\textsobscript{***}\tabularnewline -->
+<!--     \hline -->
+<!-- \vspace{5mm} -->
+<!--    \textbf{Equation 2} \\ -->
+<!--      \textit{Intercept} &$ 0.528728$&$0.1418$&$  3.728$&$0.00019$\textsobscript{***}\tabularnewline -->
+<!--     Bid2&$-0.015654$&$0.0019$&$-7.832$&$0.00000$\textsobscript{***}\tabularnewline -->
+<!--     Age&$ -0.010806$&$0.0.0025$&$  -4.272$&$0.00001$\textsobscript{***}\tabularnewline -->
+<!--     Gender&$0.172253$&$0.0740$&$2.37$&$0.019989$\textsobscript{**}\tabularnewline -->
+<!--     School&$ -0.067069$&$0.0869$&$ -0.771$&$0.44074$\tabularnewline -->
+<!--     Temperature &$-0.025151$&$0.0832$&$-0.302$&$0.76265\tabularnewline -->
+<!--     Facilities &$ 0.651171$&$0.0770$&$  8.452$&$0.00000$\textsobscript{***}\tabularnewline -->
+<!--    \hline -->
+<!--    Nº Observations &&&$1144$\tabularnewline -->
+<!--    Log Likelihood &&&$-1342.32$\tabularnewline -->
+<!--    AIC &&&$ 2714.6$\tabularnewline -->
+<!--    BIC &&&$ 2790.3$\tabularnewline -->
+<!--    \hline -->
+<!--    \end{tabular}\end{center} -->
+<!--    \begin{tablenotes} -->
+<!--    \begin{center} -->
+<!--           \\Note: *** p<0.01, ** p<0.05, and * p<0.1}  -->
+<!--    \end{center} -->
+<!-- \end{tablenotes} -->
+<!--     \end{table} -->
 
 
 ```{r include=FALSE}
@@ -520,23 +525,36 @@ summary(bvp)
 
 ```
 
-The results for the general sample indicate that WTP from the first equation (Eq 1) was influenced positively by the level of education (0.042, p-value < 0,01), and by the respondent's perceptions about infrastructure (0.187, p-value < 0,01) and temperature of the park (0.105, p-value < 0,01), while the respondent's age and gender weren't statistically significant.
+The results for the general sample indicate that WTP from the first equation (Eq 1) was influenced positively by the level of education (0.042, p-value < 0,01), and by the respondent's perceptions about Facilities (0.187, p-value < 0,01) and temperature of the park (0.105, p-value < 0,01), while the respondent's age and gender weren't statistically significant.
 
-In the second equation, the results for the general sample indicate that WTP is negatively influenced by the age of respondents (0.010, p-value < 0,01), by the park's temperature (0.090, p-value < 0,01), and the respondent's gender (0.042, p-value < 0,186). However, it is positively affected by respondent's perceptions about the park's infrastructure (0.176, p-value < 0,01). Opposite to the first equation, the level of education wasn't statistically significant.
+In the second equation, the results for the general sample indicate that WTP is negatively influenced by the age of respondents (0.010, p-value < 0,01), by the park's temperature (0.090, p-value < 0,01), and the respondent's gender (0.042, p-value < 0,186). However, it is positively affected by respondent's perceptions about the park's Facilities (0.176, p-value < 0,01). Opposite to the first equation, the level of education wasn't statistically significant.
 
 Examining the results, we could interpret some of the signs of the estimated coefficients as expected and consistent with the economic theory. For example, the likelihood of voting “yes”  to the proposed program in the second equation is higher for younger and better-educated respondents, as well as for female respondents. On the other hand, we find that likelihood of voting “yes”  to the proposed program is lower when we consider park respondent's temperature perceptions. Furthermore, the regression model indicates statistically significant and theoretically justify relationships between the WTP responses and several explanatory variables.
 
 
 # Discussion {#sec:4}
 
+[@brander2011value] An important finding from the meta-analyses is that the methodological design of the underlying valuation study has a large influence on the results of both CV.
 
+Ver secao 5.3. Determinants of the true willingness to payLet us now consider the impacts of the determinants de [@verbivc2016contingent]
 
 # Conclusions {#sec:5}
 
+\begin{itemize}
+\item does study reveals that urban parks and green spaces are quite important to the local population? 
+\item Does survey and its analysis show that the residents of Recife are willing to pay amounts of money in order to continues using the parks area as provisioninger cultural ecosystem service ? 
+\item What are the most important benefits from the park self reported by his users? 
+\item What is the users WTP?
+\end{itemize}
 
-# Policy implications 
+# Policy implications and Recomendations
 
-This study introduces a new approach to calibrate WTP estimates using perceived policy consequentiality that enables detailed analyses of the factors behind preference misrepresentations (Liu et al., 2020) 
+This study introduces a new approach to calibrate WTP estimates using perceived policy consequentiality that enables detailed analyses of the factors behind preference misrepresentations [@liu2020effects]. The perceived consequentiality reduces the probability of nontruthful choices and potentially leads to a more accurate willingness to pay (WTP) estimation
  
-Verificar texto do D. Latinopoulos et al. 2016
+In accordance with [@liu2020effects], policy consequentiality refers to the belief of respondents that their survey responses will affect the outcome of whether a proposed policy or project is implemented. Payment consequentiality refers to the belief that payment will be imposed when the project gets implemented. Truthful preference revelation is unlikely when survey respondents do not believe that the survey is consequential [@carson2007incentive], which may bias estimation on WTP.
+ 
+** acrescentar comentario nas discussoes a respeito de preferirmos imposto ou cobrança direto na conta ao inves de doação" -> \textbf{The tax payment vehicle is generally preferred to the voluntary donation payment vehicle as the tax reduces free-riding incentives when true WTP is higher than the elicited amounts.}
+ 
+Verificar texto do [@latinopoulos2016valuing] D. Latinopoulos et al. 2016
 
+# References 
