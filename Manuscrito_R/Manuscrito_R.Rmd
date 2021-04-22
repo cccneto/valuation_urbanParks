@@ -61,7 +61,7 @@ We conducted the survey between December 2018 and March 2019 among the local res
 
 We gathered data among the Recife users population’s universe, configuring a non-probabilistic sample with a convenience bias. We recognize the sampling scheme has not achieved a representative sample of the city’s households. All the analyses and estimates were performed with the R Studio 4.0 software. The dataset is available in csv format at a Github repository [https://github.com/cccneto/valuation_urbanParks].
 
-The current survey was tested through a pilot study/previous survey in one of the city parks (CITAR ARTIGO DO ARACA). We have constructed the bid vector for the dichotomous choice questions based on the analysis of the WTP responses in the previous survey. The questionnaire’s structure was based on the NOAA panel recommendations for CVM studies [@arrow1993report]. The questionnaire consisted of a set of 17 questions. 
+The current survey was tested through a pilot study/previous survey in one of the city parks [@cruzneto2021]. We have constructed the bid vector for the dichotomous choice questions based on the analysis of the WTP respo   nses in the previous survey. The questionnaire’s structure was based on the NOAA panel recommendations for CVM studies [@arrow1993report]. The questionnaire consisted of a set of 17 questions. 
 
 In the first part, we surveyed respondents’ socio-economic and household characteristics from age at least 18 years. In the second part we asked about: a) the visit purpose to the park, b) the frequency visits to the park, c) the main criteria determining the decision to visit a park,  d) their perceptions about the park characteristics (e.g. Facilities, maintenance, size, security), finally, e) their perception about the presence of ecosystem services in the park.
 
@@ -147,7 +147,7 @@ $$
 Once the regression is estimated, the estimated WTP is calculated as:
 
 \begin{align}
-\widehat{WTP} = \frac{\hat{\alpha}\overline{X_{i}})}{\hat{\beta}} 
+\widehat{WTP} = \frac{\hat{\alpha}\overline{X_{i}}}{\hat{\beta}} 
 \end{align}
 
 
@@ -233,21 +233,6 @@ base %>%
 
 Inserir tabela considerando a informação **Objetivo de visita** 
 
-
-
-
-```{r include=FALSE}
-dados_sitio_da_trindade <- base %>% filter(parque == "sitio da trindade")
-dados_13demaio <- base %>% filter(parque == "13demaio")
-dados_santosdumont <- base %>% filter(parque == "santosdumont")
-dados_lindu <- base %>% filter(parque == "lindu")
-dados_caiara <- base %>% filter(parque == "caiara")
-dados_macaxeira <- base %>% filter(parque == "macaxeira")
-dados_jaqueira <- base %>% filter(parque == "jaqueira")
-dados_santana <- base %>% filter(parque == "santana")
-
-```
-
 ```{r eval=FALSE, include=FALSE}
 # ANALISE CONJUNTA DE TODOS OS PARQUES
 
@@ -264,8 +249,6 @@ summary(bvp)
 library(modelsummary)
 modelsummary(bvp, group = component + term ~ model)
 
-summary(teste)
-
 coefs <- summary(bvp)
 coefs$tableP1
 coefs <- summary(bvp$coefficients)
@@ -281,7 +264,7 @@ infra_med <- mean(base$infraestrutura)
 lance2_med <- mean(base$lance2)
 
 ## coeficientes eq 1
-cf_intercept <- bvp$coefficients[1]
+cf_intercept1 <- bvp$coefficients[1]
 cf_lance1 <- bvp$coefficients[2]
 cf_idade <- bvp$coefficients[3]
 cf_sexo <- bvp$coefficients[4]
@@ -301,102 +284,41 @@ cf_infra2 <- bvp$coefficients[14]
 ## CALCULANDO A DAP 
 
 ### Dap equação 1
-dap_eq1 <- -(cf_intercept + cf_idade*idade_med + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)/cf_lance1 # R$ 40,47
+dap_eq1 <- -( cf_intercept1 + cf_idade*idade_med + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)/cf_lance1 # R$ 40,47
 
 # A dap da equação 1 foi de R$ 
 round(dap_eq1, digits = 2)
 
 ### Dap equação 2
-dap_eq2 <- -(cf_intercept + cf_idade2*idade_med + cf_sexo2*sexo_med + cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_lance2 # R$ 39,50 
+dap_eq2 <- -(cf_intercept2 + cf_idade2*idade_med + cf_sexo2*sexo_med + cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_lance2 # R$ 32,69 
 
 # A dap da equação 2 foi de R$ 
 round(dap_eq2, digits = 2)
+round(dap_eq1, digits = 2)
+# Análise individual dos parques
 
-# Análise individual dos parques 
+wtp1_median <- as.numeric(median(base$lance1))
+wtp1_mean <- as.numeric(lance1_med)
+wtp1_estimated <- as.numeric(dap_eq1) 
+wtp2_median <-  as.numeric(median(base$lance2))
+wtp2_mean <- as.numeric(lance2_med)
+wtp2_estimated <- as.numeric(dap_eq2)
 
-## Regressão Parques - individualmente - linear na renda 
-
-bvp.sitiotrindade <- gjrm(f.list, data=dados_sitio_da_trindade, Model="B", margins= mr)
-bvp.trezedemaio <- gjrm(f.list, data=dados_13demaio, Model="B", margins= mr)
-bvp.santosdumont <- gjrm(f.list, data=dados_santosdumont, Model="B", margins= mr)
-bvp.lindu <- gjrm(f.list, data=dados_lindu, Model="B", margins= mr)
-bvp.caiara <- gjrm(f.list, data=dados_caiara, Model="B", margins= mr)
-bvp.macaxeira <- gjrm(f.list, data=dados_macaxeira, Model="B", margins= mr)
-bvp.jaqueira <- gjrm(f.list, data=dados_jaqueira, Model="B", margins= mr)
-bvp.santana <- gjrm(f.list, data=dados_santana, Model="B", margins= mr)
-
-# Como eu posso extrair os valores de ('Estimate', 'std. Error', 'Pr(>|z|)') dos resultados do output e coloca-los em um formato de tabela? 
-# 'Estimate', 'std. Error', 'Pr(>|z|)'
-
-l.bvp.sitiotrindade <- summary(bvp.sitiotrindade)
-l.bvp.trezedemaio <- summary(bvp.trezedemaio)
-l.bvp.santosdumont <- summary(bvp.santosdumont)
-l.bvp.lindu <- summary(bvp.lindu)
-l.bvp.caiara <- summary(bvp.caiara)
-l.bvp.macaxeira <- summary(bvp.macaxeira)
-l.bvp.jaqueira <- summary(bvp.jaqueira)
-l.bvp.santana <- summary(bvp.santana)
-
-library(dplyr)
-
-# extraindo os resultados dos modelos individuais
-resultado_sitiotrindade <-
-  rbind(l.bvp.sitiotrindade$tableP1, l.bvp.sitiotrindade$tableP2) %>%
-  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value") %>% 
-  mutate(Parque = "Sitio Trindade")
-
-resultado_trezedemaio <-
-  rbind(l.bvp.trezedemaio$tableP1, l.bvp.trezedemaio$tableP2) %>%
-  as.data.frame()  %>% tibble::rownames_to_column("Variavel") %>% select(!"z value") %>% 
-  mutate(Parque = "Treze de Maio")
-
-resultado_santosdumont <-
-  rbind(l.bvp.santosdumont$tableP1, l.bvp.santosdumont$tableP2) %>%
-  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")  %>% 
-  mutate(Parque = "Santos Dumont")
-
-resultado_lindu <-
-  rbind(l.bvp.lindu$tableP1, l.bvp.lindu$tableP2) %>%
-  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")  %>% 
-  mutate(Parque = "Lindu")
-
-resultado_caiara <- 
-  rbind(l.bvp.caiara$tableP1, l.bvp.caiara$tableP2) %>% 
+teste <- 
+  rbind(wtp1_median,wtp1_mean, wtp1_estimated, wtp2_median, wtp2_mean, wtp2_estimated) %>%  
   as.data.frame() %>% 
-  tibble::rownames_to_column("Variavel") %>% 
-  select(!"z value")  %>% 
-  mutate(Parque = "Caiara")
- 
-resultado_macaxeira <- 
-  rbind(l.bvp.macaxeira$tableP1, l.bvp.macaxeira$tableP2) %>% 
-  as.data.frame() %>% 
-  tibble::rownames_to_column("Variavel") %>% 
-  select(!"z value") %>% 
-  mutate(Parque = "Macaxeira")
+  round(digits = 2)
 
-resultado_jaqueira <-
-  rbind(l.bvp.jaqueira$tableP1, l.bvp.jaqueira$tableP2) %>%
-  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value") %>% 
-  mutate(Parque = "Jaqueira")
+df <- as_tibble(teste)
 
-resultado_santana <-
-  rbind(l.bvp.santana$tableP1, l.bvp.santana$tableP2) %>%
-  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value") %>% 
-  mutate(Parque = "Santana")
+Values <- teste$V1   
+WTP  <- c("wtp1_median","wtp1_mean", "wtp1_estimated", "wtp2_median", "wtp2_mean", "wtp2_estimated")
 
-# extraindo valores regressao todos parques juntos
-
-l.bvp.allparques <- summary(bvp)
-rbind(l.bvp.allparques$tableP1, l.bvp.allparques$tableP2) %>%
-  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")
-
-df_parques <- rbind(resultado_santana, resultado_caiara, resultado_macaxeira, 
-      resultado_lindu, resultado_santosdumont, resultado_trezedemaio, resultado_sitiotrindade)
-
-df_parques %>% 
-  group_by(Equação = df_parques$Parque, `Estimate` = Estimate, `Std. Erro` = `Std. Error`, `p-valor` = `Pr(>|z|)`)
+# tabela com valores de WTP
+wtps <- cbind(WTP, Values) 
 
 ```
+
 
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
@@ -540,21 +462,23 @@ Ver secao 5.3. Determinants of the true willingness to payLet us now consider th
 
 # Conclusions {#sec:5}
 
-\begin{itemize}
-\item does study reveals that urban parks and green spaces are quite important to the local population? 
-\item Does survey and its analysis show that the residents of Recife are willing to pay amounts of money in order to continues using the parks area as provisioninger cultural ecosystem service ? 
-\item What are the most important benefits from the park self reported by his users? 
-\item What is the users WTP?
-\end{itemize}
+Estimating the benefits provided by green areas in urban spaces is not an easy task, especially in public projects. However, this difficulty should not be seen as an insurmountable condition. For this reason, we endeavor to obtain a monetary measure derived from the benefits extracted by the users of the parks, especially from their direct use value of the Cultural Ecosystem Services, such as the use of the parks of the City of Recife for the recreational activities of its visitors.
+
+We find that urban parks and green spaces are quite important to the local population. For that reason, one of the exercises proposed in this article was precisely to estimate the willingness to pay of park users and measure the total surplus of that provision. We address the need to recover a green area (park), highlighting its importance as an alternative in improving the quality of life of the population benefited by the studied area. In fact, our results are restricted to the urban population of the city where parks are located (Recife - Brazil), which does not prevent our estimates from being compared with the similarities of other cities in developing countries.
+
+In general, our findings suggest that part of the population of Recife attributes a positive economic benefit to the urban park, and for this reason, they expressed a positive Willingness to Pay. We believe that this result was possible because of the positive effect of park to his users. Our results also reveal that the value of the bids offered had a greater influence on the Respondents' Willingness to Pay. The Estimated WTP for the model was R\$ 40.47 (first bid) and R\$ 32.69 (second bid). which totaled a consumer surplus of R\$ 545,151.90 and R\$ 568,075.52.
+
 
 # Policy implications and Recomendations
+
+Like any economic methodology, contingent valuation has its limitations and it alone can never provide the definitive answer to any major policy question (Carson, 1998).
 
 This study introduces a new approach to calibrate WTP estimates using perceived policy consequentiality that enables detailed analyses of the factors behind preference misrepresentations [@liu2020effects]. The perceived consequentiality reduces the probability of nontruthful choices and potentially leads to a more accurate willingness to pay (WTP) estimation
  
 In accordance with [@liu2020effects], policy consequentiality refers to the belief of respondents that their survey responses will affect the outcome of whether a proposed policy or project is implemented. Payment consequentiality refers to the belief that payment will be imposed when the project gets implemented. Truthful preference revelation is unlikely when survey respondents do not believe that the survey is consequential [@carson2007incentive], which may bias estimation on WTP.
  
-** acrescentar comentario nas discussoes a respeito de preferirmos imposto ou cobrança direto na conta ao inves de doação" -> \textbf{The tax payment vehicle is generally preferred to the voluntary donation payment vehicle as the tax reduces free-riding incentives when true WTP is higher than the elicited amounts.}
+ACRESCENTAR comentário nas discussões a respeito de preferirmos imposto ou cobrança direto na conta ao inves de doação" -> \textbf{The tax payment vehicle is generally preferred to the voluntary donation payment vehicle as the tax reduces free-riding incentives when true WTP is higher than the elicited amounts.}
  
-Verificar texto do [@latinopoulos2016valuing] D. Latinopoulos et al. 2016
+Verificar texto do [@latinopoulos2016valuing] 
 
 # References 
