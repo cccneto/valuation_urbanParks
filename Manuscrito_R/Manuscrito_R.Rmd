@@ -1,38 +1,16 @@
 ---
 title: "VALUATION OF CULTURAL ECOSYSTEM SERVICES IN URBAN PARKS"
-subtitle: teremos um subtitulo?
-titlerunning: Short form of title (if too long for head)
-output:
+authors: "Carlos e Cadu"
+output: 
   pdf_document:
-    latex_engine: xelatex
-  word_document: default
-  html_document:
-    df_print: paged
-thanks: "Grants or other notes about the article that should go on the front \npage
-  should be placed here. General acknowledgments should be placed at the\nend of the
-  article.\n"
-authors:
-- name: Carlos Eduardo de Menezes Silva
-  address: Department of YYY, Federal Institute of Pernambuco
-  email: carlosmenezes@recife.ifpe.edu.br
-- name: Claudiano Carneiro da Cruz Neto
-  address: Center for Agricultural, Environmental and Biological Sciences, Federal
-    University of Reconcavo of Bahia
-  email: cneto@ufrb.edu.br
-header-includes: \usepackage{bbm}
-keywords:
-- key
-- dictionary
-- word
-MSC:
-- MSC code 1
-- MSC code 2
-abstract: |
-  Escrever abstract aqui, total de 150 -- 250 palavras.
+     latex_engine: xelatex
 bibliography: bibliography.bib
 biblio-style: spphys
-authorrunning: Short form of author list if too long for running head
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
 # Introduction {#intro}
 
@@ -168,6 +146,7 @@ library(VIM)
 library(GJRM)
 library(tidyr)
 library(utils)
+library(kableExtra)
 
 # base <- utils::read.table("https://raw.githubusercontent.com/cccneto/valuation_urbanParks/master/dados/base_cleaned.csv",
 #                   header = T,
@@ -390,46 +369,40 @@ freq_total
 
 The results from the BP regression for the general sample are shown in Table x. The estimations for Eq. (1) are shown in the upper part of the Table, while the estimation for Eq. (2)  in the lower part. The probability that WTP be equal or higher to the two bids amount is influenced by the respondent’s own characteristics and by a series of independent variables that reflect their preferences for the ES being valued. The coefficient on the bid was negative and statistically significant in both equations, which indicates as the price increased the probability of a positive answer to the WTP question decreased.  
 
-<!--   \begin{table}[!tbp] -->
-<!--     \begin{center} -->
-<!--     \begin{tabular}{lrrrr} -->
-<!--     \hline\hline -->
-<!--     \multicolumn{1}{l}{}&\multicolumn{1}{r}{Estimate}&\multicolumn{1}{r}{Std. Error}&\multicolumn{1}{r}{z-value}&\multicolumn{1}{r}{p-value}\tabularnewline -->
-<!--     \hline -->
-<!--        \vspace{5mm} -->
-<!--    \textbf{Equation 1} \\ -->
-<!--     \textit{Intercept} &$ 0.635419$&$0.1440$&$  4.410$&$0.00001$\textsobscript{***}\tabularnewline -->
-<!--     Bid1&$-0.020311$&$0.0020$&$-10.154$&$0.00000$\textsobscript{***}\tabularnewline -->
-<!--     Age&$ -0.006643$&$0.0026$&$  -2.540$&$0.01109$\textsobscript{**}\tabularnewline -->
-<!--     Gender&$0.073047$&$0.0776$&$0.941$&$0.34666$\tabularnewline -->
-<!--     School&$0.216602$&$0.0915$&$  2.367$&$0.01795$\textsobscript{***}\tabularnewline -->
-<!--     Temperature &$0.270258$&$0.0863$&$3.131$&$0.00174$\textsobscript{***}\tabularnewline -->
-<!--     Facilities &$ 0.503613$&$0.0808$&$  6.226$&$0.00000$\textsobscript{***}\tabularnewline -->
-<!--     \hline -->
-<!-- \vspace{5mm} -->
-<!--    \textbf{Equation 2} \\ -->
-<!--      \textit{Intercept} &$ 0.528728$&$0.1418$&$  3.728$&$0.00019$\textsobscript{***}\tabularnewline -->
-<!--     Bid2&$-0.015654$&$0.0019$&$-7.832$&$0.00000$\textsobscript{***}\tabularnewline -->
-<!--     Age&$ -0.010806$&$0.0.0025$&$  -4.272$&$0.00001$\textsobscript{***}\tabularnewline -->
-<!--     Gender&$0.172253$&$0.0740$&$2.37$&$0.019989$\textsobscript{**}\tabularnewline -->
-<!--     School&$ -0.067069$&$0.0869$&$ -0.771$&$0.44074$\tabularnewline -->
-<!--     Temperature &$-0.025151$&$0.0832$&$-0.302$&$0.76265\tabularnewline -->
-<!--     Facilities &$ 0.651171$&$0.0770$&$  8.452$&$0.00000$\textsobscript{***}\tabularnewline -->
-<!--    \hline -->
-<!--    Nº Observations &&&$1144$\tabularnewline -->
-<!--    Log Likelihood &&&$-1342.32$\tabularnewline -->
-<!--    AIC &&&$ 2714.6$\tabularnewline -->
-<!--    BIC &&&$ 2790.3$\tabularnewline -->
-<!--    \hline -->
-<!--    \end{tabular}\end{center} -->
-<!--    \begin{tablenotes} -->
-<!--    \begin{center} -->
-<!--           \\Note: *** p<0.01, ** p<0.05, and * p<0.1}  -->
-<!--    \end{center} -->
-<!-- \end{tablenotes} -->
-<!--     \end{table} -->
-
-
+ \begin{table}[!tbp]
+    \begin{center}
+    \begin{tabular}{lrrrr}
+    \hline\hline
+    \multicolumn{1}{l}{}&\multicolumn{1}{r}{Estimate}&\multicolumn{1}{r}{Std. Error}&\multicolumn{1}{r}{z-value}&\multicolumn{1}{r}{p-value}\tabularnewline
+    \hline
+       \vspace{5mm}
+   \textbf{Equation 1} \\
+    \textit{Intercept} & $0.635419$ & $0.1440$ & $4.410$ & $0.00001$ \tabularnewline
+    Bid1 & $-0.020311$ & $0.0020$ & $-10.154$ & $0.00000$ \tabularnewline
+    Age& $-0.006643$ & $0.0026$ & $-2.540$ & $0.01109$ \tabularnewline
+    Gender & $0.073047$ & $0.0776$ & $0.941$ & $0.34666$ \tabularnewline
+    School & $0.216602$ & $0.0915$ & $2.367$ & $0.01795$ \tabularnewline
+    Temperature & $0.270258$ & $0.0863$ & $3.131$ & $0.00174$ \tabularnewline
+    Facilities & $0.503613$ & $0.0808$ & $6.226$ & $0.00000$ \tabularnewline
+    \hline
+\vspace{5mm}
+   \textbf{Equation 2} \\
+     \textit{Intercept} & $ 0.528728$ & $0.1418$ & $3.728$ & $0.00019$\tabularnewline
+    Bid2 & $-0.015654$ & $0.0019$ & $-7.832$ & $0.00000$\tabularnewline
+    Age & $-0.010806$ & $0.0.0025$ & $-4.272$ & $0.00001$\tabularnewline
+    Gender & $0.172253$ & $0.0740$ & $2.37$ & $0.019989$\tabularnewline
+    School & $-0.067069$ & $0.0869$ & $-0.771$ & $0.44074$\tabularnewline
+    Temperature & $-0.025151$ & $0.0832$ & $-0.302$ & $0.76265$\tabularnewline
+    Facilities & $0.651171$ & $0.0770$ & $8.452$ & $0.00000$\tabularnewline
+   \hline
+   Nº Observations & & & &  $1144$ \tabularnewline
+   Log Likelihood & & & & $-1342.32$ \tabularnewline
+   AIC & & & & $2714.6$ \tabularnewline
+   BIC & & & & $2790.3$ \tabularnewline
+   \hline
+   \end{tabular} \end{center}
+       \end{table}
+       
 ```{r include=FALSE}
 # ANALISE CONJUNTA DE TODOS OS PARQUES
 
@@ -447,18 +420,21 @@ summary(bvp)
 
 ```
 
-The results for the general sample indicate that WTP from the first equation (Eq 1) was influenced positively by the level of education (0.042, p-value < 0,01), and by the respondent's perceptions about Facilities (0.187, p-value < 0,01) and temperature of the park (0.105, p-value < 0,01), while the respondent's age and gender weren't statistically significant.
+The results for the general sample indicate that WTP from the first equation (Eq 1) was influenced positively by the level of education (0.2166, p-value < 0,05), and by the respondent's perceptions about Facilities (0.5036, p-value < 0,01) and temperature of the park (0.2702, p-value < 0,01), while the respondent's gender was statistically significant just in the second equation.
 
-In the second equation, the results for the general sample indicate that WTP is negatively influenced by the age of respondents (0.010, p-value < 0,01), by the park's temperature (0.090, p-value < 0,01), and the respondent's gender (0.042, p-value < 0,186). However, it is positively affected by respondent's perceptions about the park's Facilities (0.176, p-value < 0,01). Opposite to the first equation, the level of education wasn't statistically significant.
+Our results allow us to highlight the find that the respondents' age has a statistically significant negative impact on both the respondents’ initial and follow-up decisions on their contribution to realizing the presented scenario. The regression coefficient is (-0.0066, p-value < 0,05) at the respondents’ initial response and (-0.0108, p-value < 0,01) at the follow-up response, which means that the higher the age, the lowest the probability that the respondent shall accept the proposed willingness-to-pay value. 
 
-Examining the results, we could interpret some of the signs of the estimated coefficients as expected and consistent with the economic theory. For example, the likelihood of voting “yes”  to the proposed program in the second equation is higher for younger and better-educated respondents, as well as for female respondents. On the other hand, we find that likelihood of voting “yes”  to the proposed program is lower when we consider park respondent's temperature perceptions. Furthermore, the regression model indicates statistically significant and theoretically justify relationships between the WTP responses and several explanatory variables.
+Examining just the second equation, the results for the general sample indicate that WTP is negatively influenced by the age of respondents (0.010, p-value < 0,01), by the park's temperature (0.090, p-value < 0,01), and the respondent's gender (0.042, p-value < 0,186). However, it is positively affected by respondent's perceptions about the park's Facilities (0.176, p-value < 0,01). Opposite to the first equation, the level of education wasn't statistically significant.
+
+Examining the results, we could interpret some of the signs of the estimated coefficients as expected and consistent with the economic theory. For example, the likelihood of voting “yes”  to the proposed program in the second equation is higher for younger and better-educated respondents, as well as for female respondents. It's not certain, but the age results can be explained by the high average age of the respondents (41 years). On the other hand, we find that likelihood of voting “yes”  to the proposed program is lower when we consider park respondent's temperature perceptions. Furthermore, the regression model indicates statistically significant and theoretically justify relationships between the WTP responses and several explanatory variables.
 
 
 # Discussion {#sec:4}
 
+
 [@brander2011value] An important finding from the meta-analyses is that the methodological design of the underlying valuation study has a large influence on the results of both CV.
 
-Ver secao 5.3. Determinants of the true willingness to payLet us now consider the impacts of the determinants de [@verbivc2016contingent]
+Ver secao 5.3. Determinants of the true willingness to pay Let us now consider the impacts of the determinants de [@verbivc2016contingent]
 
 # Conclusions {#sec:5}
 
