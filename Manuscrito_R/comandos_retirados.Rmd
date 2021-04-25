@@ -1,0 +1,110 @@
+---
+title: "comandos_parques"
+author: "Claudiano Neto"
+date: "22/04/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+```{r include=FALSE}
+dados_sitio_da_trindade <- base %>% filter(parque == "sitio da trindade")
+dados_13demaio <- base %>% filter(parque == "13demaio")
+dados_santosdumont <- base %>% filter(parque == "santosdumont")
+dados_lindu <- base %>% filter(parque == "lindu")
+dados_caiara <- base %>% filter(parque == "caiara")
+dados_macaxeira <- base %>% filter(parque == "macaxeira")
+dados_jaqueira <- base %>% filter(parque == "jaqueira")
+dados_santana <- base %>% filter(parque == "santana")
+
+```
+
+```{r}
+## Regressão Parques - individualmente - linear na renda 
+
+bvp.sitiotrindade <- gjrm(f.list, data=dados_sitio_da_trindade, Model="B", margins= mr)
+bvp.trezedemaio <- gjrm(f.list, data=dados_13demaio, Model="B", margins= mr)
+bvp.santosdumont <- gjrm(f.list, data=dados_santosdumont, Model="B", margins= mr)
+bvp.lindu <- gjrm(f.list, data=dados_lindu, Model="B", margins= mr)
+bvp.caiara <- gjrm(f.list, data=dados_caiara, Model="B", margins= mr)
+bvp.macaxeira <- gjrm(f.list, data=dados_macaxeira, Model="B", margins= mr)
+bvp.jaqueira <- gjrm(f.list, data=dados_jaqueira, Model="B", margins= mr)
+bvp.santana <- gjrm(f.list, data=dados_santana, Model="B", margins= mr)
+
+# Como eu posso extrair os valores de ('Estimate', 'std. Error', 'Pr(>|z|)') dos resultados do output e coloca-los em um formato de tabela? 
+# 'Estimate', 'std. Error', 'Pr(>|z|)'
+
+l.bvp.sitiotrindade <- summary(bvp.sitiotrindade)
+l.bvp.trezedemaio <- summary(bvp.trezedemaio)
+l.bvp.santosdumont <- summary(bvp.santosdumont)
+l.bvp.lindu <- summary(bvp.lindu)
+l.bvp.caiara <- summary(bvp.caiara)
+l.bvp.macaxeira <- summary(bvp.macaxeira)
+l.bvp.jaqueira <- summary(bvp.jaqueira)
+l.bvp.santana <- summary(bvp.santana)
+
+library(dplyr)
+
+# extraindo os resultados dos modelos individuais
+resultado_sitiotrindade <-
+  rbind(l.bvp.sitiotrindade$tableP1, l.bvp.sitiotrindade$tableP2) %>%
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value") %>% 
+  mutate(Parque = "Sitio Trindade")
+
+resultado_trezedemaio <-
+  rbind(l.bvp.trezedemaio$tableP1, l.bvp.trezedemaio$tableP2) %>%
+  as.data.frame()  %>% tibble::rownames_to_column("Variavel") %>% select(!"z value") %>% 
+  mutate(Parque = "Treze de Maio")
+
+resultado_santosdumont <-
+  rbind(l.bvp.santosdumont$tableP1, l.bvp.santosdumont$tableP2) %>%
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")  %>% 
+  mutate(Parque = "Santos Dumont")
+
+resultado_lindu <-
+  rbind(l.bvp.lindu$tableP1, l.bvp.lindu$tableP2) %>%
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")  %>% 
+  mutate(Parque = "Lindu")
+
+resultado_caiara <- 
+  rbind(l.bvp.caiara$tableP1, l.bvp.caiara$tableP2) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column("Variavel") %>% 
+  select(!"z value")  %>% 
+  mutate(Parque = "Caiara")
+ 
+resultado_macaxeira <- 
+  rbind(l.bvp.macaxeira$tableP1, l.bvp.macaxeira$tableP2) %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column("Variavel") %>% 
+  select(!"z value") %>% 
+  mutate(Parque = "Macaxeira")
+
+resultado_jaqueira <-
+  rbind(l.bvp.jaqueira$tableP1, l.bvp.jaqueira$tableP2) %>%
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value") %>% 
+  mutate(Parque = "Jaqueira")
+
+resultado_santana <-
+  rbind(l.bvp.santana$tableP1, l.bvp.santana$tableP2) %>%
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value") %>% 
+  mutate(Parque = "Santana")
+
+# extraindo valores regressao todos parques juntos
+
+l.bvp.allparques <- summary(bvp)
+rbind(l.bvp.allparques$tableP1, l.bvp.allparques$tableP2) %>%
+  as.data.frame() %>% tibble::rownames_to_column("Variavel") %>% select(!"z value")
+
+df_parques <- rbind(resultado_santana, resultado_caiara, resultado_macaxeira, 
+      resultado_lindu, resultado_santosdumont, resultado_trezedemaio, resultado_sitiotrindade)
+
+df_parques %>% 
+  group_by(Equação = df_parques$Parque, `Estimate` = Estimate, `Std. Erro` = `Std. Error`, `p-valor` = `Pr(>|z|)`)
+
+```

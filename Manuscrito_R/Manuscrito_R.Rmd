@@ -1,6 +1,6 @@
 ---
 title: "VALUATION OF CULTURAL ECOSYSTEM SERVICES IN URBAN PARKS"
-authors: "Carlos e Cadu"
+authors: "Carlos, Claudiano e ... "
 output: 
   pdf_document:
      latex_engine: xelatex
