@@ -1,5 +1,5 @@
 ---
-title: "VALUATION OF CULTURAL ECOSYSTEM SERVICES IN URBAN PARKS"
+title: "Integrating cultural ecosystem services with urban planning: The case of urban parks in the city of Recife – Brazil"
 authors: "Carlos, Claudiano e ... "
 output: 
   pdf_document:
@@ -12,94 +12,113 @@ biblio-style: spphys
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Abstract {#abstract}
+
+The growth of the urban population and climate change has led to an increasing need for urban green areas that provide ecosystem services in cities. This scenario is particularly true in developing countries that face rapidly growing populations and trade-offs between the growing demand to build infrastructure and access to nature. This article aims to analyze the importance of the urban park system in Recife (Brazil) to provide cultural ecosystem services. In addition, it aims to demonstrate the importance of accounting for these ecosystem services in urban management. To that end, a survey with 1144 users of the city's 10 official parks was conducted. Using the Contingent Valuation Method, we estimated the economic impact of parks on the population's well-being. We ascertained that the estimated WTP was between R\$ 32,69 and R\$ 40.47, representing an average of 1.0 and 1.3% of the interviewees' average income. The extrapolated values to potential park users have shown the significant economic impact of urban parks in Recife. In one year, it varies between R\$ 16.3 and R\$ 30.6 million and exceeds the current resources provided by the municipality for its management in a percentage between 20 and 57%. On the one hand, the data are highly significant because they demonstrate how the population perceives the importance of these areas. On the other hand, it shows that the positive impact on the provision of these ecosystem services is highly justifiable to local decision-makers to improve the well-being of urban populations.
+
 # Introduction {#intro}
 
-The world population may grow 26% by the year 2050, from the current 7.7 billion to 9.7 billion[@un2019]. This will lead to an even greater increase in the population in urban areas, especially in regions such as Latin America that already have around 81% of their population living in these areas [@un2018]. This scenario increases the concern with maintaining and / or improving the well-being conditions for this population. And in this regard, it is considered that the well-being of the inhabitants of urban areas depends on an adequate supply of ecosystem services [@keeler2019social].
+The world population is expected to increase 26% by the year 2050, from the current 7.7 billion to 9.7 billion [@un2019], which will lead to an even more significant increase of the population in urban areas, especially in regions like Latin America that already has around 81% of its population living in such areas [@un2018]. This scenario has increased the concern with maintaining and/or improving the welfare conditions for urban populations. Moreover, in this context, it is essential to consider that the well-being of the inhabitants of urban areas depends on an adequate supply of ecosystem services [@keeler2019social].
 
-Understood as nature's contributions to people, ecosystem services are vital for human existence and good quality of life. However, they are generally distributed unevenly in space, time and between different segments of society [@diaz2019global]. Of particular interest to the well-being of urban populations, cultural ecosystem services are public goods, produced by ecosystems that affect people's physical and mental states. Cultural services are characterized mainly as environments, places or environmental situations that give rise to changes in people's physical or mental states [@haines2018revision]. And therefore, in a context of greater urbanization, special attention should be paid to urban green spaces as a guarantee of offering this type of ecosystem service, and ensuring the integration of these spaces in city planning [@liu2020supply].
+Nature's contributions to people, namely ecosystem services, are vital to human existence and contribute to a good quality of life. However, they are generally unevenly distributed in space, time, and among different segments of Society [@ipbes2019]. Concerning the well-being of urban populations, cultural ecosystem services are public goods produced by ecosystems that affect people's physical and mental states. Cultural services are characterized mainly as environments, places, or environmental situations that foster changes in people's physical or mental states [@haines2018revision]. Furthermore, in the context of greater urbanization, special attention must be paid to urban green spaces in order to offer this type of ecosystem service and to ensure the integration of these spaces in city planning [@haines2018revision].
 
-These benefits provided by urban green areas are still important when cities seek to offer a variety of services that contribute to increasing the quality of life of their inhabitants. Initiative that already found support in the agenda of the Sustainable Development Goals - SDGs, gains even more momentum with the greater importance given to these spaces after the long period of confinement caused by the Pandemic of COVID-19.
+Such a thing happens because the concept of ecosystem services can attract interests beyond the ones from academics and conservationists [@honeck2021integrating]. However, in general, its use is more conceptual than it is a strategic tool. Despite the potential to assist the understanding of specific trade-offs related to changes in land use and in integrating the concept into a multi-level planning [@liu2020supply].
 
-However, unlike developed countries, in Brazil and Latin America, the literature on this issue is still scarce. There are few studies that explore the association between green areas and well-being in urban areas in Brazil [@amato2016metropoles; @camargo2018physical; @londe2014influencia; @silveira2018espaccos]. There are also few studies on the economic valuation of these areas. These productions are concentrated in the southern region of the country and focused on individual parks. And in general, cultural ecosystem services are less evaluated or evaluated inappropriately [@ridding2018importance] and for this reason they are seldom present in studies in this area [@boerema2017ecosystem]. This scarcity makes it difficult to understand the potential benefit that urban green spaces can bring to the Brazilian population [@arana2017qualidade]. And the importance of investments by the government in these areas.
+Therefore, considering that municipalities should be increasingly aware of the countless benefits of urban parks, it seems evident that it is important to estimate them [@del2007estimating]. It is essential to evaluate these areas' impacts on monetary value and that the related spatial and environmental aspects receive adequate weight in the decision-making process [@verbivc2016contingent]. It is essential to do that because urban parks and other public goods depend on economic variables [@shimamoto2019empirical]. estimate these benefits that are materialized as public goods, it is necessary to use the contingent valuation method [@haab2002valuing].
 
-In this article, we seek to contribute to fill this information gap and demonstrate the importance of urban parks as sources of provision of cultural ecosystem services in the city of Recife. As a differential, we do not study only one park, but all urban parks recognized by the city and which had specific equipment for physical activities. We used questionnaires applied to users of all parks to characterize them and we used the contingent valuation method to estimate the monetary value. Among other contributions, the results demonstrate that the parks in Recife have a greater coverage than usual and that users with lower income groups value these areas more than users with lower income.
+However, there are some deficiencies about it. There are not many studies on the economic valuation of these areas, and many of them present poorly interpreted methodological aspects [@brandli2015estimating]. In the case of Brazil, most of these studies were carried out in the south, southeast, and midwest regions of the country and focused on individual parks[@castro2019; @neckel2020estimation]. Commonly, cultural ecosystem services are less assessed or assessed inappropriately [@ridding2018importance]. That is why they are not widely present in studies on this area [@boerema2017ecosystem]. Such scarcity makes it difficult to understand the potential benefit that urban green spaces can bring to the Brazilian population [@arana2017qualidade], and the importance of investments by the government in these areas. In general, local authorities do not consider these areas as essential contributors to economic development. There is a gap in perceptions about the economic benefits of urban green areas, and reducing that gap may have a significant positive impact on their financing [@mowen2017]. The academic community urgently needs to provide explicit and pertinent information that meets the demands of decision-makers [@mandle2020increasing].
 
+In this article, we aim to fill this information gap and demonstrate the importance of urban green areas as sources of provision of cultural ecosystem services in the city of Recife. For this study, we consider green areas as the set of urban parks in the city. As a way to better examine the topic, we do not focus on only one park, but all urban parks recognized by the city hall and the ones which have specific equipment for physical activities. As well as, we compare the valuation estimates of ecosystem services with the public expenditures of the city administration regarding urban parks. Among other contributions, the results demonstrate that the benefits in terms of cultural ecosystem services outweigh the city's investments for maintaining these areas. The estimated DAP fits into the national economic reality, demonstrating an understanding by the population of the extent of the contribution of these urban green areas to their well-being.
 
 # Methodology {#sec:1}
 
-## Study Area  {#sec:2}
+## Study Area {#sec:2}
 
-The place of study was the Municipality of Recife, capital of the state of Pernambuco, in the Northeast region of Brazil. The municipality has 10 public parks and countless squares spread over the 94 neighborhoods that compose it. The area covered by the squares parks is equivalent to 8.2% of the municipal territory. These 10 areas have structures known as city gyms, spaces with equipment and classes of different modalities, in addition to other leisure equipment (Figure 1).
+The place of study was the city of Recife, capital of the state of Pernambuco, in the Northeast region of Brazil. The municipality has 10 public parks spread over the 94 neighborhoods which compose it. The area which is covered by parks and squares is equivalent to 8.2% of the municipal territory. In these 10 areas there are structures known as gyms in the city, spaces with equipment for the practice of physical activities conducted by specialized professionals, in addition to other leisure equipment (Figure 1).
 
-**inserir figura do mapa**
+```{r figurename, echo=FALSE, fig.cap= "Location of urban parks with city academies in the municipality of Recife - Pernambuco – Brazil", out.width = '70%', fig.align="center"}
+knitr::include_graphics("Localização Mapas ING.jpeg")
+```
 
 ## Survey methods and questionnaire design
 
-We conducted the survey between December 2018 and March 2019 among the local residents of the city of Recife that uses at least one of the 9 parks of the city. The survey method was face-to-face personal interviews by means of a structured questionnaire and was applied to 1281 questionnaires. All procedures were according to the rules of resolution 510/1617 of National Health Council (CNS), the opinion survey format was prepared and did not request any identification. 
+The survey was conducted between September 2018 and March 2019 among the population living in Recife that use at least one of the 10 parks of the city. The survey method consisted of  face-to-face personal interviews using a structured questionnaire and 1281 questionnaires were applied. According to the rules of resolution 510/1617 of the National Health Council [@brasil2016resoluccao], all procedures were in accordance with the resolution rules. The opinion survey format was prepared and not any kind of identification was requested. Moreover, In the approach to respondents on the park, the users were asked if they agreed to respond to the survey questions.
 
-We gathered data among the Recife users population’s universe, configuring a non-probabilistic sample with a convenience bias. We recognize the sampling scheme has not achieved a representative sample of the city’s households. All the analyses and estimates were performed with the R Studio 4.0 software. The dataset is available in csv format at a Github repository [https://github.com/cccneto/valuation_urbanParks].
+Data was gathered among Recife users' population, configuring a non-probabilistic sample with a convenience bias. There were no previous data on the number and characteristics of park users. The analyses and estimations were carried out through the R Studio 4.0 software. The dataset will be available in file CSV format at a Github repository. 
 
-The current survey was tested through a pilot study/previous survey in one of the city parks [@cruzneto2021]. We have constructed the bid vector for the dichotomous choice questions based on the analysis of the WTP respo   nses in the previous survey. The questionnaire’s structure was based on the NOAA panel recommendations for CVM studies [@arrow1993report]. The questionnaire consisted of a set of 17 questions. 
+The current survey was tested through a pilot study/previous survey in one of the city parks [@cruzneto2021]. The bid vector was constructed for the dichotomous choice questions based on the WTP responses in the previous survey. This study follows the questionnaire's structure based on the NOAA panel recommendations for CVM studies [@arrow1993report]. The questionnaire consisted of a set of 17 questions. 
 
-In the first part, we surveyed respondents’ socio-economic and household characteristics from age at least 18 years. In the second part we asked about: a) the visit purpose to the park, b) the frequency visits to the park, c) the main criteria determining the decision to visit a park,  d) their perceptions about the park characteristics (e.g. Facilities, maintenance, size, security), finally, e) their perception about the presence of ecosystem services in the park.
+In the first part, we surveyed respondents' socioeconomic and household characteristics from people aged at least 18 years old. Then, in the second part, we asked about ways to use, access, and their perception of the physical characteristics of the parks (e.g. Facilities, maintenance, size, security), etc. In the third part, they were asked about their perception of ecosystem services in the park and their self-perception of physical and mental health. Finally, in the final part, we described the hypothetical scenario and the valuation questions. In this scenario, we presented a change in the park's vegetation cover. Such change was conceived to demonstrate to respondents the potential transformation in the area's environmental quality. It is essential to say the interviewer did a relevant visual presentation of the possible changes in the scenario presented (i.e. images before and after the park development). At last, they were asked how much they would be willing to pay (WTP) for the changes presented to them. A close-ended format in the WTP question was adopted  to approximate real market transactions (i.e., take-it or leave-it decisions). Then, a double-bonded (DB) dichotomous choice format was applied [@arrow1993report; @hanemann1991statistical]. The procedures presented to respondents an initial bid value, randomly selected. If the response was "yes" a follow-up question with a higher bid was asked, while a "no" response led to a lower bid level. 
 
-The final part we described the hypothetical scenario and the valuation questions. In this scenario, we presented a change in the park's vegetal cover to the respondents, focusing on the transformation of the environmental quality of the area. It is important to say the interviewer did a relevant visual presentation of the changes in the scenario presented (i.e. images before and after the park development).
 
-In the approach to respondents on the park, we asked residents if they wanted to participate in this research (i.e., if they agree to respond to the survey questions). After the two initial parts of the questionnaire, we asked how much they would be willing to pay for the changes presented to them. The interviewer explained their answers would be useful to the decision-making and planning process. About the WTP question, we adopted a close-ended format to better approximate real market transactions (i.e., take-it or leave-it decisions).  We have have adopted the a double-bounded (DB) dichotomous choice format following the recommendations of the NOAA panel [@arrow1993report] and [@hanemann1991statistical]. The procedures presents to respondents an initial bid value, randomly selected from a set of 70 bid levels - R\$ 1 to R\$ 70. If the response was “yes” a follow-up question with a higher bid was asked, while a “no” response led to a lower bid level. The value amount would be annually collected by the municipal authority and would be exclusively devoted to cover the development costs of the park. 
+The econometric models of dichotomous choice have been widely used to address contingent valuation Follows (Groothuis and Whitehead, 2002). The Random Utility Model provides the theoretical basis for the analysis of Contingent Valuation Methods. In this model, an individual could choose to pay a donation fee for the conservation of the services provided by the studied area if the following conditions are met (Hanemann, 1984):
 
-## Theoretical Model 
 
-According to [@groothuis2002does], econometric models of dichotomous choice have been an instrument widely used to address issues related to contingent valuation. O Modelo de utilidade randômica fornece as bases teóricas para a análise de Métodos de Valoração Contingente.In this model an individual could choose to pay a donation fee for the conservation of the services provided by the studied area if the following conditions are met (Hanemann, 1984):
+In the approach to respondents on the park, we asked residents if they wanted to participate in this research (i.e., if they agree to respond to the survey questions). After the two initial parts of the questionnaire, we asked how much they would be willing to pay for the changes presented to them. The interviewer explained their answers would be useful to the decision-making and planning process. About the WTP question, we adopted a close-ended format to better approximate real market transactions (i.e., take-it or leave-it decisions). We have have adopted the a double-bounded (DB) dichotomous choice format following the recommendations of the NOAA panel [@arrow1993report] and [@hanemann1991statistical]. The procedures present to respondents an initial bid value, randomly selected from range R\$ 1,00 to R\$ 70,00. If the response was "yes" a follow-up question with a higher bid was asked, while a "no" response led to a lower bid level. The value amount would be annually collected by the municipal authority and would be exclusively devoted to cover the development costs of the park.
 
+## Theoretical Model
+
+According to [@groothuis2002does], econometric models of dichotomous choice have been an instrument widely used to address issues related to contingent valuation. O Modelo de utilidade randômica fornece as bases teóricas para a análise de Métodos de Valoração Contingente.In this model an individual could choose to pay a donation fee for the conservation of the services provided by the studied area if the following conditions are met [@hanemann1984welfare]:
+
+```{=tex}
 \begin{align}
 u(y, X) = u(y-t, q, X)
 \end{align}
-
+```
+```{=tex}
 \begin{align}
 u(y, X) = u(y_{j}X_{j}) + \epsilon_{0j})
 \end{align}
-
+```
+```{=tex}
 \begin{align}
 v(1, y-t; X) + \epsilon_{1} \ge v(0, y, X)
 \end{align}
+```
 
-Where $u$ is the respondent's utility function, $v$ is the indirect utility function, $1$ represents the donation payment and $0$ represents the non-payment, $y$ is the respondent's individual income, the amount of the bid made to the respondent, $X$ represents other socioeconomic characteristics that affect the respondent's preferences. The difference between the utilities $\Delta v$ determines the payment or not of the donation:
+While $u$ corresponds to the respondent's utility function, $v$ is the indirect utility function, $1$ represents the donation payment, and $0$ represents the non-payment, $y$ is the respondent's income, the amount of the bid made to the respondent, $X$ represents other socioeconomic characteristics that affect the respondent's preferences. The difference between the utility $\Delta v$ determines the payment of the donation or not:
 
+
+```{=tex}
 \begin{align}
-\Delta v= (1, y-t;X) -v(0, y, X) + \epsilon_{1} + \epsilon_{0} 	
+\Delta v= (1, y-t;X) -v(0, y, X) + \epsilon_{1} + \epsilon_{0}  
 \end{align}
+```
+The MVC dichotomous choice format requires a qualitative choice model. The use of a linear distribution of the WTP and a Bivariate Probit Model (BPM), was developed based on the model by [@cameron1994estimation]. It is assumed that the error of the second dichotomous question is correlated with the error of the first question. For this reason, we follow Alberini's [@alberini1995optimal] recommendation for the choice of bivariate dichotomous models, because if the coefficient correlation, $\rho \ne 1$, it is clear that, in general, the second WTP does not perfectly match the first and can be interpreted as a revised version of the amount of the first WTP. If WTP values are independently determined, then $\rho = 0$. For all other values of the correlation coefficient, the interval $0 < \rho < 1$ is valid, which implies that the correlation between the two WTP values is less than perfect.
 
-The MVC dichotomous choice format requires a qualitative choice model. The use of a linear distribution of the WTP and a Bivariate Probit Model (BPM), was developed based on the model by [@cameron1994estimation]. It is assumed that the error of the second dichotomous question is correlated with the error of the first question. For this reason, we follow Alberini's (1995) recommendation for the choice of bivariate dichotomous models, because if the coefficient correlation, $\rho \ne 1$, it is clear that, in general, the second WTP does not perfectly match the first and can be interpreted as a revised version of the amount of the first WTP. If WTP values are independently determined, then $\rho = 0$. For all other values of the correlation coefficient, the interval $0 < \rho < 1$ is valid, which implies that the correlation between the two WTP values is less than perfect.
+The MVC dichotomous choice format requires a qualitative choice model. The use of linear distribution of the WTP and a Bivariate Probit Model (BPM), was developed based on the model by [@cameron1994estimation]. We assumed that the error of the second dichotomous question is correlated with the error of the first question. For this reason, [@alberini1995optimal] recommendation for the choice of bivariate dichotomous models was used, because if the coefficient correlation, $\rho \ne 1$ , it is clear that, in general, the second WTP does not perfectly match the first and can be interpreted as a revised version of the amount of the first WTP. If WTP values are independently determined, then $\rho = 0$. For all other values of the correlation coefficient, the interval $0 < \rho < 1$ is valid, which implies that the correlation between the two WTP values is less than perfect.
 
-Considering these aspects, the modeling of the data generated by the questions in the double limit dichotomous choice format was achieved by the following formulation:
-
-#### Linear Model 
+The following formulation achieved the modeling of the data generated by the questions in the double limit dichotomous choice format:
 
 $$
 \begin{aligned}
 \Delta Y_{i}(yes|no)= \alpha_{0} + \alpha_{1}Age + \alpha_{2}D_{1i} + \alpha_{3}D_{2i} \\ 
-+ \alpha_{4}D_{3i} + \alpha_{5}D_{4i} + \alpha_{6}Tempo_{i} + \beta_{1}Bid_{12i} + \epsilon_{i} 	
++ \alpha_{4}D_{3i} + \alpha_{5}D_{4i} + \alpha_{6}Tempo_{i} + \beta_{1}Bid_{12i} + \epsilon_{i}     
 \end{aligned}
 $$
 
-$Y_i$ is the dependent variable and reports the respondent's answer ($yes = 1$ or $no = 0$) to the $Bid$, $Age_i$ is the age of the respondent, $D_{1i}$ is the dummie variable for the $Sex$ of the respondent (man = $1$, woman = $0$), $D_{2i}$ is a dummie for the respondent's education (complete higher education = $1$), $D_{3i}$ is a dummie for respondent assessing regarding the temperature in the park (good / excellent = $1$), $D_{4i}$ is a dummie for assessing the respondent regarding of the park's Facilities (good / great = $1$), $Bid_i$ are the variables for the values drawn as bids to respondents.
+$Y_i$ is the dependent variable and reports the respondent's answer ($yes = 1$ or $no = 0$) to the $Bid$, $Age_i$ is the age of the respondent, $D_{1i}$ is the dummy variable for the $Gender$ of the respondent (man = $1$, woman = $0$), $D_{2i}$ is a dummy for the respondent's education (complete higher education = $1$), $D_{3i}$ is a dummy for respondent assessing regarding the temperature in the park (good / excellent = $1$), $D_{4i}$ is a dummy for assessing the respondent regarding of the park's Facilities (good / great = $1$), $Bid_i$ are the variables for the values drawn as bids to respondents. 
 
 The $WTP_{ij}$ component represents the respondent's $j-th$ willingness to pay and $i = 1$, 2 denotes the first and second questions, respectively.
 
+```{=tex}
 \begin{align}
 WTP_{ij} = X'_{ij}\beta_{i} + \epsilon_{ij}
 \end{align}
+```
 
-The $WTP$ depends on a systematic component given by the observed characteristics of the interviewee $(X'_{ij}\beta_{i})$, as well as a random random component $(ij \sim N(0, \sigma^2))$.     
+The $WTP$ depends on a systematic component given by the observed characteristics of the interviewee $(X'_{ij}\beta_{i})$, as well as a random random component $(ij \sim N(0, \sigma^2))$.
 
+```{=tex}
 \begin{align}
 Pr(yes, no) = Pr(WTP_{1j} \ge t^1, WTP_{2j} < t^2)
 \end{align}
-
+```
+```{=tex}
 \begin{align}
 Pr(yes, no) = Pr(X'_{1}\beta_{1} + \epsilon_{1j} \ge t^1, X'_{2}\beta_{2} + \epsilon_{2j} < t^2)
 \end{align}
-
+```
 Since the other sequence of possible responses can be constructed in an analogous way, which allows building the likelihood function:
 
 $$
@@ -111,7 +130,7 @@ Pr(X'_{1}\beta_{1} + \epsilon_{1j} < t^1, X'_{2}\beta_{2} + \epsilon_{2j} < t^2)
 \end{aligned}
 $$
 
-Given a sample of n respondents, we have that the function of logarithmic probability of the responses to the first and second moves of the dichotomous choice with double limit is:
+Given a sample of $n$ respondents, it was found that the function of logarithmic probability of the responses to the first and second moves of the dichotomous choice with double limit is:
 
 $$
 \begin{aligned}
@@ -124,17 +143,43 @@ $$
 
 Once the regression is estimated, the estimated WTP is calculated as:
 
+```{=tex}
 \begin{align}
 \widehat{WTP} = \frac{\hat{\alpha}\overline{X_{i}}}{\hat{\beta}} 
 \end{align}
+```
+
+After estimating the individual WTP, the consumer surplus was calculated, considering two scenarios for the beneficiaries of Recife's urban parks. The scenarios were built according to the resident population in the minimum and maximum distance recommended for different types of urban parks: a) Population served within a radius of 800m from the parks; b) Population served within a 4800m radius from the parks [@meneses2018desafios; @mertes1996park]. 
+
+## Integrating ecosystem services into policymaking
+
+Integrating ecosystem services with planning and decision-making requires demonstrating the value of these assets [@jones2009valuing; @sukhdev2014economics].  Considering this, the second step of this stage was to analyze Recife’s  public expenditure  once public budgeting is one of the first steps for planning public actions [@howard2001public]. Moreover, public expenditure review studies can play an essential role in environmental challenges [@gupta1995public; @swanson2003public], even when there is a focus on analyzing funding for biodiversity conservation, even at the local level [@nair2019biofin; @undp2018].  For that reason, we decided to process data extraction from the transparency portal website from the city of Recife regarding the last 8 years (2013- 2020), equivalent to two municipal management periods. Then, the expenses incurred by the different municipal bodies that were explicitly related to urban parks were analyzed. 
 
 
 # Results {#sec:3}
 
-## Respondent's profile
+After processing the data,  there were 1144 questionnaires validated. Considering the estimated population of 1,653,461 inhabitants of the city [@ibge2019] and the distribution between age groups, income, gender, and residence, the data represent the city.  In the first part of the questionnaire, on socioeconomic aspects, it was possible to observe that 51.68\% of respondents were female and 48.32\% male. The vast majority of respondents, 92.82\%, consisted of young adults (< 65 years), the average age was 41.3 years old. The average monthly income was R\$ 3,091.00, and only 25.9\% of the interviewees held at least a college degree. Among the variables related to the characteristics of the parks that were significant, the perception of infrastructure considered excellent or good were the ones that predominated. The temperature was considered predominantly between very bad and regular by the respondents. We collected responses from people living in all 94 neighborhoods in the city (Table 1). 
 
-After processing the data, 1144 questionnaires were used. Considering the estimated population of 1,653,461 inhabitants of the city, and the distribution between age groups, income, sex and place of residence, the data are representative for the city. Among the interviewees, $51.68\%$ were female; $48.32\%$ male. The vast majority of respondents $92.82\%$ were young adults (<65 years), living in 94 neighborhoods in the city (Table 1).
 
+```{=tex}
+\begin{table}[!tbp]
+    \begin{center}
+    \begin{tabular}{lcccccc}
+    \hline\hline
+    \multicolumn{1}{l}{}&\multicolumn{1}{r}{Min}&\multicolumn{1}{r}{1st. Quad.}&\multicolumn{1}{r}{Median}&\multicolumn{1}{r}{Mean}&\multicolumn{1}{r}{3st. Quad.}&\multicolumn{1}{r}{Max}\tabularnewline
+    \hline
+    Age & 18 & 30  & 39 & 41.25 & 51 & 96  \tabularnewline
+    Gender & 0 & 0 & 1 & 0.542 & 1 & 1  \tabularnewline
+    School & 0 & 0 & 0 & 0.2592 & 1 & 1 \tabularnewline
+    Income & 41 & 998 & 1800 & 3087 & 4000 & 62000 \tabularnewline
+    Facilities & 0 & 0  & 1 & 0.5552 & 1 & 1 \tabularnewline
+    Temperature & 0 & 0  & 0  & 0.3187 & 1 & 1 \tabularnewline
+    Fist Bid &  1 & 14.25 & 28 & 29.06 & 44 & 70 \tabularnewline
+    Second Bid & 1 & 16.25 & 32 & 33.68 & 50 & 75 \tabularnewline
+   \hline
+   \end{tabular} \end{center}
+       \end{table}
+```
 ```{r include=FALSE}
 library(tidyverse)
 library(readxl)
@@ -174,6 +219,7 @@ baseunificada <- baseunificada %>%
 # Ajustando codigo de variaveis
 
 base <- baseunificada %>%
+  filter(idade > 17) %>% 
   mutate(
     infraestrutura = case_when(infraestrutura >= 4 ~ "1", TRUE ~ "0"), 
     temperatura = case_when(temperatura >= 4 ~ "1", TRUE ~ "0"),
@@ -199,18 +245,26 @@ base <- base %>%
     resp2 = as.factor(resp2)
   )
 
-
-
-
-base %>%
-  select(
-  resp1, resp2, lance1, lance2, idade, sexo, escolar, infraestrutura, temperatura, renda, parque, objetivo) %>%
-  summarytools::dfSummary(graph.col = F, valid.col = F, na.col = F) %>% 
-  print()
-
 ```
 
-Inserir tabela considerando a informação **Objetivo de visita** 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+base %>%
+   select(resp1, resp2, lance1, lance2, idade, sexo, escolar, infraestrutura, temperatura, renda) %>%
+  rename(
+    "Age" = idade,
+    "Gender" = sexo,
+    "School"= escolar,
+    "Income" = renda,
+    "Facilities" = infraestrutura,
+    "temperature" = temperatura,
+   "First Bid" = lance1,
+    "Second Bid" = lance2,
+     "First Response" = resp1,
+     "Second Response" = resp2)
+   
+```
 
 ```{r eval=FALSE, include=FALSE}
 # ANALISE CONJUNTA DE TODOS OS PARQUES
@@ -298,20 +352,8 @@ wtps <- cbind(WTP, Values)
 
 ```
 
-
-
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
-library(tidyverse)
-base %>%
-  select(
-    resp1, resp2, lance1, lance2, idade, sexo, escolar, infraestrutura, temperatura, renda) %>%
-  summarytools::dfSummary(graph.col = F, valid.col = F, na.col = F) %>% 
-  print()
-   
-```
-
-Regarding the profile of respondents, $45.9\%$ of the respondents are female, the average age is about 41.3 years (sd = 14.8). The average monthly income is $R\$ 1.800$, and the median income was estimated to be between $R\$ 41$ and $R\$ 61.200$. Only $25.9\%$ hold a degree from a university or from a technological educational institute.About the use of dummy variables, we focused on respondents assessing their self-perception on the temperature in the park, and regarding the park's Facilities. About $31.8\%$ beliefs that the park has a nice temperature because of the natural cover to the park. And $55.4\%$ evaluated the "Facilities as good/great. These variables  were included in the analysis because it was expected to affect positively the probability to participate in the project, as well the respondent's WTP.(ver tabela x)
-
+It was also observed that 51.68\% of the interviewees were people with some sort of occupation (10.53\% civil servants; 27.90\% private-sector employees and 13.25\% self-employed), 2.71\% unemployed, 5, 21\% students, 21.82\% retired, 18.57\% did not fall into these categories. In addition, 41.98% of the interviewees declared themselves single, 42.31% married, and 15.7% are divorced, widowed or not declared. Of which, 41.52\% had no children while 58.48\% did have (25\% = 1 child; 21.85\% = 2 children; 11.63\% = 3 or more children).
+The second part of the questionnaire addressed the forms of the park usage by the interviewees. It seems that most users travel more than 4500m to access the parks and they have as their primary objective the realization of physical activities with a predominant duration between 30 and 60 minutes coinciding with the total time spent in the parks. The most-reported frequency of visitation was between 2 and 6 times per month (Table 2).
 
 ```{r include=FALSE}
 # Proporção de respostas por parque
@@ -335,7 +377,6 @@ resp_parq <- base %>%
 resp_parq
 ```
 
-**Inserir detalhamento das respostas por parque e geral**
 
 ```{r include=FALSE}
 # respostas por parque
@@ -364,12 +405,15 @@ freq_total<- num_total %>%
 freq_total
 ```
 
+The results from the BP regression for the general sample are shown in Table 3. The estimations for Eq. (1) are shown in the upper part of the Table, while the estimation for Eq. (2) in the lower part. The probability that WTP is equal or higher to the two bids amount is influenced by the respondent's own characteristics and by a series of independent variables that reflect their preferences for the ES being valued. The coefficient on the bid was negative and statistically significant in both equations, which indicates that as the price increased, the probability of a positive answer to the WTP question decreased.
 
-## Bivariate Probit Model estimation results
+The results for the general sample indicate that WTP from the first equation (Eq 1) was influenced positively by the level of education (0.2166, p-value < 0,05), and by the respondent’s perceptions about Facilities (0.5036, p-value < 0,01) and temperature of the park (0.2702, p-value < 0,01), while the respondent’s gender was statistically significant just in the second equation.
 
-The results from the BP regression for the general sample are shown in Table x. The estimations for Eq. (1) are shown in the upper part of the Table, while the estimation for Eq. (2)  in the lower part. The probability that WTP be equal or higher to the two bids amount is influenced by the respondent’s own characteristics and by a series of independent variables that reflect their preferences for the ES being valued. The coefficient on the bid was negative and statistically significant in both equations, which indicates as the price increased the probability of a positive answer to the WTP question decreased.  
+These results allow us to highlight the finding that the respondents’ age has a statistically significant negative impact on both the respondents’ initial and follow-up decisions on their contribution to the accomplishment of the presented scenario. The regression coefficient is (-0.0066, p-value < 0,05) at the respondents’ initial response and (-0.0108, p-value < 0,01) at the follow-up response, which means that the higher the age, the lowest the probability that the respondent will accept the proposed willingness-to-pay a fee.
+Table 3 – Estimation of WTP...
 
- \begin{table}[!tbp]
+```{=tex}
+\begin{table}[!tbp]
     \begin{center}
     \begin{tabular}{lrrrr}
     \hline\hline
@@ -402,7 +446,7 @@ The results from the BP regression for the general sample are shown in Table x. 
    \hline
    \end{tabular} \end{center}
        \end{table}
-       
+```
 ```{r include=FALSE}
 # ANALISE CONJUNTA DE TODOS OS PARQUES
 
@@ -420,17 +464,26 @@ summary(bvp)
 
 ```
 
-The results for the general sample indicate that WTP from the first equation (Eq 1) was influenced positively by the level of education (0.2166, p-value < 0,05), and by the respondent's perceptions about Facilities (0.5036, p-value < 0,01) and temperature of the park (0.2702, p-value < 0,01), while the respondent's gender was statistically significant just in the second equation.
+Examining only the second equation, the results for the general sample indicate that WTP is negatively influenced by the age of respondents (0.010, p-value < 0,01), by the park's temperature (0.090, p-value < 0,01), and the respondent's gender (0.042, p-value < 0,186). However, it is positively affected by respondent's perceptions about the park's Facilities (0.176, p-value < 0,01). Opposite to the first equation, the level of education was not statistically significant.
 
-Our results allow us to highlight the find that the respondents' age has a statistically significant negative impact on both the respondents’ initial and follow-up decisions on their contribution to realizing the presented scenario. The regression coefficient is (-0.0066, p-value < 0,05) at the respondents’ initial response and (-0.0108, p-value < 0,01) at the follow-up response, which means that the higher the age, the lowest the probability that the respondent shall accept the proposed willingness-to-pay value. 
+Furthermore, the results allow us to interpret some of the signs of the estimated coefficients as expected and consistent with the economic theory. For example, the likelihood of voting "yes" to the proposed program in the second equation is higher for younger and better-educated respondents, as well as for female respondents. It is not definite, but the age results can be determined by the respondents' older average age (41 years). On the other hand, it was checked that the likelihood of voting "yes" to the proposed program is lower when the park respondent's temperature perceptions are taken into consideration. Furthermore, the regression model indicates statistically significant and theoretically justify relationships between the WTP responses and several explanatory variables.
 
-Examining just the second equation, the results for the general sample indicate that WTP is negatively influenced by the age of respondents (0.010, p-value < 0,01), by the park's temperature (0.090, p-value < 0,01), and the respondent's gender (0.042, p-value < 0,186). However, it is positively affected by respondent's perceptions about the park's Facilities (0.176, p-value < 0,01). Opposite to the first equation, the level of education wasn't statistically significant.
+This result of WTP significance allowed an estimate of the aggregate monetary dimension of the benefits generated by urban parks in Recife in terms of cultural ecosystem services. For this calculation, it is possible to ponder that the data of population served in two scenarios: a) considering a walking distance range of 800m = 499,588 people; b) considering a walking distance range of 4,800m = 756,667 people [@meneses2018desafios; @mertes1996park]. Based on these two scenarios, we estimate the annual added value of cultural ecosystem services provided by urban parks in the city of Recife, may vary between R\$ 16.3 and R$ 30.6 million (Table 4).
 
-Examining the results, we could interpret some of the signs of the estimated coefficients as expected and consistent with the economic theory. For example, the likelihood of voting “yes”  to the proposed program in the second equation is higher for younger and better-educated respondents, as well as for female respondents. It's not certain, but the age results can be explained by the high average age of the respondents (41 years). On the other hand, we find that likelihood of voting “yes”  to the proposed program is lower when we consider park respondent's temperature perceptions. Furthermore, the regression model indicates statistically significant and theoretically justify relationships between the WTP responses and several explanatory variables.
+**inserir tabela 4"
+
+In order to contribute to the city’s urban planning, public expenditures made by the city to maintain urban parks in the period from 2013 to 2020 were analysed. The data shows that the city has spent around R\$ 104 million in the past 8 years, equivalent to the last two administrative periods of urban management. The annual average expenditure for implementation and maintenance in the parks was of R\$ 13 million (Figure 2).
+
+Figure 2 - Variation in expenses with the implementation and maintenance of Urban Parks in the municipality of Recife. Source: Prepared by the authors based on data from the Transparency Portal of the City of Recife
+
+```{r figurename, echo=FALSE, fig.cap= "Variation in expenses on Urban Parks in the municipality of Recife", out.width = '70%', fig.align="center"}
+knitr::include_graphics("figuregastos.PNG")
+
+```
+
 
 
 # Discussion {#sec:4}
-
 
 [@brander2011value] An important finding from the meta-analyses is that the methodological design of the underlying valuation study has a large influence on the results of both CV.
 
@@ -444,17 +497,16 @@ We find that urban parks and green spaces are quite important to the local popul
 
 In general, our findings suggest that part of the population of Recife attributes a positive economic benefit to the urban park, and for this reason, they expressed a positive Willingness to Pay. We believe that this result was possible because of the positive effect of park to his users. Our results also reveal that the value of the bids offered had a greater influence on the Respondents' Willingness to Pay. The Estimated WTP for the model was R\$ 40.47 (first bid) and R\$ 32.69 (second bid). which totaled a consumer surplus of R\$ 545,151.90 and R\$ 568,075.52.
 
-
 # Policy implications and Recomendations
 
 Like any economic methodology, contingent valuation has its limitations and it alone can never provide the definitive answer to any major policy question (Carson, 1998).
 
 This study introduces a new approach to calibrate WTP estimates using perceived policy consequentiality that enables detailed analyses of the factors behind preference misrepresentations [@liu2020effects]. The perceived consequentiality reduces the probability of nontruthful choices and potentially leads to a more accurate willingness to pay (WTP) estimation
- 
-In accordance with [@liu2020effects], policy consequentiality refers to the belief of respondents that their survey responses will affect the outcome of whether a proposed policy or project is implemented. Payment consequentiality refers to the belief that payment will be imposed when the project gets implemented. Truthful preference revelation is unlikely when survey respondents do not believe that the survey is consequential [@carson2007incentive], which may bias estimation on WTP.
- 
-ACRESCENTAR comentário nas discussões a respeito de preferirmos imposto ou cobrança direto na conta ao inves de doação" -> \textbf{The tax payment vehicle is generally preferred to the voluntary donation payment vehicle as the tax reduces free-riding incentives when true WTP is higher than the elicited amounts.}
- 
-Verificar texto do [@latinopoulos2016valuing] 
 
-# References 
+In accordance with [@liu2020effects], policy consequentiality refers to the belief of respondents that their survey responses will affect the outcome of whether a proposed policy or project is implemented. Payment consequentiality refers to the belief that payment will be imposed when the project gets implemented. Truthful preference revelation is unlikely when survey respondents do not believe that the survey is consequential [@carson2007incentive], which may bias estimation on WTP.
+
+ACRESCENTAR comentário nas discussões a respeito de preferirmos imposto ou cobrança direto na conta ao inves de doação" -\> \textbf{The tax payment vehicle is generally preferred to the voluntary donation payment vehicle as the tax reduces free-riding incentives when true WTP is higher than the elicited amounts.}
+
+Verificar texto do [@latinopoulos2016valuing]
+
+# References
