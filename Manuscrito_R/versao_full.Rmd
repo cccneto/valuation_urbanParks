@@ -157,7 +157,7 @@ After processing the data, there were 1144 questionnaires validated. Considering
 ```{=tex }
 \begin{table}[!tbp]
 \caption{Summary of Descriptive Statistics}
-\label{tab1}
+\label{tab2}
     \begin{center}
     \begin{tabular}{lcccccc}
     \hline\hline
@@ -176,26 +176,286 @@ After processing the data, there were 1144 questionnaires validated. Considering
        \end{table}
 ```
 
+
+```{r eval=FALSE, include=FALSE}
+library(tidyverse)
+library(readxl)
+library(DCchoice)
+library(Ecdat)
+library(lmtest)
+library(dplyr)
+library(VIM)
+library(GJRM)
+library(tidyr)
+library(utils)
+library(kableExtra)
+
+# base <- utils::read.table("https://raw.githubusercontent.com/cccneto/valuation_urbanParks/master/dados/base_cleaned.csv",
+#                   header = T,
+#                   sep = ",")
+# 
+# base <- read.csv("https://raw.githubusercontent.com/cccneto/valuation_urbanParks/master/dados/base_cleaned.csv", 
+#                  header = T)
+
+
+# Carregando base de dados
+url <- "https://github.com/cccneto/valuation_urbanParks/blob/master/dados/baseunificada.xlsx?raw=true"
+destfile <- tempfile()
+curl::curl_download(url, destfile)
+baseunificada <- read_excel(destfile)
+
+
+baseunificada <- baseunificada %>% 
+  select(parque, idade, sexo, cidade, escolar, renda, infraestrutura, sombra, temperatura, objetivo, 
+         lance1,lance2, resp1, resp2, bidl, bidh, lnRendat1, lnRendat2, lnRenda) %>% 
+  mutate(
+    infraestrutura = as.double(infraestrutura),
+    sombra = as.double(sombra),
+    temperatura = as.double(temperatura))
+
+# Ajustando codigo de variaveis
+
+base <- baseunificada %>%
+  filter(idade > 17) %>% 
+  mutate(
+    infraestrutura = case_when(infraestrutura >= 4 ~ "1", TRUE ~ "0"), 
+    temperatura = case_when(temperatura >= 4 ~ "1", TRUE ~ "0"),
+    sombra = case_when(sombra >= 4 ~ "1", TRUE ~ "0"),
+    escolar = case_when(escolar > 19 ~ "1", TRUE ~ "0"), # 1=superior completo, 0= otherwise
+    sexo = case_when(sexo == 1 ~ "1", TRUE ~ "0")
+  )
+
+base <- base %>%
+  mutate(
+    parque = as.factor(parque),
+    idade = as.integer(idade),
+    sexo = as.integer(sexo),
+    cidade = as.factor(cidade),
+    escolar = as.integer(escolar),
+    renda = as.integer(renda),
+    infraestrutura = as.integer(infraestrutura),
+    sombra = as.integer(sombra),
+    temperatura = as.integer(temperatura),
+    lance1 = as.integer(lance1),
+    lance2 = as.integer(lance2),
+    resp1 = as.factor(resp1),
+    resp2 = as.factor(resp2)
+  )
+
+```
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+
+base %>%
+   select(resp1, resp2, lance1, lance2, idade, sexo, escolar, infraestrutura, temperatura, renda) %>%
+  rename(
+    "Age" = idade,
+    "Gender" = sexo,
+    "School"= escolar,
+    "Income" = renda,
+    "Facilities" = infraestrutura,
+    "temperature" = temperatura,
+   "First Bid" = lance1,
+    "Second Bid" = lance2,
+     "First Response" = resp1,
+     "Second Response" = resp2)
+   
+```
+
+```{r eval=FALSE, include=FALSE}
+# ANALISE CONJUNTA DE TODOS OS PARQUES
+
+## Configurando listas de variaveis - **modelo sem renda**
+treat.eq <- resp1 ~ lance1 + idade + sexo + escolar + temperatura + infraestrutura
+out.eq <- resp2 ~ lance2 + idade + sexo + escolar + temperatura + infraestrutura
+f.list <- list(treat.eq, out.eq)
+mr <- c("probit", "probit")
+
+## Modelo Linear
+bvp <- gjrm(f.list, data=base, Model="B", margins= mr)
+summary(bvp)
+
+library(modelsummary)
+modelsummary(bvp, group = component + term ~ model)
+
+coefs <- summary(bvp)
+coefs$tableP1
+coefs <- summary(bvp$coefficients)
+
+# atribuindo valores médios
+lance1_med <- mean(base$lance1)
+renda_med <- mean(base$renda)
+idade_med <- mean(base$idade)
+sexo_med <- mean(base$sexo)
+escolar_med <- mean(base$escolar)
+temp_med <- mean(base$temperatura)
+infra_med <- mean(base$infraestrutura)
+lance2_med <- mean(base$lance2)
+
+## coeficientes eq 1
+cf_intercept1 <- bvp$coefficients[1]
+cf_lance1 <- bvp$coefficients[2]
+cf_idade <- bvp$coefficients[3]
+cf_sexo <- bvp$coefficients[4]
+cf_escolar <- bvp$coefficients[5]
+cf_temp <- bvp$coefficients[6]
+cf_infra <- bvp$coefficients[7]
+
+# coeficientes eq 2
+cf_intercept2 <- bvp$coefficients[8]
+cf_lance2 <- bvp$coefficients[9]
+cf_idade2 <- bvp$coefficients[10]
+cf_sexo2 <- bvp$coefficients[11]
+cf_escolar2 <- bvp$coefficients[12]
+cf_temp2 <- bvp$coefficients[13]
+cf_infra2 <- bvp$coefficients[14]
+
+## CALCULANDO A DAP 
+
+### Dap equação 1
+dap_eq1 <- -( cf_intercept1 + cf_idade*idade_med + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)/cf_lance1 # R$ 40,47
+
+# A dap da equação 1 foi de R$ 
+round(dap_eq1, digits = 2)
+
+### Dap equação 2
+dap_eq2 <- -(cf_intercept2 + cf_idade2*idade_med + cf_sexo2*sexo_med + cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_lance2 # R$ 32,69 
+
+# A dap da equação 2 foi de R$ 
+round(dap_eq2, digits = 2)
+round(dap_eq1, digits = 2)
+# Análise individual dos parques
+
+wtp1_median <- as.numeric(median(base$lance1))
+wtp1_mean <- as.numeric(lance1_med)
+wtp1_estimated <- as.numeric(dap_eq1) 
+wtp2_median <-  as.numeric(median(base$lance2))
+wtp2_mean <- as.numeric(lance2_med)
+wtp2_estimated <- as.numeric(dap_eq2)
+
+teste <- 
+  rbind(wtp1_median,wtp1_mean, wtp1_estimated, wtp2_median, wtp2_mean, wtp2_estimated) %>%  
+  as.data.frame() %>% 
+  round(digits = 2)
+
+df <- as_tibble(teste)
+
+Values <- teste$V1   
+WTP  <- c("wtp1_median","wtp1_mean", "wtp1_estimated", "wtp2_median", "wtp2_mean", "wtp2_estimated")
+
+# tabela com valores de WTP
+wtps <- cbind(WTP, Values) 
+
+```
+
 It was also observed that 51.68% of the interviewees were people with some sort of occupation (10.53% civil servants; 27.90% private-sector employees and 13.25% self-employed), 2.71% unemployed, 5, 21% students, 21.82% retired, 18.57% did not fall into these categories. In addition, 41.98% of the interviewees declared themselves single, 42.31% married, and 15.7% are divorced, widowed or not declared. Of which, 41.52% had no children while 58.48% did have (25% = 1 child; 21.85% = 2 children; 11.63% = 3 or more children).
 
 The second part of the questionnaire addressed the forms of the park usage by the interviewees. It seems that most users travel more than 4500m to access the parks and they have as their primary objective the realization of physical activities with a predominant duration between 30 and 60 minutes coinciding with the total time spent in the parks. The most-reported frequency of visitation was between 2 and 6 times per month.
 
-The results from the BP regression for the general sample are shown in Table 2. The estimations for Eq. (1) are shown in the upper part of the Table, while the estimation for Eq. (2) in the lower part. The probability that WTP is equal or higher to the two bids amount is influenced by the respondent's own characteristics and by a series of independent variables that reflect their preferences for the ES being valued. The coefficient on the bid was negative and statistically significant in both equations, which indicates that as the price increased, the probability of a positive answer to the WTP question decreased.
+
+```{=tex }
+
+\begin{table}[!htp]
+\centering
+\caption{Characteristics of access and use of urban parks studied.}
+\scriptsize
+\begin{tabular}{lllll}
+\multicolumn{2}{c}{\textbf{Travelled distance}} &\textbf{} &\multicolumn{2}{c}{\textbf{Objective}} 
+greater 4500m &31.49\% & &Study &1.09\% \\
+between 3001 and 4500m &4.34\% & &leisure &25.33\% \\
+between 1500 and 3000m &20.63\% & &Physical activity &36.96\% \\
+between 1001 and 1500m &5.97\% & &Children &27.83\% \\
+between 500 and 1000m &9.66\% & &Others &8.80\% \\
+between 100 and 500m &27.90\% & & & \\
+\multicolumn{2}{c}{\textbf{Length of time spent there}} & \multicolumn{2}{c}{\textbf{Physical Activity length}} \
+Up to 1h &43.21\% & &up to 30 min &50.92\% \\
+between 1 e 2h &34.09\% & &between 30 e 60 min &24.54\% \\
+between 2 e 2,5h &9.55\% & &between 60 e 120 min &16.29\% \\
+between 2,5 e 3h &8.36\% & &more than 120 min &8.25\% \\
+more than 3h &4.78\% & & & \\
+\multicolumn{2}{c}{\textbf{Visiting Frequency}} & & & \
+1x (once) /month &20.94\% & & & \\
+between 2 e 6x /month &60.20\% & & & \\
+between 6 e 11x /month &7.09\% & & & \\
+between 11 e 19x/month &4.03\% & & & \\
+between 20 e 30x /month &7.74\% & & & \\
+\bottomrule
+\end{tabular}
+\end{table}
+```
+
+
+
+
+
+```{r eval=FALSE, include=FALSE}
+# Proporção de respostas por parque
+resp_parq <- base %>% 
+  group_by(parque) %>% 
+  na.omit() %>% 
+      mutate(resp1 = as.numeric(resp1),
+             resp2 = as.numeric(resp2)) %>% 
+      summarise(yy = sum(resp1==1 & resp2==1),
+                yn = sum(resp1==1 & resp2==0),
+                ny = sum(resp1==0 & resp2==1),
+                nn = sum(resp1==0 & resp2==0)) %>% 
+    group_by(parque) %>%
+    summarise(freq_yy = yy / sum(yy, yn, nn, ny)*100,
+            freq_yn = yn / sum(yy, yn, nn, ny)*100,
+            freq_ny = ny / sum(yy, yn, nn, ny)*100,
+            freq_nn = nn / sum(yy, yn, nn, ny)*100,
+            total_quest = sum(yy, yn, nn, ny))  %>% 
+    arrange(desc(freq_yy, freq_yn)) 
+
+resp_parq
+```
+
+```{r eval=FALSE, include=FALSE}
+# respostas por parque
+num_total <- base %>% 
+  na.omit() %>% 
+  mutate(resp1 = as.numeric(resp1),
+         resp2 = as.numeric(resp2)) %>% 
+  summarise(yy = sum(resp1==1 & resp2==1),
+            yn = sum(resp1==1 & resp2==0),
+            ny = sum(resp1==0 & resp2==1),
+            nn = sum(resp1==0 & resp2==0)) 
+
+num_total
+```
+
+```{r eval=FALSE, include=FALSE}
+# frequencia das respostas - todos parques
+freq_total<- num_total %>%  
+  summarise(freq_yy = yy / sum(yy, yn, nn, ny)*100,
+            freq_yn = yn / sum(yy, yn, nn, ny)*100,
+            freq_ny = ny / sum(yy, yn, nn, ny)*100,
+            freq_nn = nn / sum(yy, yn, nn, ny)*100) %>% 
+  arrange(desc(freq_yy, freq_yn)) %>% 
+  round(digits = 2)
+
+freq_total
+```
+
+The results from the BP regression for the general sample are shown in Table 3. The estimations for Eq. (1) are shown in the upper part of the Table, while the estimation for Eq. (2) in the lower part. The probability that WTP is equal or higher to the two bids amount is influenced by the respondent's own characteristics and by a series of independent variables that reflect their preferences for the ES being valued. The coefficient on the bid was negative and statistically significant in both equations, which indicates that as the price increased, the probability of a positive answer to the WTP question decreased.
 
 The results for the general sample indicate that WTP from the first equation (Eq 1) was influenced positively by the level of education (0.2166, p-value \< 0,05), and by the respondent's perceptions about Facilities (0.5036, p-value \< 0,01) and temperature of the park (0.2702, p-value \< 0,01), while the respondent's gender was statistically significant just in the second equation.
 
 These results allow us to highlight the finding that the respondents' age has a statistically significant negative impact on both the respondents' initial and follow-up decisions on their contribution to the accomplishment of the presented scenario. The regression coefficient is (-0.0066, p-value \< 0,05) at the respondents' initial response and (-0.0108, p-value \< 0,01) at the follow-up response, which means that the higher the age, the lowest the probability that the respondent will accept the proposed willingness-to-pay a fee.
 
+
+
 ```{=tex}
 \begin{table}[!tbp]
-\caption{Willingness to pay for Park visitors} \label{tab2}
+\caption{Willingness to pay for Park visitors} \label{tab3}
     \begin{center}
     \begin{tabular}{lrrrr}
     \hline\hline
     \multicolumn{1}{l}{}&\multicolumn{1}{r}{Estimate}&\multicolumn{1}{r}{Std. Error}&\multicolumn{1}{r}{z-value}&\multicolumn{1}{r}{p-value}\tabularnewline
     \hline
        \vspace{5mm}
-   \textbf{Equation 1} \
+   \textbf{Equation 1} \\
     \textit{Intercept} & $0.635419$ & $0.1440$ & $4.410$ & $0.00001$ \tabularnewline
     Bid1 & $-0.020311$ & $0.0020$ & $-10.154$ & $0.00000$ \tabularnewline
     Age& $-0.006643$ & $0.0026$ & $-2.540$ & $0.01109$ \tabularnewline
@@ -205,7 +465,7 @@ These results allow us to highlight the finding that the respondents' age has a 
     Facilities & $0.503613$ & $0.0808$ & $6.226$ & $0.00000$ \tabularnewline
     \hline
 \vspace{5mm}
-   \textbf{Equation 2} \
+   \textbf{Equation 2} \\
      \textit{Intercept} & $ 0.528728$ & $0.1418$ & $3.728$ & $0.00019$\tabularnewline
     Bid2 & $-0.015654$ & $0.0019$ & $-7.832$ & $0.00000$\tabularnewline
     Age & $-0.010806$ & $0.0.0025$ & $-4.272$ & $0.00001$\tabularnewline
@@ -224,16 +484,33 @@ These results allow us to highlight the finding that the respondents' age has a 
 ```
 
 
+```{r eval=FALSE, include=FALSE}
+# ANALISE CONJUNTA DE TODOS OS PARQUES
+
+## Configurando listas de variaveis - **modelo sem renda**
+treat.eq <- resp1 ~ lance1 + idade + sexo + escolar + temperatura + infraestrutura
+out.eq <- resp2 ~ lance2 + idade + sexo + escolar + temperatura + infraestrutura
+f.list <- list(treat.eq, out.eq)
+mr <- c("probit", "probit")
+```
+
+```{r eval=FALSE, include=FALSE}
+## Modelo Linear
+bvp <- gjrm(f.list, data=base, Model="B", margins= mr)
+summary(bvp)
+
+```
+
 Examining only the second equation, the results for the general sample indicate that WTP is negatively influenced by the age of respondents (0.010, p-value \< 0,01), by the park's temperature (0.090, p-value \< 0,01), and the respondent's gender (0.042, p-value \< 0,186). However, it is positively affected by respondent's perceptions about the park's Facilities (0.176, p-value \< 0,01). Opposite to the first equation, the level of education was not statistically significant.
 
 Furthermore, the results allow us to interpret some of the signs of the estimated coefficients as expected and consistent with the economic theory. For example, the likelihood of voting "yes" to the proposed program in the second equation is higher for younger and better-educated respondents, as well as for female respondents. It is not definite, but the age results can be determined by the respondents' older average age (41 years). On the other hand, it was checked that the likelihood of voting "yes" to the proposed program is lower when the park respondent's temperature perceptions are taken into consideration. Furthermore, the regression model indicates statistically significant and theoretically justify relationships between the WTP responses and several explanatory variables.
 
-This result of WTP significance allowed an estimate of the aggregate monetary dimension of the benefits generated by urban parks in Recife in terms of cultural ecosystem services. For this calculation, it is possible to ponder that the data of population served in two scenarios: a) considering a walking distance range of 800m = 499.588 people; b) considering a walking distance range of 4,800m = 756.667 people [@meneses2018desafios; @mertes1996park]. Based on these two scenarios, we estimate the annual added value of cultural ecosystem services provided by urban parks in the city of Recife, which may vary between R\$ 16.3 and R\$ 30.6 million (Table 3).
+This result of WTP significance allowed an estimate of the aggregate monetary dimension of the benefits generated by urban parks in Recife in terms of cultural ecosystem services. For this calculation, it is possible to ponder that the data of population served in two scenarios: a) considering a walking distance range of 800m = 499.588 people; b) considering a walking distance range of 4,800m = 756.667 people [@meneses2018desafios; @mertes1996park]. Based on these two scenarios, we estimate the annual added value of cultural ecosystem services provided by urban parks in the city of Recife, which may vary between R\$ 16.3 and R\$ 30.6 million (Table 4).
 
 ```{=tex }
 \begin{table}[!htbp]
 \caption{Individual and aggregated WTP estimates considering two scenarios}
-\label{tab3}
+\label{tab1}
     \begin{center}
     \begin{tabular}{llll}
     \hline\hline
@@ -248,14 +525,12 @@ This result of WTP significance allowed an estimate of the aggregate monetary di
 
 In order to contribute to the city's urban planning, public expenditures made by the city to maintain urban parks in the period from 2013 to 2020 were analysed. The data shows that the city has spent around R\$ 104 million in the past 8 years, equivalent to the last two administrative periods of urban management. The annual average expenditure for implementation and maintenance in the parks was of R\$ 13 million (Figure 2).
 
-Based on these data, it is possible to observe that the city has made considerable investments to the expansion and maintenance of urban parks in Recife. In a context on which public expenditures have increased considerably due to the COVID-19 Pandemic, it is essential to note that investments in the provision of environmental public goods have been maintained. It is even more important to consider that the estimated economic return generated by these areas in terms of well-being exceeds the efforts made to maintain them. Hence, in this study, our estimates considered only the cultural ecosystem services associated with leisure. However, we recognize that these urban green spaces still provide a series of other ecosystem services, such as reducing heat islands and flood risks that undoubtedly increase their benefit/cost ratio.
-
-
-```{r figurename, echo=FALSE, fig.cap= "Variation in expenses with the implementation and maintenance of Urban Parks in the municipality of Recife - Source: prepared by the authors based on data from the Transparency Portal of the City of Recife" , out.width = '70%', fig.align="center"}
+```{r figurename, echo=FALSE, fig.cap= "Variation in expenses with the implementation and maintenance of Urban Parks in the municipality of Recife - Prepared by the authors based on data from the Transparency Portal of the City of Recife" , out.width = '70%', fig.align="center"}
 knitr::include_graphics("figuregastos.PNG")
 
 ```
 
+Based on these data, it is possible to observe that the city has made considerable investments to the expansion and maintenance of urban parks in Recife. In a context on which public expenditures have increased considerably due to the COVID-19 Pandemic, it is essential to note that investments in the provision of environmental public goods have been maintained. It is even more important to consider that the estimated economic return generated by these areas in terms of well-being exceeds the efforts made to maintain them. Hence, in this study, our estimates considered only the cultural ecosystem services associated with leisure. However, we recognize that these urban green spaces still provide a series of other ecosystem services, such as reducing heat islands and flood risks that undoubtedly increase their benefit/cost ratio.
 
 # Discussion {#sec:4}
 
