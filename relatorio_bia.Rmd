@@ -9,7 +9,6 @@ output: html_document
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(readxl)
-library(DCchoice)
 library(Ecdat)
 library(lmtest)
 library(VIM)
@@ -247,13 +246,11 @@ cf_infra2 <- bvp_santana$coefficients[14]
 ```{r}
 ### Dap equação 1
 dap_eq1 <- -(cf_intercept + cf_idade*idade_med + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)/cf_lance1 # R$ 40,47
-# R$ 43,52
-# A dap da equação 1 foi de R$ 
-round(dap_eq1, digits = 2)
+
 
 ### Dap equação 2
 dap_eq2 <- -(cf_intercept + cf_idade2*idade_med + cf_sexo2*sexo_med + cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_lance2 # R$ 39,50 
-# R$ 19,36
+
 
 ```
 
