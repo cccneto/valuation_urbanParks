@@ -72,7 +72,7 @@ summary(bvp_jaqueira)
 bvp_santana <- gjrm(f.list, data=dados_macaxeira, Model="B", margins= mr)
 summary(bvp_santana)
 
-# calculando para MACAXEIRA
+# MACAXEIRA
 
 # atribuindo valores médios
 lance1_med <- mean(dados_macaxeira$lance1)
@@ -116,7 +116,7 @@ dap_eq2 <- -(cf_intercept + cf_idade2*idade_med + cf_sexo2*sexo_med + cf_escolar
 
 #############################
 
-# calculando para JAQUEIRA
+# JAQUEIRA
 
 # atribuindo valores médios
 lance1_med <- mean(dados_jaqueira$lance1)
@@ -146,7 +146,52 @@ cf_escolar2 <- bvp_jaqueira$coefficients[12]
 cf_temp2 <- bvp_jaqueira$coefficients[13]
 cf_infra2 <- bvp_jaqueira$coefficients[14]
 
-## CALCULANDO A DAP - macaxeira
+## CALCULANDO A DAP - jaqueira
+
+### Dap equação 1
+dap_eq1 <- -(cf_intercept + cf_idade*idade_med + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)/cf_lance1 # R$ 40,47
+# R$ 43,52
+# A dap da equação 1 foi de R$ 
+round(dap_eq1, digits = 2)
+
+### Dap equação 2
+dap_eq2 <- -(cf_intercept + cf_idade2*idade_med + cf_sexo2*sexo_med + cf_escolar2*escolar_med + cf_temp2*temp_med + cf_infra2*infra_med)/cf_lance2 # R$ 39,50 
+# R$ 19,36
+
+
+#############################
+
+# SANTANA
+
+# atribuindo valores médios
+lance1_med <- mean(dados_santana$lance1)
+renda_med <- mean(dados_santana$renda)
+idade_med <- mean(dados_santana$idade)
+sexo_med <- mean(dados_santana$sexo)
+escolar_med <- mean(dados_santana$escolar)
+temp_med <- mean(dados_santana$temperatura)
+infra_med <- mean(dados_santana$infraestrutura)
+lance2_med <- mean(dados_santana$lance2)
+
+## coeficientes eq 1
+cf_intercept <- bvp_santana$coefficients[1]
+cf_lance1 <- bvp_santana$coefficients[2]
+cf_idade <- bvp_santana$coefficients[3]
+cf_sexo <- bvp_santana$coefficients[4]
+cf_escolar <- bvp_santana$coefficients[5]
+cf_temp <- bvp_santana$coefficients[6]
+cf_infra <- bvp_santana$coefficients[7]
+
+# coeficientes eq 2
+cf_intercept2 <- bvp_santana$coefficients[8]
+cf_lance2 <- bvp_santana$coefficients[9]
+cf_idade2 <- bvp_santana$coefficients[10]
+cf_sexo2 <- bvp_santana$coefficients[11]
+cf_escolar2 <- bvp_santana$coefficients[12]
+cf_temp2 <- bvp_santana$coefficients[13]
+cf_infra2 <- bvp_santana$coefficients[14]
+
+## CALCULANDO A DAP - SANTANA
 
 ### Dap equação 1
 dap_eq1 <- -(cf_intercept + cf_idade*idade_med + cf_sexo*sexo_med + cf_escolar*escolar_med + cf_temp*temp_med + cf_infra*infra_med)/cf_lance1 # R$ 40,47
