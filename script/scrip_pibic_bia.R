@@ -66,10 +66,10 @@ mr <- c("probit", "probit")
 bvp_macaxeira <- gjrm(f.list, data=dados_macaxeira, Model="B", margins= mr)
 summary(bvp_macaxeira)
 
-bvp_jaqueira <- gjrm(f.list, data=dados_macaxeira, Model="B", margins= mr)
+bvp_jaqueira <- gjrm(f.list, data=dados_jaqueira, Model="B", margins= mr)
 summary(bvp_jaqueira)
 
-bvp_santana <- gjrm(f.list, data=dados_macaxeira, Model="B", margins= mr)
+bvp_santana <- gjrm(f.list, data=dados_santana, Model="B", margins= mr)
 summary(bvp_santana)
 
 # MACAXEIRA
